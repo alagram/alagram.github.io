@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Heroku | Al Agram]]></title>
+  <link href="http://alagram.github.io/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://alagram.github.io/"/>
+  <updated>2013-11-06T11:22:02+00:00</updated>
+  <id>http://alagram.github.io/</id>
+  <author>
+    <name><![CDATA[Albert Agram]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying to Heroku]]></title>
+    <link href="http://alagram.github.io/blog/2013/08/16/deploying-to-heroku/"/>
+    <updated>2013-08-16T18:16:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/08/16/deploying-to-heroku</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p><a href="http://www.heroku.com">Heroku</a> is great for rapid prototyping and testing ideas. All you have to do is <code>git push heroku master</code> right? Wonderful.</p>
+
+<p>However, sometimes deploying can be somewhat daunting, with so many errors messages to deal with. Below is my own Heroku deployment checklist:</p>
+
+<h2>Steps</h2>
+
+<ol>
+<li><p>Create an App on Heroku dashboard eg. <code>boboobo</code> and select appropriate region.</p></li>
+<li><p>Copy Git URL in this case <code>git@heroku.com:boboobo.git</code> and run <code>git remote add heroku git@heroku.com:boboobo.git</code> in the App directory.</p></li>
+<li><p>After making changes in local directory, stage files, commit and then deploy code via <code>git push heroku master</code> or <code>git push heroku mod1:master</code> (when deploying from branch mod1)</p></li>
+</ol>
+
+
+<p>After generating migrations, do the following to avoid any nasty errors</p>
+
+<ol>
+<li><p><code>heroku run rake db:migrate</code></p></li>
+<li><p><code>heroku run rake db:reset</code> and <code>heroku run rake db:setup</code></p></li>
+<li><p><code>heroku restart</code></p></li>
+<li><p>Also do <code>heroku logs -t</code> and <code>heroku run console</code> to check server logs and db in console respectively.</p></li>
+</ol>
+
+
+<p>After successfully deploying this app you&rsquo;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | Al Agram]]></title>
+  <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://alagram.github.io/"/>
+  <updated>2013-11-06T11:22:02+00:00</updated>
+  <id>http://alagram.github.io/</id>
+  <author>
+    <name><![CDATA[Albert Agram]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Uploading multiple files with carrierwave and a nested form]]></title>
+    <link href="http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/"/>
+    <updated>2013-11-04T17:00:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>I recently needed to create a form for uploading multiple files to a given object. I implemented this with <a href="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a> and <a href="https://github.com/tors/jquery-fileupload-rails">jQuery File Upload</a> gems.</p>
+
+<p>Before we start, we need to make sure models and migrations are setup.
+For images, we have the following migration:</p>
+
+<pre><code>class CreateImages &lt; ActiveRecord::Migration
+  def change
+    create_table :images do |t|
+    t.string :image
+    t.integer :fraud_id
+
+    t.timestamps
+  end
+end
+</code></pre>
+
+<p>I have the following classes:</p>
+
+<pre><code>class Fraud &lt; ActiveRecord::Base
+  has_many :images
+  accepts_nested_attributes_for :images
+end
+
+class Image &lt; ActiveRecord::Base
+  belongs_to :fraud
+end
+</code></pre>
+
+<p>Added gems to Gemfile:</p>
+
+<pre><code>gem 'carrierwave'
+gem 'jquery-fileupload-rails'
+</code></pre>
+
+<p>Run <code>bundle install</code> to install gems and dependencies.</p>
+
+<p>Then we create a carrierwave uploader with <code>rails generate uploader image</code> and mount the uploader:</p>
+
+<pre><code>class Image &lt; ActiveRecord::Base
+  belongs_to :fraud
+
+  mount_uploader :image, ImageUploader
+end
+</code></pre>
+
+<p>The carrierwave uploader helps by doing all the heavy lifting with regard to uploading the files.</p>
+
+<p>Now we are ready to work on the view, where the form is modified in the following way:</p>
+
+<pre><code>= render 'shared/errors', object: @fraud
+
+= form_for @fraud, html: { class: "form-horizontal", autocomplete: "off", multipart: true } do |f|
+  %fieldset
+    .control-group
+      = f.label :title, class: 'control-label'
+      .controls
+        = f.text_field :title, class: 'span3'
+    .control-group
+      = f.label :description, class: 'control-label'
+      .controls
+        = f.text_area :description, rows: 6, class: 'span6'
+    .control-group
+      = f.label :fraud_date, class: 'control-label'
+      .controls
+        = f.text_field :fraud_date, class: 'span3 fraud_date'
+    .control-group
+      = f.fields_for :images, Image.new do |ff|
+        = ff.label :image, "Upload Evidence", class: 'control-label'
+        .controls
+          = ff.file_field :image, multiple: true, class: 'btn btn-file', id: 'upload-image', name: "fraud[images_attributes][][image]"
+  %fieldset.actions.control-group
+    .controls
+      = f.submit class: 'btn', id: 'submit-data'
+</code></pre>
+
+<p>The form setup is a typical form with a few details:
+<code>= f.fields_for :images, Image.new do |ff|</code> creates a nested form. <code>accepts_nested_attributes_for</code> allows the creation of a related object along with the main object. There is good documentation of this <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html#method-i-accepts_nested_attributes_for">here</a>. So in this example, we are creating an instance of <code>Fraud</code> class while simultaneously creating an instance of an <code>Image</code> class.</p>
+
+<p>Since by default, most browsers do not allow selection of multiple files, we use <code>multiple: true</code> to change this. Also, we have to change the <code>name</code> attribute of our nested form to make it work with carrierwave. The attribute finally looks like this:</p>
+
+<pre><code>name: "fraud[images_attributes][][image]"
+</code></pre>
+
+<p>Lastly, we need our images to be uploaded on submit. jQuery File Upload gem by default tries to upload files immediately after its attached, we need to change this.</p>
+
+<p> We grab the id&rsquo;s of the file field and the submit button and use coffeescript to change this default behaviour to fit our needs:</p>
+
+<pre><code>$ -&gt;
+  $("#upload-image").fileupload
+  add: (e, data) -&gt;
+    data.context = $("#submit-data")
+    data.submit()
+</code></pre>
+
+<p>That&rsquo;s all folks! With this, on submit, Rails knows to create an instance of Fraud and instances of Image. There is a natural association with Fraud and Image.</p>
+]]></content>
+  </entry>
+  
+</feed>

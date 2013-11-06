@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | Al Agram]]></title>
+  <link href="http://alagram.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://alagram.github.io/"/>
+  <updated>2013-11-06T11:22:02+00:00</updated>
+  <id>http://alagram.github.io/</id>
+  <author>
+    <name><![CDATA[Albert Agram]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fix Octopress rake new_post problem on Zsh]]></title>
+    <link href="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/"/>
+    <updated>2013-08-15T16:35:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
+
+<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
+
+<pre><code>$ rake new_post["My New Post"]
+zsh: no matches found: new_post[My New Post]
+</code></pre>
+
+<p>After following worked for me after doing some googling.</p>
+
+<h2>Solution</h2>
+
+<p>You can fix this problem by simply running <code>rake new_post</code></p>
+
+<pre><code>rake new_post
+Enter a title for your post:
+</code></pre>
+
+<p>This will then prompt for title of post and then create it. Done!</p>
+]]></content>
+  </entry>
+  
+</feed>

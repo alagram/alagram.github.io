@@ -1,16 +1,46 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog/</loc>
+        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes/
+        </loc>
+        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+    </url>
+    <url>
+        <loc>http://alagram.github.io/blog/2013/05/24/lets-get-classy/</loc>
+        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/
+        </loc>
+        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+    </url>
+    <url>
+        <loc>http://alagram.github.io/blog/2013/08/16/deploying-to-heroku/</loc>
+        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/
+        </loc>
+        <lastmod>2013-11-06T11:20:25+00:00</lastmod>
+    </url>
+    <url>
         <loc>http://alagram.github.io/404.html</loc>
         <lastmod>2013-11-06T10:47:52+00:00</lastmod>
     </url>
     <url>
         <loc>http://alagram.github.io/blog/archives/</loc>
-        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+        <lastmod>2013-11-06T11:20:25+00:00</lastmod>
     </url>
     <url>
         <loc>http://alagram.github.io/</loc>
-        <lastmod>2013-11-06T10:47:52+00:00</lastmod>
+        <lastmod>2013-11-06T11:20:25+00:00</lastmod>
     </url>
     <url>
         <loc>http://alagram.github.io/robots.txt</loc>

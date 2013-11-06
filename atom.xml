@@ -4,7 +4,7 @@
   <title><![CDATA[Al Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2013-11-06T10:54:45+00:00</updated>
+  <updated>2013-11-06T11:22:02+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,5 +12,480 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Uploading multiple files with carrierwave and a nested form]]></title>
+    <link href="http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/"/>
+    <updated>2013-11-04T17:00:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>I recently needed to create a form for uploading multiple files to a given object. I implemented this with <a href="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a> and <a href="https://github.com/tors/jquery-fileupload-rails">jQuery File Upload</a> gems.</p>
+
+<p>Before we start, we need to make sure models and migrations are setup.
+For images, we have the following migration:</p>
+
+<pre><code>class CreateImages &lt; ActiveRecord::Migration
+  def change
+    create_table :images do |t|
+    t.string :image
+    t.integer :fraud_id
+
+    t.timestamps
+  end
+end
+</code></pre>
+
+<p>I have the following classes:</p>
+
+<pre><code>class Fraud &lt; ActiveRecord::Base
+  has_many :images
+  accepts_nested_attributes_for :images
+end
+
+class Image &lt; ActiveRecord::Base
+  belongs_to :fraud
+end
+</code></pre>
+
+<p>Added gems to Gemfile:</p>
+
+<pre><code>gem 'carrierwave'
+gem 'jquery-fileupload-rails'
+</code></pre>
+
+<p>Run <code>bundle install</code> to install gems and dependencies.</p>
+
+<p>Then we create a carrierwave uploader with <code>rails generate uploader image</code> and mount the uploader:</p>
+
+<pre><code>class Image &lt; ActiveRecord::Base
+  belongs_to :fraud
+
+  mount_uploader :image, ImageUploader
+end
+</code></pre>
+
+<p>The carrierwave uploader helps by doing all the heavy lifting with regard to uploading the files.</p>
+
+<p>Now we are ready to work on the view, where the form is modified in the following way:</p>
+
+<pre><code>= render 'shared/errors', object: @fraud
+
+= form_for @fraud, html: { class: "form-horizontal", autocomplete: "off", multipart: true } do |f|
+  %fieldset
+    .control-group
+      = f.label :title, class: 'control-label'
+      .controls
+        = f.text_field :title, class: 'span3'
+    .control-group
+      = f.label :description, class: 'control-label'
+      .controls
+        = f.text_area :description, rows: 6, class: 'span6'
+    .control-group
+      = f.label :fraud_date, class: 'control-label'
+      .controls
+        = f.text_field :fraud_date, class: 'span3 fraud_date'
+    .control-group
+      = f.fields_for :images, Image.new do |ff|
+        = ff.label :image, "Upload Evidence", class: 'control-label'
+        .controls
+          = ff.file_field :image, multiple: true, class: 'btn btn-file', id: 'upload-image', name: "fraud[images_attributes][][image]"
+  %fieldset.actions.control-group
+    .controls
+      = f.submit class: 'btn', id: 'submit-data'
+</code></pre>
+
+<p>The form setup is a typical form with a few details:
+<code>= f.fields_for :images, Image.new do |ff|</code> creates a nested form. <code>accepts_nested_attributes_for</code> allows the creation of a related object along with the main object. There is good documentation of this <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html#method-i-accepts_nested_attributes_for">here</a>. So in this example, we are creating an instance of <code>Fraud</code> class while simultaneously creating an instance of an <code>Image</code> class.</p>
+
+<p>Since by default, most browsers do not allow selection of multiple files, we use <code>multiple: true</code> to change this. Also, we have to change the <code>name</code> attribute of our nested form to make it work with carrierwave. The attribute finally looks like this:</p>
+
+<pre><code>name: "fraud[images_attributes][][image]"
+</code></pre>
+
+<p>Lastly, we need our images to be uploaded on submit. jQuery File Upload gem by default tries to upload files immediately after its attached, we need to change this.</p>
+
+<p> We grab the id&rsquo;s of the file field and the submit button and use coffeescript to change this default behaviour to fit our needs:</p>
+
+<pre><code>$ -&gt;
+  $("#upload-image").fileupload
+  add: (e, data) -&gt;
+    data.context = $("#submit-data")
+    data.submit()
+</code></pre>
+
+<p>That&rsquo;s all folks! With this, on submit, Rails knows to create an instance of Fraud and instances of Image. There is a natural association with Fraud and Image.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying to Heroku]]></title>
+    <link href="http://alagram.github.io/blog/2013/08/16/deploying-to-heroku/"/>
+    <updated>2013-08-16T18:16:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/08/16/deploying-to-heroku</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p><a href="http://www.heroku.com">Heroku</a> is great for rapid prototyping and testing ideas. All you have to do is <code>git push heroku master</code> right? Wonderful.</p>
+
+<p>However, sometimes deploying can be somewhat daunting, with so many errors messages to deal with. Below is my own Heroku deployment checklist:</p>
+
+<h2>Steps</h2>
+
+<ol>
+<li><p>Create an App on Heroku dashboard eg. <code>boboobo</code> and select appropriate region.</p></li>
+<li><p>Copy Git URL in this case <code>git@heroku.com:boboobo.git</code> and run <code>git remote add heroku git@heroku.com:boboobo.git</code> in the App directory.</p></li>
+<li><p>After making changes in local directory, stage files, commit and then deploy code via <code>git push heroku master</code> or <code>git push heroku mod1:master</code> (when deploying from branch mod1)</p></li>
+</ol>
+
+
+<p>After generating migrations, do the following to avoid any nasty errors</p>
+
+<ol>
+<li><p><code>heroku run rake db:migrate</code></p></li>
+<li><p><code>heroku run rake db:reset</code> and <code>heroku run rake db:setup</code></p></li>
+<li><p><code>heroku restart</code></p></li>
+<li><p>Also do <code>heroku logs -t</code> and <code>heroku run console</code> to check server logs and db in console respectively.</p></li>
+</ol>
+
+
+<p>After successfully deploying this app you&rsquo;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fix Octopress rake new_post problem on Zsh]]></title>
+    <link href="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/"/>
+    <updated>2013-08-15T16:35:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
+
+<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
+
+<pre><code>$ rake new_post["My New Post"]
+zsh: no matches found: new_post[My New Post]
+</code></pre>
+
+<p>After following worked for me after doing some googling.</p>
+
+<h2>Solution</h2>
+
+<p>You can fix this problem by simply running <code>rake new_post</code></p>
+
+<pre><code>rake new_post
+Enter a title for your post:
+</code></pre>
+
+<p>This will then prompt for title of post and then create it. Done!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Class Act]]></title>
+    <link href="http://alagram.github.io/blog/2013/05/24/lets-get-classy/"/>
+    <updated>2013-05-24T16:31:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/05/24/lets-get-classy</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>We can create an empty class in Ruby by using the following syntax:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Animal</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># The above class can also be written in one line like so:</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Animal</span><span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, lets initialize our class with the <code>initialize</code> method like so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Animal</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our Animal class can now hold vairables, in the form of instance variables and class vairables. Instance variables always start with <code>@</code> while class varaibles start with <code>@@</code>. We have to make sure every Animal we create has a name by giving it <code>@name</code> instance varaible. This way only the Animal class and instances of that class will have access to <code>@name</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Animal</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can create an instance of our Animal class by calling the <code>new</code> method on <code>Animal</code> class and passing an argument.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="no">Animal</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bruno&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Class variables are attached to the entire class, not just an instance of the class. For instance we can set up a simple BankAccount class and use class variables to track how many instance of the class have been created like so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">BankAccount</span>
+</span><span class='line'>  <span class="vc">@@total_accounts</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vc">@@total_accounts</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">accounts_created</span>
+</span><span class='line'>    <span class="vc">@@total_accounts</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">savings</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">current</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">inv</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Number of accounts created is </span><span class="si">#{</span><span class="no">BankAccount</span><span class="o">.</span><span class="n">accounts_created</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span class='line'><span class="c1"># =&gt; Number of accounts created is 3.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now everytime a new instance of BankAcoount is created <code>@@total_accounts</code> is increamented by one. Simple right?</p>
+
+<p>The above illustration also subtly introduced the concept of Class mehtods. These usually start with <code>self</code>. In the context of the class <code>self</code> referes to the current class, hence they can be called directed without creating an instance of a class.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Book</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">title</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;The title of this book is &#39;Outliers&#39;.&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Book</span><span class="o">.</span><span class="n">title</span>
+</span><span class='line'><span class="c1"># =&gt; The title of this book is &#39;Outliers&#39;.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instance methods, on the other hand, can only be called by creating an instance of the class.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Author</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">info</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;The book has X number of pages and the author is </span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">audiobook</span> <span class="o">=</span> <span class="no">Author</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Malcolm Gladwell&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">audiobook</span><span class="o">.</span><span class="n">info</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; The book has X number of pages and the author is Malcolm Gladwell.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>def</code> keyword creates an instance method. Hence the only way <code>info</code> method can be called is by creating an instance of <code>Author</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Getting familiar with Ruby Arrays and Hash Methods.]]></title>
+    <link href="http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes/"/>
+    <updated>2013-05-17T14:37:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks like Rails.</p>
+
+<p>Now lets have some fun with some examples of Array and Hash mehtods.</p>
+
+<p>Given the following array <code>my_array = [1, 2, 3, 5, 7, 9, 11, 12, 13, 15]</code>, we are going to iterate over it and print each element to the screen using the <code>each</code> method.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">val</span> <span class="p">}</span>
+</span><span class='line'><span class="mi">1</span>
+</span><span class='line'><span class="mi">2</span>
+</span><span class='line'><span class="mi">3</span>
+</span><span class='line'><span class="mi">5</span>
+</span><span class='line'><span class="mi">7</span>
+</span><span class='line'><span class="mi">11</span>
+</span><span class='line'><span class="mi">12</span>
+</span><span class='line'><span class="mi">13</span>
+</span><span class='line'><span class="mi">15</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It prints every element in the array and returns the entire array at the end.</p>
+
+<p>Next, lets use the <code>select</code> method to select all even elements from <code>my_array</code>.
+We can do something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or we can do this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span><span class="o">.</span><span class="n">even?</span> <span class="p">}</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cute right?</p>
+
+<p>Note: Select returns an array by default, so we didn&rsquo;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&rsquo;s going to be selected, if its false it won&rsquo;t be selected.</p>
+
+<p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">}</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">225</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: We can use the <code>map</code> method to achieve the same result.</p>
+
+<p>If we have a hash, how do we get the key and value pairs? We&rsquo;ll use the <code>each</code> method.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;man united&quot;</span><span class="p">,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="s2">&quot;fergie&quot;</span><span class="p">,</span> <span class="ss">location</span><span class="p">:</span> <span class="s2">&quot;old trafford manchester&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">club</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&quot;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2"> value is </span><span class="si">#{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Produces</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="nb">name</span> <span class="n">value</span> <span class="n">is</span> <span class="n">man</span> <span class="n">uinted</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span> <span class="n">value</span> <span class="n">is</span> <span class="mi">20</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span> <span class="n">value</span> <span class="n">is</span> <span class="n">fergie</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span> <span class="n">value</span> <span class="n">is</span> <span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What if we want only the keys from a hash? We&rsquo;ll use the <code>each_key</code> method like so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;man united&quot;</span><span class="p">,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="s2">&quot;fergie&quot;</span><span class="p">,</span> <span class="ss">location</span><span class="p">:</span> <span class="s2">&quot;old trafford manchester&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">club</span><span class="o">.</span><span class="n">each_key</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&quot;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Produces</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="nb">name</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span>
+</span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Conclusion: Array and Hash methods are very good to know and this post has covered just a few. Learn more about these methods by looking at several Ruby/Rails APIs.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Welcome to my Coding Blog]]></title>
+    <link href="http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog/"/>
+    <updated>2013-05-17T02:54:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>I finally set up my blog. Hurray!</p>
+
+<p>About a year ago, I decide to take coding seriously. Along the way I quit my job as a banker, to focus more on business and coding. Started with codecademy, then stopped. Then started learning some PHP and MySQL, and then moved back to codecademy to complete their HTML/CSS and JavaScript tracks. It&rsquo;s been a really fun and sometimes frustrating experience. Tried to build a few things along the way but got stuck.</p>
+
+<p>After all the drifting and some careful research, I settled on Ruby language and building apps with the Rails framework and I&rsquo;m loving it!</p>
+
+<p>This blog will mainly be for sharing my coding adventure with the rest of the world.</p>
+
+<p>So here goes&hellip;</p>
+]]></content>
+  </entry>
   
 </feed>

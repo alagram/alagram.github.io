@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Al Agram</title>
+  <title>Fix Octopress rake new_post problem on Zsh - Al Agram</title>
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Blog Archive 2013 Uploading multiple files with carrierwave and a nested form
-Nov 04 2013 posted in Rails Deploying to Heroku
-Aug 16 2013 posted in &hellip;">
+  <meta name="description" content="Creating a post on Octopress uses a rake command like so:rake new_post["My New Post"] However when you try to create a new post within zsh shell it &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ Aug 16 2013 posted in &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alagram.github.io/blog/archives">
+  <link rel="canonical" href="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh">
   <link href="/favicon.ico" rel="icon">
   
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -75,101 +73,116 @@ Aug 16 2013 posted in &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">Fix Octopress Rake New_post Problem on Zsh</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T16:35:00+00:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
   </header>
-  
-  <div id="blog-archives">
 
 
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/">Uploading multiple files with carrierwave and a nested form</a></h1>
-<time datetime="2013-11-04T17:00:00+00:00" pubdate><span class='month'>Nov</span> <span class='day'>04</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
+<div class="entry-content"><!-- more -->
 
 
-</article>
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
 
+<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
 
+<pre><code>$ rake new_post["My New Post"]
+zsh: no matches found: new_post[My New Post]
+</code></pre>
 
-<article>
-  
-<h1><a href="/blog/2013/08/16/deploying-to-heroku/">Deploying to Heroku</a></h1>
-<time datetime="2013-08-16T18:16:00+00:00" pubdate><span class='month'>Aug</span> <span class='day'>16</span> <span class='year'>2013</span></time>
+<p>After following worked for me after doing some googling.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/heroku/'>Heroku</a></span>
-</footer>
+<h2>Solution</h2>
 
+<p>You can fix this problem by simply running <code>rake new_post</code></p>
 
-</article>
+<pre><code>rake new_post
+Enter a title for your post:
+</code></pre>
 
-
-
-<article>
-  
-<h1><a href="/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/">Fix Octopress rake new_post problem on Zsh</a></h1>
-<time datetime="2013-08-15T16:35:00+00:00" pubdate><span class='month'>Aug</span> <span class='day'>15</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/octopress/'>Octopress</a>, <a class='category' href='/blog/categories/zsh/'>Zsh</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/24/lets-get-classy/">A Class Act</a></h1>
-<time datetime="2013-05-24T16:31:00+00:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ruby/'>Ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes/">Getting familiar with Ruby Arrays and Hash Methods.</a></h1>
-<time datetime="2013-05-17T14:37:00+00:00" pubdate><span class='month'>May</span> <span class='day'>17</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/coding/'>Coding</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/17/welcome-to-my-coding-blog/">Welcome to my Coding Blog</a></h1>
-<time datetime="2013-05-17T02:54:00+00:00" pubdate><span class='month'>May</span> <span class='day'>17</span> <span class='year'>2013</span></time>
-
-
-</article>
-
+<p>This will then prompt for title of post and then create it. Done!</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn"><a href="/about" title="About the author (Albert Agram)" rel="author">Albert Agram</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T16:35:00+00:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>Octopress</a>, <a class='category' href='/blog/categories/zsh/'>Zsh</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/" data-via="" data-counturl="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/24/lets-get-classy/" title="Previous Post: A Class Act">&laquo; A Class Act</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/16/deploying-to-heroku/" title="next Post: Deploying to Heroku">Deploying to Heroku &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -188,7 +201,10 @@ Aug 16 2013 posted in &hellip;">
       var disqus_shortname = 'agramwebdev';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/';
+        var disqus_url = 'http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
