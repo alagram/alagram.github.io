@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Al Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2013-11-23T20:05:10+00:00</updated>
+  <updated>2013-11-23T20:07:36+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -48,7 +48,7 @@
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>bundle update rack</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p><code>Taps</code> will now successfully pulled data from SQLite into Postgres.</p>
+<p><code>Taps</code> will now successfully pull data from SQLite into Postgres.</p>
 ]]></content>
   </entry>
   
