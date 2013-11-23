@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Al Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2013-11-06T11:22:02+00:00</updated>
+  <updated>2013-11-23T20:05:10+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Migrating to PostgreSQL]]></title>
+    <link href="http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql/"/>
+    <updated>2013-11-23T18:53:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&rsquo;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
+
+<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&rsquo;d like to put out here for anyone going through this.</p>
+
+<p>The real problem starts during the process of pulling data from SQLite database with <a href="https://github.com/ricardochimal/taps">Taps</a>. This gem provides a <code>taps</code> command that will help serve the one database and also pull data from it into another. First we have to serve our current SQLite database by passing <code>taps</code> a path to the database and also set a username and password. Then we can pull the data from this database into our Postgres database.</p>
+
+<p>However after running this command I got an error that read something like this:</p>
+
+<pre><code>taps cannot load such file -- sqlite3 (LoadError)
+</code></pre>
+
+<p>Huh? After hours of frustration I found that <code>Taps</code> depends on <code>rack</code> version <code>1.0.1</code>.</p>
+
+<h2>Solution</h2>
+
+<p>Added the this to <code>Gemfile</code></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lsquo;rack&rsquo;,’1.0.1’</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Then on Terminal run this&hellip;</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Terminal </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle update rack</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><code>Taps</code> will now successfully pulled data from SQLite into Postgres.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Uploading multiple files with carrierwave and a nested form]]></title>
