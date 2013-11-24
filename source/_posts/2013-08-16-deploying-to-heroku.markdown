@@ -2,7 +2,7 @@
 layout: post
 title: "Deploying to Heroku"
 date: 2013-08-16 18:16
-comments: true
+comments: false
 categories: [Heroku, Git]
 ---
 

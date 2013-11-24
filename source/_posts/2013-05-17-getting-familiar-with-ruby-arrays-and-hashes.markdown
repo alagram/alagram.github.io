@@ -2,7 +2,7 @@
 layout: post
 title: "Getting familiar with Ruby Arrays and Hash Methods."
 date: 2013-05-17 14:37
-comments: true
+comments: false
 categories: [Coding, Ruby]
 ---
 

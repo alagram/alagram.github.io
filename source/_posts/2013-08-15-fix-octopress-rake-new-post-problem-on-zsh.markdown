@@ -2,7 +2,7 @@
 layout: post
 title: "Fix Octopress rake new_post problem on Zsh"
 date: 2013-08-15 16:35
-comments: true
+comments: false
 categories: [Octopress, Zsh]
 ---
 <!-- more -->

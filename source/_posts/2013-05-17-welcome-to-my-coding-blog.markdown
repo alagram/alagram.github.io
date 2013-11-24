@@ -2,7 +2,7 @@
 layout: post
 title: "Welcome to my Coding Blog"
 date: 2013-05-17 02:54
-comments: true
+comments: false
 categories: 
 ---
 

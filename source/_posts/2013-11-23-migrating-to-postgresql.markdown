@@ -2,7 +2,7 @@
 layout: post
 title: "Migrating to PostgreSQL"
 date: 2013-11-23 18:53
-comments: true
+comments: false
 categories: [Rails, PostgreSQL]
 ---
 

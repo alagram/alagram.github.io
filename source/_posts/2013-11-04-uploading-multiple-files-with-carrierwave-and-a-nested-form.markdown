@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Uploading multiple files with carrierwave and a nested form"
+title: "Uploading multiple files with carrierwave using a nested form"
 date: 2013-11-04 17:00
-comments: true
+comments: false
 categories: Rails
 ---
 

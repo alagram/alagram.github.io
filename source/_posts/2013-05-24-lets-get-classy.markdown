@@ -2,7 +2,7 @@
 layout: post
 title: "A Class Act"
 date: 2013-05-24 16:31
-comments: true
+comments: false
 categories: Ruby
 ---
 
