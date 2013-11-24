@@ -1,107 +1,107 @@
 
-
-<!doctype html>
-  <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-  <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-  <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-  <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Getting familiar with Ruby Arrays and Hash Methods. - Albert Agram</title>
-    <meta name="author" content="Albert Agram">
-    
-    <meta name="description" content="Getting familiar with Ruby Arrays and Hash Methods. May 17th, 2013 Coding Ruby This post is about getting familiar with array and hash methods. &hellip;">
-    
-    <meta name="viewport" content="width=device-width">
-    
-    <link rel="canonical" href="http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes">
-    <link href="/favicon.png" rel="icon">
-    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
-    <link href="//atom.xml" rel="alternate" title="Albert Agram" type="application/atom+xml">
-  </head>
-
-
-  <body >
-
-    <header>
-      <div class="grid-wrapper">
-  <div class="grid">
-
-    <div class="grid__item two-fifths lap-four-sixths palm-one-whole">
-  <a href="/" class="site-title">Albert Agram</a>
-</div>
-
-<div class="grid__item three-fifths lap-two-sixths palm-one-whole">
-  <nav>
-    <input type="checkbox" id="toggle">
-<label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
-<ul class="menu pull-right">
-  <li><a href="/">Home</a></li>
-  <li><a href="/blog/">Blog</a></li>
-</ul>
-  </nav>
-</div>
-
-  </div>
-</div>
-    </header>
-
-    
-
-    <div class="grid-wrapper">
-      <div class="grid grid-center">
-        
-        <div class="grid__item two-thirds lap-one-whole palm-one-whole">
-        
-
-          <article class="post">
-  <header>
-  
-  <h1 class="title indent">Getting familiar with Ruby Arrays and Hash Methods.</h1>
-  
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Getting familiar with Ruby Arrays and Hash Methods. - Albert Agram</title>
+  <meta name="author" content="Albert Agram">
 
   
-  <div class="meta clearfix">
-    
-
-
-
-
-
-
-
-
+  <meta name="description" content="This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks &hellip;">
   
 
-
-<time class="pull-left" datetime="2013-05-17T14:37:00+00:00" pubdate data-updated="true"><i class="icon-calendar"></i> May 17<span>th</span>, 2013</time>
-    
-
-
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <div class="pull-left">
-    <i class="icon-tags"></i>
-    <ul class="tags unstyled">
-    
-      <li><a href="/blog/categories/Coding/">Coding</a></li>
-    
-      <li><a href="/blog/categories/Ruby/">Ruby</a></li>
-    
-    </ul>
-  </div>
-  
+  <link rel="canonical" href="http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Albert Agram" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
-    
-  </div>
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'A-41006019-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Albert Agram</a></h1>
+  
+</hgroup>
+
 </header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:alagram.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Getting Familiar With Ruby Arrays and Hash Methods.</h1>
+    
+    
+      <p class="meta">
+        
 
 
 
 
-  <!-- more -->
+
+
+
+
+  
+
+
+<time datetime="2013-05-17T14:37:00+00:00" pubdate data-updated="true">May 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><!-- more -->
 
 
 <p>This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks like Rails.</p>
@@ -218,48 +218,72 @@ We can do something like this:</p>
 
 
 <p>Conclusion: Array and Hash methods are very good to know and this post has covered just a few. Learn more about these methods by looking at several Ruby/Rails APIs.</p>
+</div>
 
 
-</article>
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Albert Agram</span></span>
+
+      
 
 
-        
-        </div>
-        
-        
-        <aside id="sidebar" class="grid__item one-third lap-one-whole palm-one-whole">
-          <div class="grid">
+
+
+
+
+
 
   
-<section class="social aside-module grid__item one-whole lap-one-half">
-  <h1 class="title delta">
-    Follow me!
-  </h1>
-  <ul class="unstyled">
-    
-    
-    <li><a class="github" href="//github.com/alagram"><i class="icon-github"></i> Github</a></li>
-    
-    
-    
-    
-    
-    
-    
-  </ul>
-</section>
 
 
-  <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
-  <h1 class="title delta">Recent Posts</h1>
-  <ul class="divided">
+<time datetime="2013-05-17T14:37:00+00:00" pubdate data-updated="true">May 17<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/coding/'>Coding</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/17/welcome-to-my-coding-blog/" title="Previous Post: Welcome to my Coding Blog">&laquo; Welcome to my Coding Blog</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/05/24/lets-get-classy/" title="Next Post: A Class Act">A Class Act &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
     
       <li class="post">
         <a href="/blog/2013/11/23/migrating-to-postgresql/">Migrating to PostgreSQL</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/">Uploading multiple files with carrierwave using a nested form</a>
+        <a href="/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/">Uploading Multiple Files With Carrierwave Using a Nested Form</a>
       </li>
     
       <li class="post">
@@ -267,7 +291,7 @@ We can do something like this:</p>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/">Fix Octopress rake new_post problem on Zsh</a>
+        <a href="/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/">Fix Octopress Rake New_post Problem on Zsh</a>
       </li>
     
       <li class="post">
@@ -277,23 +301,36 @@ We can do something like this:</p>
   </ul>
 </section>
 
-<section id="github-repos" class="aside-module grid__item one-whole lap-one-half">
-  <h1 class="title delta">
-    GitHub Repos
-    
-    <small class="pull-right">
-      <a class="btn" href="//github.com/alagram" title="@alagram on GitHub" target="_blank">
-        <i class="icon-external-link"></i>
-      </a>
-    </small>
-    
-  </h1>
-  <ul id="gh_repos" class="divided">
-    <li class="loading">
-      <i class="icon-spinner icon-spin"></i>
-    </li>
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
   </ul>
+  
+  <a href="https://github.com/alagram">@alagram</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'alagram',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
+
+
 
 
 
@@ -304,7 +341,7 @@ We can do something like this:</p>
   <ul class="unstyled">
     
     
-    <li><a class="github" href="//github.com/alagram"><i class="icon-github"></i> Github</a></li>
+    
     
     
     
@@ -315,43 +352,19 @@ We can do something like this:</p>
   </ul>
 </section>
 
+  
+</aside>
 
-</div>
 
-        </aside>
-        
-      </div>
-    </div>
-    
-    <footer>
-      <div class="grid-wrapper">
-  <div class="grid">
-    <div class="grid__item">
-      <p class="copyright">
-  All content by Albert Agram and licenced under <a href="//creativecommons.org/licenses/by-nc-sa/3.0/ie/">Creative Commons</a>.<br>
-  Code under <a href="//github.com/coogie/oscailte/blob/master/README.md">MIT Licence</a>.
-</p>
     </div>
   </div>
-</div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Albert Agram -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
-    </footer>
-
-    <!--[if lt IE 7]>
-      <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-    <![endif]-->
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-<script defer src="/javascripts/octopress.js"></script>
-
-
-<script>
-  var _gaq=[['_setAccount','A-41006019-1'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
+</footer>
+  
 
 
 
@@ -363,5 +376,5 @@ We can do something like this:</p>
 
 
 
-  </body>
+</body>
 </html>
