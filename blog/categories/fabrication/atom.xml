@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Fabrication | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/fabrication/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2013-11-28T22:01:44+00:00</updated>
+  <updated>2013-11-29T10:45:16+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Multiple file uploads with Rspec, Fabrication and carrierwave]]></title>
-    <link href="http://alagram.github.io/blog/2013/11/28/multiple-file-upload-with-rspec-fabrication-and-carrierwave/"/>
+    <title type="html"><![CDATA[Testing multiple file uploads with Rspec, Fabrication and carrierwave]]></title>
+    <link href="http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave/"/>
     <updated>2013-11-28T20:26:00+00:00</updated>
-    <id>http://alagram.github.io/blog/2013/11/28/multiple-file-upload-with-rspec-fabrication-and-carrierwave</id>
+    <id>http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave</id>
     <content type="html"><![CDATA[<!-- more -->
 
 
