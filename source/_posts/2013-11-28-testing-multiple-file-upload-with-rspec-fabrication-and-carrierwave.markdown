@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Testing multiple file uploads with Rspec, Fabrication and carrierwave"
+title: "Testing multiple file upload with Rspec, Fabrication and carrierwave"
 date: 2013-11-28 20:26
 comments: false
 categories: [Fabrication, Rspec, carrierwave]
