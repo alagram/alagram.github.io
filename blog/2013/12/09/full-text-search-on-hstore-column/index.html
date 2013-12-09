@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rspec - Albert Agram</title>
+  <title>Full-Text Search on Hstore Column - Albert Agram</title>
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Category: Rspec">
+  <meta name="description" content="I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alagram.github.ioblog/categories/rspec">
+  <link rel="canonical" href="http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Albert Agram" type="application/atom+xml">
@@ -74,36 +74,121 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rspec</h1>
+    
+      <h1 class="entry-title">Full-Text Search on Hstore Column</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-09T19:27:00+00:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://alagram.github.io">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave/">Testing multiple file upload with Rspec, Fabrication and carrierwave</a></h1>
-<time datetime="2013-11-28T20:26:00+00:00" pubdate><span class='month'>Nov</span> <span class='day'>28</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/fabrication/'>Fabrication</a>, <a class='category' href='/blog/categories/rspec/'>Rspec</a>, <a class='category' href='/blog/categories/carrierwave/'>carrierwave</a></span>
-</footer>
+<div class="entry-content"><!-- more -->
 
 
-</article>
+<p>I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
+
+<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&rsquo;t cut it. Lets assume we&rsquo;re working on a Product model with hstore properties column. After much frustration and searching, I found that to do full text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">def</span> <span class="k">self</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">conditons</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="n">EOS</span>
+</span><span class='line'>    <span class="n">to_tsvector</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">EOS</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">where</span><span class="p">(</span><span class="n">conditons</span><span class="p">,</span> <span class="n">query</span><span class="p">).</span><span class="k">order</span><span class="p">(</span><span class="ss">&quot;created_at DESC&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Reference</h3>
+
+<ul>
+<li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Albert Agram</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-09T19:27:00+00:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hstore/'>Hstore</a>, <a class='category' href='/blog/categories/postgres/'>Postgres</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave/" title="Previous Post: Testing multiple file upload with Rspec, Fabrication and carrierwave">&laquo; Testing multiple file upload with Rspec, Fabrication and carrierwave</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -205,7 +290,10 @@
       var disqus_shortname = 'agramwebdev';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column/';
+        var disqus_url = 'http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

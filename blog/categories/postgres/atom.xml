@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Postgres | Albert Agram]]></title>
+  <link href="http://alagram.github.io/blog/categories/postgres/atom.xml" rel="self"/>
+  <link href="http://alagram.github.io/"/>
+  <updated>2013-12-09T20:54:10+00:00</updated>
+  <id>http://alagram.github.io/</id>
+  <author>
+    <name><![CDATA[Albert Agram]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Full-Text Search on Hstore Column]]></title>
+    <link href="http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column/"/>
+    <updated>2013-12-09T19:27:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
+
+<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&rsquo;t cut it. Lets assume we&rsquo;re working on a Product model with hstore properties column. After much frustration and searching, I found that to do full text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">def</span> <span class="k">self</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">conditons</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span><span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">to_tsvector</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">where</span><span class="p">(</span><span class="n">conditons</span><span class="p">,</span> <span class="n">query</span><span class="p">).</span><span class="k">order</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">created_at</span> <span class="k">DESC</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Reference</h3>
+
+<ul>
+<li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
