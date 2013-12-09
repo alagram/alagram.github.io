@@ -8,9 +8,15 @@ categories: [Fabrication, Rspec, carrierwave]
 
 <!-- more -->
 
-I ran into some problems when testing controller code with Rpsec while generating objects with fabrication. Most tests failed after I set validation on an Image object. 
+I ran into some problems when testing controller code with Rpsec while generating objects with fabrication. Most tests failed after I set validation on an Image object.
 
 My setup:
+
+*  fabrication (2.9.3)
+*  rspec-rails (2.14.0)
+*  faker (1.2.0)
+*  ruby 2.0.0p247
+*  OSX 10.9
 
 {% codeblock lang:ruby %}
 class Expense < ActiveRecord::Base
