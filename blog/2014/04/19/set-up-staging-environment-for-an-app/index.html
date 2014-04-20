@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Set Up Staging Environment for an App - Albert Agram</title>
+  <meta name="author" content="Albert Agram">
+
+  
+  <meta name="description" content="Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alagram.github.io/blog/2014/04/19/set-up-staging-environment-for-an-app">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Albert Agram" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'A-41006019-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Albert Agram</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:alagram.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Set Up Staging Environment for an App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-19T10:21:00+00:00" pubdate data-updated="true">Apr 19<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://alagram.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><!-- more -->
+
+
+<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&rsquo;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
+
+<h2>With App Not Deployed to Production</h2>
+
+<p>If your app has not been pushed to production, i.e , it&rsquo;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
+
+<h2>With App Already Deployed to Production</h2>
+
+<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&rsquo;ll run</p>
+
+<pre><code>heroku fork -a googleclone googleclone-staging
+</code></pre>
+
+<p>This will create a copy of googleclone called googleclone-clone</p>
+
+<pre><code>Creating fork googleclone-staging... done
+Copying slug... done
+Adding heroku-postgresql:some-dev... done
+Adding pgbackups:plus to googleclone... done
+Adding pgbackups:plus to googleclone-staging... done
+Transferring database (this can take some time)...  done
+Copying config vars... done
+Fork complete, view it at http://googleclone-staging.herokuapp.com/
+</code></pre>
+
+<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratropper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># lib/tasks/deploy.rake</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;paratrooper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:deploy</span> <span class="k">do</span>
+</span><span class='line'> <span class="n">desc</span> <span class="s1">&#39;Deploy app in staging environment&#39;</span>
+</span><span class='line'> <span class="n">task</span> <span class="ss">:staging</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">deployment</span> <span class="o">=</span> <span class="ss">Paratrooper</span><span class="p">:</span><span class="ss">:Deploy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;googleclone-staging&quot;</span><span class="p">,</span> <span class="ss">tag</span><span class="p">:</span> <span class="s1">&#39;staging&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="n">deployment</span><span class="o">.</span><span class="n">deploy</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'> <span class="n">desc</span> <span class="s1">&#39;Deploy app in production environment&#39;</span>
+</span><span class='line'> <span class="n">task</span> <span class="ss">:production</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">deployment</span> <span class="o">=</span> <span class="ss">Paratrooper</span><span class="p">:</span><span class="ss">:Deploy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;googleclone&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">deploy</span><span class="o">|</span>
+</span><span class='line'>     <span class="n">deploy</span><span class="o">.</span><span class="n">tag</span>              <span class="o">=</span> <span class="s1">&#39;production&#39;</span><span class="p">,</span>
+</span><span class='line'>     <span class="n">deploy</span><span class="o">.</span><span class="n">match_tag</span>        <span class="o">=</span> <span class="s1">&#39;staging&#39;</span>
+</span><span class='line'>   <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="n">deployment</span><span class="o">.</span><span class="n">deploy</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can call  <code>rake deploy:staging</code> and <code>rake deploy:production</code> to deploy to <code>staging</code> and <code>production</code> environments respectively.</p>
+
+<p>I hope you found this useful.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Albert Agram</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-19T10:21:00+00:00" pubdate data-updated="true">Apr 19<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/heroku/'>Heroku</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/27/web-design-resources/" title="Previous Post: Web Design Resources">&laquo; Web Design Resources</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/27/web-design-resources/">Web Design Resources</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/09/full-text-search-on-hstore-column/">Full-Text Search on Hstore Column</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave/">Testing Multiple File Upload With Rspec, Fabrication and Carrierwave</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/migrating-to-postgresql/">Migrating to PostgreSQL</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/alagram">@alagram</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'alagram',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+<section class="social aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">
+    Follow me!
+  </h1>
+  <ul class="unstyled">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Albert Agram -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'agramwebdev';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alagram.github.io/blog/2014/04/19/set-up-staging-environment-for-an-app/';
+        var disqus_url = 'http://alagram.github.io/blog/2014/04/19/set-up-staging-environment-for-an-app/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
