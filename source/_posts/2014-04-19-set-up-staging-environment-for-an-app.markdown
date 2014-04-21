@@ -33,7 +33,7 @@ This will create a copy of googleclone called googleclone-clone
     Copying config vars... done
     Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
-With this taken care of, we'll use the [paratropper gem](https://github.com/mattpolito/paratrooper) which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we'll need to create a simple `deploy.rake` file under `lib/tasks`
+With this taken care of, we'll use the [paratrooper gem](https://github.com/mattpolito/paratrooper) which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we'll need to create a simple `deploy.rake` file under `lib/tasks`
 
 {% codeblock lang:ruby %}
 
