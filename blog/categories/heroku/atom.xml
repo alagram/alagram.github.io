@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-04-20T13:47:21+00:00</updated>
+  <updated>2014-04-21T13:56:03+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -46,7 +46,7 @@ Copying config vars... done
 Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </code></pre>
 
-<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratropper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
+<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
