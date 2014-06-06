@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-04-21T13:56:03+00:00</updated>
+  <updated>2014-06-06T22:55:35+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -98,6 +98,456 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>Now we can call  <code>rake deploy:staging</code> and <code>rake deploy:production</code> to deploy to <code>staging</code> and <code>production</code> environments respectively.</p>
 
 <p>I hope you found this useful.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Basic SQL]]></title>
+    <link href="http://alagram.github.io/blog/2014/04/07/basic-sql/"/>
+    <updated>2014-04-07T11:35:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/04/07/basic-sql</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<h2>Introduction</h2>
+
+<p>In this blog post, we want to introduce you to SQL and Databases. We&rsquo;ll start by explaining the key concepts of databases. Later, we&rsquo;ll pick up some basic SQL commands while buiding a database of our favourite books.</p>
+
+<!-- In this blog post, we'll look at basic SQL concepts while building a database of our favorite books. The best way to learn is by practicing the commands in a real relational database. We'll make use of MySQL, however, any relational database product will also work. -->
+
+
+
+
+<!-- ####1.0) An Introduction to SQL and Explaining Tables -->
+
+
+<h4>1.0) Bird&rsquo;s eye view of Databases</h4>
+
+<p>We&rsquo;ll start by explaining the core concepts of Databases.</p>
+
+<h4>1.1) What is SQL?</h4>
+
+<p>SQL stands for Structured Query Language.</p>
+
+<p>A databse is an organized collection of data. Software which is used to manage digital databases is called a Database Management System (DBMS).</p>
+
+<h4>1.1) What is a Table?</h4>
+
+<p>To help you properly accept the concept of databases, we&rsquo;re going to use spreadsheets as an analogy. To optimize the use of spreadsheets, we usually create a file with multiple sheets.</p>
+
+<p>Suppose we have two sheets inside our spreadsheet that keep track of users and reviews respectively:</p>
+
+<p><img class="center" src="http://alagram.github.io/images/users.png" width="400" height="400" title="users" alt="images"></p>
+
+<p><img class="center" src="http://alagram.github.io/images/reviews.png" width="400" height="400" title="reviews" alt="images"></p>
+
+<p>Our first sheet has 3 columns that help us keep track of a user&rsquo;s <code>id</code>, <code>username</code> and <code>email</code>. The second sheet has two columns: <code>id</code> and <code>content</code>. Lets call these sheets <code>users</code> and <code>reviews</code>.</p>
+
+<p>Technically, in relational databases, a table is an organized set of data elements where columns describe the type of data and rows contain the actual data to be stored. A sheet is a perfect analogy of a table within a database.</p>
+
+<h4>1.2 Rows and Columns</h4>
+
+<p>A relational database has columns and rows. A row represents a single set of related data whiles a column provides a standardized way of storing data in the rows of a database. For instance, in our <code>users</code> sheet, the <code>username</code> column is set up to contain only the username value of a particular user. We cannot store a integer in this column. Also, the first row contains data related to john.</p>
+
+<h4>1.3 Relational Database Views</h4>
+
+<p>The two main views are data and schema views. The dataview displays with columns at the top and rows of data for each dataset, just like an Excel spreadsheet. It shows the data in a table. A schema view shows the column names and column type.</p>
+
+<h4>1.4 Interacting with a database</h4>
+
+<p>Relational database interfaces are in two forms, GUI and command line. It is important to note that they all the same. Making a choice between these two is a matter of preference.</p>
+
+<h4>1.5 Primary Key and Foreign Key</h4>
+
+<p>There is a unique column to keep track of each row of data. This column is called primary key. Most relational databases default this to the <code>id</code> column. Rails use&rsquo;s this default as well.</p>
+
+<p>Foreign key helps is link information from one table to another. The foreign key column will contain the primary key of another table. Lets suppose we want to link our <code>users</code> and <code>reviews</code> tables to keep track of who a review belongs to. We could create a <code>review_username</code> column to store the user&rsquo;s <code>username</code> in our <code>reviews</code> table. But the problem with this approach is the <code>username</code> column is not unique. There could be multiple Sam&rsquo;s in the <code>users</code> table. We need a unique column and the perfect candidate is the <code>id</code> column. <code>user_id</code> will become our foreign key created in the <code>reviews</code> table.</p>
+
+<p><img class="center" src="http://alagram.github.io/images/foreign_key.png" width="400" height="400" title="foreign key" alt="images"></p>
+
+<p>Now the first review belongs to alice, the second belongs to john and the last review belongs to sam.</p>
+
+<p>With these basic concepts out of the way, we&rsquo;ll get our hands dirty with some basic SQL syntax in the next section.</p>
+
+<h4>2.1) Data Definition Language</h4>
+
+<p>SQL has basics verbs. They are:</p>
+
+<ul>
+<li>Data Manipulation Language: INSERT, UPDATE, DELETE</li>
+<li>Data Query Language: SELECT</li>
+<li>Data Control Language: GRANT, REVOTE etc.</li>
+<li>Transaction Control Commands: COMMIT, ROLLBACK ect.</li>
+</ul>
+
+
+<h4>2.2 SQL Data types</h4>
+
+<p>Just like the Ruby language has data types like <code>Array</code>, <code>Hash</code> etc, SQL also has its special data-types. The common ones are:</p>
+
+<ul>
+<li>Variable length characters    (varchar)</li>
+<li>Integer values             (int)</li>
+<li>Decimal numbers            (decimal)</li>
+<li>Date data type             (date)</li>
+</ul>
+
+
+<h4>2.3 Creating a Database</h4>
+
+<p>Now that we&rsquo;ve gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables.</p>
+
+<p>Example:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">library</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2.4 Table Creation</h4>
+
+<p>Next, we&rsquo;ll create a <code>books_tbl</code> table.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl</span> <span class="p">(</span>
+</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+</span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2.5 Inserting data</h4>
+
+<p>We&rsquo;re all set now; lets populate our table with some data. To polupate data we use the <code>INSERT</code> command</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span>  <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. Constraints</h4>
+
+<p>So far, we&rsquo;ve created a table and populated it with data, but we have some problems to deal with. We want our table to hold meaningful information about our books. In that regard, it would make sense to create our table in such a way that certain fields do not accept empty or <code>NULL</code> values. This is where constraints come in.</p>
+
+<p>Contstraints are rules to abide by while doing SQL operations. Constraints help make data in your database more useful and structured. For instance, every book must have a title, author and year. Below we create a table that accepts <code>NULL</code> constraints in some fields.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl_cp</span> <span class="p">(</span>
+</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="k">NULL</span>
+</span><span class='line'>  <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This means that only publisher field will accept empty values. Let&rsquo;s populate this table.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3.1 Primary Key Constraint</h4>
+
+<p>We&rsquo;ve solved one problem, but we&rsquo;re faced with yet another. We have to ensure that none of the records would duplicate information about the same book. A primary key is used to ensure uniqueness of data. It&rsquo;s also used to identify a row of data in a table, is almost always a number value and does not allow <code>NULL</code> values. Also, a table can only have one primary key.</p>
+
+<p>To deonstrate, lets create a new table <code>fav_books_tbl</code> with a <code>primary key</code> set to the <code>id</code> field. Also, we&rsquo;d like to have our <code>primary key</code> auto incremented without specifying a value.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="p">(</span>
+</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NULL</span>
+</span><span class='line'>  <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ID fields are generally used as primary keys. Now, we do not have to specify the <code>id</code> value. Also, when we try to insert duplicate <code>id</code> fields, our databse will complain. Try it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3.2 Unique Key Constraint</h4>
+
+<p>Let&rsquo;s things up a notch by exploring the concept of a unique key. A unique key, like the primary key is used to ensure uniqueness of data. Unique key, makes sure that data is not duplicated in two rows in the database. There are subtle differences between the two. For example, a table can have more than one unique key. A field with a unique key can take only one NULL value.</p>
+
+<p>In our case, we can now decide to make <code>title</code> field unique. This would ensure that there are no duplicate titles in our table. This time we&rsquo;ll only modify the column.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="k">MODIFY</span> <span class="k">COLUMN</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">UNIQUE</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now our <code>fav_books_tbl</code> table ensures the <code>title</code> column does not have duplicate records. Give it a shot:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4.0 Operations on Tables</h4>
+
+<p>Lets clean up our database by learning a few Table Operations.</p>
+
+<h4>4.1 Dropping Tables</h4>
+
+<p>We drop tables in SQL with the <code>DROP TABLE</code> command. Lets go ahead and drop a few tables.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">books_tbl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4.2 Modifying tables</h4>
+
+<p>We&rsquo;ve already modified a table but we&rsquo;ll go over it again. After a table has been created, we can change its structure by using the <code>ALTER TABLE</code> command.</p>
+
+<p>We&rsquo;ll modify some attributes of <code>fav_books_tbl</code>. Lets change the <code>author</code> field to type <code>VARCHAR(100)</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="k">MODIFY</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To verify that the change took effect you can use the <code>DESCRIBE</code> command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DESCRIBE</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>5.0 Simple SQL Queries</h4>
+
+<p>Before moving on to more interesting querying, lets insert some data into our table.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Twelve Years A Slave&#39;</span><span class="p">,</span> <span class="s1">&#39;Solomon Northup&#39;</span><span class="p">,</span> <span class="mi">1853</span><span class="p">,</span> <span class="s1">&#39;Derby &amp; Miller, Auburn, New York&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;David and Goliath&#39;</span><span class="p">,</span> <span class="s1">&#39;Malcolm Gladwell&#39;</span><span class="p">,</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;Little, Brown and Company&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Power of Habit&#39;</span><span class="p">,</span> <span class="s1">&#39;Charles Duhigg&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>5.1 Selecting all records from a table</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This query will return all 4 rows in <code>fav_books_tbl</code> table.</p>
+
+<h4>5.1 Selecting a limited number of columns</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">author</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> title                 </th>
+<th> author          </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> The Famous 5          </td>
+<td> Enid Blyton</td>
+</tr>
+<tr>
+<td></td>
+<td> Twelve Years A Slave  </td>
+<td> Solomon Northup</td>
+</tr>
+<tr>
+<td></td>
+<td> David and Goliath     </td>
+<td> Malcolm Gladwell</td>
+</tr>
+<tr>
+<td></td>
+<td> The Power of Habit    </td>
+<td> Charles Duhigg</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Output showing fields constructed in the query.</p>
+
+<h4>5.2 Ordering results</h4>
+
+<p>Suppose we want to order results from a query, say, by title and  published date.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> title                 </th>
+<th> published       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Twelve Years A Slave  </td>
+<td> 1853</td>
+</tr>
+<tr>
+<td></td>
+<td> The Famous 5          </td>
+<td> 1942</td>
+</tr>
+<tr>
+<td></td>
+<td> The Power of Habit    </td>
+<td> 2012</td>
+</tr>
+<tr>
+<td></td>
+<td> David and Goliath     </td>
+<td> 2013</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Next lets further sort by descending and ascending respectively.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">DESC</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> title                 </th>
+<th> published       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> David and Goliath     </td>
+<td> 2013</td>
+</tr>
+<tr>
+<td></td>
+<td> The Power of Habit    </td>
+<td> 2012</td>
+</tr>
+<tr>
+<td></td>
+<td> The Famous 5          </td>
+<td> 1942</td>
+</tr>
+<tr>
+<td></td>
+<td> Twelve Years A Slave  </td>
+<td> 1853</td>
+</tr>
+</tbody>
+</table>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">ASC</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th> title                 </th>
+<th> published       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td> Twelve Years A Slave  </td>
+<td> 1853</td>
+</tr>
+<tr>
+<td></td>
+<td> The Famous 5          </td>
+<td> 1942</td>
+</tr>
+<tr>
+<td></td>
+<td> The Power of Habit    </td>
+<td> 2012</td>
+</tr>
+<tr>
+<td></td>
+<td> David and Goliath     </td>
+<td> 2013</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>We could order a query with an abbreviation instead of the column name.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">ASC</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Abbreviations start from 1 which is given to the first column we specify et cetera. So we&rsquo;ve succeeded in reproducing our previous query, with the 2 in place of <code>published</code>.</p>
 ]]></content>
   </entry>
   
