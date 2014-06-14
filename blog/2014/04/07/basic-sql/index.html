@@ -120,21 +120,23 @@
 <!-- ####1.0) An Introduction to SQL and Explaining Tables -->
 
 
-<h4>1.0) Bird&rsquo;s eye view of Databases</h4>
+<h4>1) Bird&rsquo;s eye view of Databases</h4>
+
+<p>Lets suppose we have to store the name, address and age of a few hundred people. We could easily start by opening up a text file and inputting our values. The advantage is this is very easy to setup and use. And although the first ten to twenty will look great, overtime you&rsquo;ll find that we&rsquo;ll have typos and duplicate data. Also, we have to manually keep track of every single dataset. Further, we&rsquo;ll also have to query our data for information purposes. At this point you&rsquo;ll realise that we have a huge problem. We need a better way to organize our data.</p>
+
+<p>This is where relational databases come into play. Relational databases offer a general-purpose solution for organizing data with mimimum redundancy.</p>
+
+<p>A database is a collection of organized data. It is worth explaining that <code>relational</code> here doesn&rsquo;t mean relationships. Relational here has a mathematical <a href="http://en.wikipedia.org/wiki/Relational_model">basis</a>. When used in connection with databases, it means a system where we can store data in a tabular fashion.</p>
+
+<p>Structured Query Language or <code>SQL</code> is the standard language used for  communicating with relational databases. Software which is used to manage digital databases is called a Database Management System (DBMS).</p>
 
 <p>We&rsquo;ll start by explaining the core concepts of Databases.</p>
 
-<h4>1.1) What is SQL?</h4>
+<h5>What is a Table?</h5>
 
-<p>SQL stands for Structured Query Language.</p>
+<p>To help you properly accept the concept of databases, we&rsquo;re going to use spreadsheets as an analogy. To optimize the use of spreadsheets, we usually create a file or a workbook with multiple sheets. If you want to store data in a spreadsheet you&rsquo;ll have to make use of rows and columns.</p>
 
-<p>A databse is an organized collection of data. Software which is used to manage digital databases is called a Database Management System (DBMS).</p>
-
-<h4>1.1) What is a Table?</h4>
-
-<p>To help you properly accept the concept of databases, we&rsquo;re going to use spreadsheets as an analogy. To optimize the use of spreadsheets, we usually create a file with multiple sheets.</p>
-
-<p>Suppose we have two sheets inside our spreadsheet that keep track of users and reviews respectively:</p>
+<p>Suppose we have two sheets inside our workbook that keep track of users and reviews respectively:</p>
 
 <p><img class="center" src="/images/users.png" width="400" height="400" title="users" alt="images"></p>
 
@@ -144,19 +146,21 @@
 
 <p>Technically, in relational databases, a table is an organized set of data elements where columns describe the type of data and rows contain the actual data to be stored. A sheet is a perfect analogy of a table within a database.</p>
 
-<h4>1.2 Rows and Columns</h4>
+<h5>Rows and Columns</h5>
 
 <p>A relational database has columns and rows. A row represents a single set of related data whiles a column provides a standardized way of storing data in the rows of a database. For instance, in our <code>users</code> sheet, the <code>username</code> column is set up to contain only the username value of a particular user. We cannot store a integer in this column. Also, the first row contains data related to john.</p>
 
-<h4>1.3 Relational Database Views</h4>
+<h5>Relational Database Views</h5>
 
 <p>The two main views are data and schema views. The dataview displays with columns at the top and rows of data for each dataset, just like an Excel spreadsheet. It shows the data in a table. A schema view shows the column names and column type.</p>
 
-<h4>1.4 Interacting with a database</h4>
+<p><img class="center" src="/images/schema_view.png" width="600" height="500" title="schema view" alt="images"></p>
+
+<h5>Interacting with a database</h5>
 
 <p>Relational database interfaces are in two forms, GUI and command line. It is important to note that they all the same. Making a choice between these two is a matter of preference.</p>
 
-<h4>1.5 Primary Key and Foreign Key</h4>
+<h5>Primary Key and Foreign Key</h5>
 
 <p>There is a unique column to keep track of each row of data. This column is called primary key. Most relational databases default this to the <code>id</code> column. Rails use&rsquo;s this default as well.</p>
 
@@ -168,7 +172,9 @@
 
 <p>With these basic concepts out of the way, we&rsquo;ll get our hands dirty with some basic SQL syntax in the next section.</p>
 
-<h4>2.1) Data Definition Language</h4>
+<h4>2) SQL Fundamentals</h4>
+
+<h5>Data Definition Language</h5>
 
 <p>SQL has basics verbs. They are:</p>
 
@@ -180,7 +186,7 @@
 </ul>
 
 
-<h4>2.2 SQL Data types</h4>
+<h5>SQL Data types</h5>
 
 <p>Just like the Ruby language has data types like <code>Array</code>, <code>Hash</code> etc, SQL also has its special data-types. The common ones are:</p>
 
@@ -192,7 +198,7 @@
 </ul>
 
 
-<h4>2.3 Creating a Database</h4>
+<h5>Creating a Database</h5>
 
 <p>Now that we&rsquo;ve gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables.</p>
 
@@ -203,7 +209,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>2.4 Table Creation</h4>
+<h5>Table Creation</h5>
 
 <p>Next, we&rsquo;ll create a <code>books_tbl</code> table.</p>
 
@@ -220,7 +226,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>2.5 Inserting data</h4>
+<h5>Inserting data</h5>
 
 <p>We&rsquo;re all set now; lets populate our table with some data. To polupate data we use the <code>INSERT</code> command</p>
 
@@ -231,7 +237,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>3. Constraints</h4>
+<h4>3. Working with Constraints</h4>
 
 <p>So far, we&rsquo;ve created a table and populated it with data, but we have some problems to deal with. We want our table to hold meaningful information about our books. In that regard, it would make sense to create our table in such a way that certain fields do not accept empty or <code>NULL</code> values. This is where constraints come in.</p>
 
@@ -263,7 +269,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>3.1 Primary Key Constraint</h4>
+<h5>Primary Key Constraint</h5>
 
 <p>We&rsquo;ve solved one problem, but we&rsquo;re faced with yet another. We have to ensure that none of the records would duplicate information about the same book. A primary key is used to ensure uniqueness of data. It&rsquo;s also used to identify a row of data in a table, is almost always a number value and does not allow <code>NULL</code> values. Also, a table can only have one primary key.</p>
 
@@ -300,7 +306,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>3.2 Unique Key Constraint</h4>
+<h5>Unique Key Constraint</h5>
 
 <p>Let&rsquo;s things up a notch by exploring the concept of a unique key. A unique key, like the primary key is used to ensure uniqueness of data. Unique key, makes sure that data is not duplicated in two rows in the database. There are subtle differences between the two. For example, a table can have more than one unique key. A field with a unique key can take only one NULL value.</p>
 
@@ -318,11 +324,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>4.0 Operations on Tables</h4>
+<h4>4) Operations on Tables</h4>
 
 <p>Lets clean up our database by learning a few Table Operations.</p>
 
-<h4>4.1 Dropping Tables</h4>
+<h5>Dropping Tables</h5>
 
 <p>We drop tables in SQL with the <code>DROP TABLE</code> command. Lets go ahead and drop a few tables.</p>
 
@@ -331,7 +337,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>4.2 Modifying tables</h4>
+<h5>Modifying tables</h5>
 
 <p>We&rsquo;ve already modified a table but we&rsquo;ll go over it again. After a table has been created, we can change its structure by using the <code>ALTER TABLE</code> command.</p>
 
@@ -349,7 +355,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>5.0 Simple SQL Queries</h4>
+<h4>5) Simple SQL Queries</h4>
 
 <p>Before moving on to more interesting querying, lets insert some data into our table.</p>
 
@@ -362,7 +368,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>5.1 Selecting all records from a table</h4>
+<h5>Selecting all records from a table</h5>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
@@ -371,7 +377,7 @@
 
 <p>This query will return all 4 rows in <code>fav_books_tbl</code> table.</p>
 
-<h4>5.1 Selecting a limited number of columns</h4>
+<h5>Selecting a limited number of columns</h5>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">author</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
@@ -415,7 +421,7 @@
 
 <p>Output showing fields constructed in the query.</p>
 
-<h4>5.2 Ordering results</h4>
+<h5>Ordering results</h5>
 
 <p>Suppose we want to order results from a query, say, by title and  published date.</p>
 
