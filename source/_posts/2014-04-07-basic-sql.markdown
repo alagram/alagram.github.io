@@ -19,23 +19,24 @@ In this blog post, we want to introduce you to SQL and Databases. We'll start by
 
 <!-- ####1.0) An Introduction to SQL and Explaining Tables -->
 
-####1.0) Bird's eye view of Databases
+####1) Bird's eye view of Databases
+
+Lets suppose we have to store the name, address and age of a few hundred people. We could easily start by opening up a text file and inputting our values. The advantage is this is very easy to setup and use. And although the first ten to twenty will look great, overtime you'll find that we'll have typos and duplicate data. Also, we have to manually keep track of every single dataset. Further, we'll also have to query our data for information purposes. At this point you'll realise that we have a huge problem. We need a better way to organize our data.
+
+This is where relational databases come into play. Relational databases offer a general-purpose solution for organizing data with mimimum redundancy.
+
+A database is a collection of organized data. It is worth explaining that `relational` here doesn't mean relationships. Relational here has a mathematical [basis](http://en.wikipedia.org/wiki/Relational_model). When used in connection with databases, it means a system where we can store data in a tabular fashion.
+
+Structured Query Language or `SQL` is the standard language used for  communicating with relational databases. Software which is used to manage digital databases is called a Database Management System (DBMS).
 
 We'll start by explaining the core concepts of Databases.
 
 
-####1.1) What is SQL?
+##### What is a Table?
 
-SQL stands for Structured Query Language.
+To help you properly accept the concept of databases, we're going to use spreadsheets as an analogy. To optimize the use of spreadsheets, we usually create a file or a workbook with multiple sheets. If you want to store data in a spreadsheet you'll have to make use of rows and columns.
 
-A databse is an organized collection of data. Software which is used to manage digital databases is called a Database Management System (DBMS).
-
-
-####1.1) What is a Table?
-
-To help you properly accept the concept of databases, we're going to use spreadsheets as an analogy. To optimize the use of spreadsheets, we usually create a file with multiple sheets.
-
-Suppose we have two sheets inside our spreadsheet that keep track of users and reviews respectively:
+Suppose we have two sheets inside our workbook that keep track of users and reviews respectively:
 
 {% img center /images/users.png 400 400 'users' 'images' %}
 
@@ -45,21 +46,24 @@ Our first sheet has 3 columns that help us keep track of a user's `id`, `usernam
 
 Technically, in relational databases, a table is an organized set of data elements where columns describe the type of data and rows contain the actual data to be stored. A sheet is a perfect analogy of a table within a database.
 
-####1.2 Rows and Columns
+##### Rows and Columns
 
 A relational database has columns and rows. A row represents a single set of related data whiles a column provides a standardized way of storing data in the rows of a database. For instance, in our `users` sheet, the `username` column is set up to contain only the username value of a particular user. We cannot store a integer in this column. Also, the first row contains data related to john.
 
-####1.3 Relational Database Views
+##### Relational Database Views
 
 The two main views are data and schema views. The dataview displays with columns at the top and rows of data for each dataset, just like an Excel spreadsheet. It shows the data in a table. A schema view shows the column names and column type.
 
 
-####1.4 Interacting with a database
+{% img center /images/schema_view.png 600 500 'schema view' 'images' %}
+
+
+##### Interacting with a database
 
 Relational database interfaces are in two forms, GUI and command line. It is important to note that they all the same. Making a choice between these two is a matter of preference.
 
 
-####1.5 Primary Key and Foreign Key
+##### Primary Key and Foreign Key
 
 There is a unique column to keep track of each row of data. This column is called primary key. Most relational databases default this to the `id` column. Rails use's this default as well.
 
@@ -74,7 +78,9 @@ Now the first review belongs to alice, the second belongs to john and the last r
 
 With these basic concepts out of the way, we'll get our hands dirty with some basic SQL syntax in the next section.
 
-####2.1) Data Definition Language
+####2) SQL Fundamentals
+
+##### Data Definition Language
 
 SQL has basics verbs. They are:
 
@@ -83,7 +89,7 @@ SQL has basics verbs. They are:
 - Data Control Language: GRANT, REVOTE etc.
 - Transaction Control Commands: COMMIT, ROLLBACK ect.
 
-####2.2 SQL Data types
+##### SQL Data types
 Just like the Ruby language has data types like `Array`, `Hash` etc, SQL also has its special data-types. The common ones are:
 
 - Variable length characters    (varchar)
@@ -91,7 +97,7 @@ Just like the Ruby language has data types like `Array`, `Hash` etc, SQL also ha
 - Decimal numbers            (decimal)
 - Date data type             (date)
 
-####2.3 Creating a Database
+##### Creating a Database
 Now that we've gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables.
 
 Example:
@@ -100,7 +106,7 @@ Example:
 CREATE DATABASE library;
 {% endcodeblock %}
 
-####2.4 Table Creation
+##### Table Creation
 Next, we'll create a `books_tbl` table.
 
 {% codeblock lang:sql %}
@@ -111,7 +117,7 @@ Next, we'll create a `books_tbl` table.
   );
 {% endcodeblock %}
 
-####2.5 Inserting data
+##### Inserting data
 
 We're all set now; lets populate our table with some data. To polupate data we use the `INSERT` command
 
@@ -120,7 +126,7 @@ INSERT INTO books_tbl VALUES (1, 'The Famous 5', 'Enid Blyton');
 INSERT INTO books_tbl VALUES (2, 'Sweet Valley',  'Francine Pascal');
 {% endcodeblock %}
 
-####3. Constraints
+####3. Working with Constraints
 
 So far, we've created a table and populated it with data, but we have some problems to deal with. We want our table to hold meaningful information about our books. In that regard, it would make sense to create our table in such a way that certain fields do not accept empty or `NULL` values. This is where constraints come in.
 
@@ -144,7 +150,7 @@ INSERT INTO books_tbl_cp VALUES (2, 'Sweet Valley', 'Francine Pascal', 1983, 'Ra
 {% endcodeblock %}
 
 
-####3.1 Primary Key Constraint
+##### Primary Key Constraint
 We've solved one problem, but we're faced with yet another. We have to ensure that none of the records would duplicate information about the same book. A primary key is used to ensure uniqueness of data. It's also used to identify a row of data in a table, is almost always a number value and does not allow `NULL` values. Also, a table can only have one primary key.
 
 To deonstrate, lets create a new table `fav_books_tbl` with a `primary key` set to the `id` field. Also, we'd like to have our `primary key` auto incremented without specifying a value.
@@ -171,7 +177,7 @@ INSERT INTO fav_books_tbl VALUES (1, 'Sweet Valley', 'Francine Pascal', 1983, 'R
 {% endcodeblock %}
 
 
-####3.2 Unique Key Constraint
+##### Unique Key Constraint
 Let's things up a notch by exploring the concept of a unique key. A unique key, like the primary key is used to ensure uniqueness of data. Unique key, makes sure that data is not duplicated in two rows in the database. There are subtle differences between the two. For example, a table can have more than one unique key. A field with a unique key can take only one NULL value.
 
 In our case, we can now decide to make `title` field unique. This would ensure that there are no duplicate titles in our table. This time we'll only modify the column.
@@ -188,10 +194,10 @@ INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Fam
 {% endcodeblock %}
 
 
-####4.0 Operations on Tables
+####4) Operations on Tables
 Lets clean up our database by learning a few Table Operations.
 
-####4.1 Dropping Tables
+##### Dropping Tables
 
 We drop tables in SQL with the `DROP TABLE` command. Lets go ahead and drop a few tables.
 
@@ -199,7 +205,7 @@ We drop tables in SQL with the `DROP TABLE` command. Lets go ahead and drop a fe
 DROP TABLE books_tbl;
 {% endcodeblock %}
 
-####4.2 Modifying tables
+##### Modifying tables
 We've already modified a table but we'll go over it again. After a table has been created, we can change its structure by using the `ALTER TABLE` command.
 
 We'll modify some attributes of `fav_books_tbl`. Lets change the `author` field to type `VARCHAR(100)`.
@@ -214,7 +220,7 @@ DESCRIBE fav_books_tbl;
 {% endcodeblock %}
 
 
-####5.0 Simple SQL Queries
+####5) Simple SQL Queries
 
 Before moving on to more interesting querying, lets insert some data into our table.
 
@@ -225,7 +231,7 @@ INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Pow
 {% endcodeblock %}
 
 
-####5.1 Selecting all records from a table
+##### Selecting all records from a table
 
 {% codeblock lang:sql %}
 SELECT * FROM fav_books_tbl;
@@ -233,7 +239,7 @@ SELECT * FROM fav_books_tbl;
 
 This query will return all 4 rows in `fav_books_tbl` table.
 
-####5.1 Selecting a limited number of columns
+##### Selecting a limited number of columns
 
 {% codeblock lang:sql %}
 SELECT title, author FROM fav_books_tbl;
@@ -251,7 +257,7 @@ Output:
 Output showing fields constructed in the query.
 
 
-####5.2 Ordering results
+##### Ordering results
 Suppose we want to order results from a query, say, by title and  published date.
 
 {% codeblock lang:sql %}
