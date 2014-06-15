@@ -176,6 +176,10 @@
 
 <p>This tutorial is meant for absolute beginners and meant to be hands-on in that we want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. We want to make sure you can complete basic SQL tasks.</p>
 
+<h5>Setup</h5>
+
+<p>For the sake of simplicity we&rsquo;ll use <a href="https://sqlite.org/">SQLite3</a>. If you&rsquo;re on Mac OSX you can install <code>SQLite3</code> using <a href="http://brew.sh/">Homebrew</a> by running <code>brew install sqlite3</code>. Windows users can download and install <code>SQLite3</code> <a href="http://www.sqlite.org/download.html">here</a>. See <a href="http://www.thegeekstuff.com/2011/07/install-sqlite3/">here</a> for Linux installation instructions.</p>
+
 <h5>Data Definition Language</h5>
 
 <p>SQL has basics verbs. They are:</p>
@@ -202,12 +206,12 @@
 
 <h5>Creating a Database</h5>
 
-<p>Now that we&rsquo;ve gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables.</p>
+<p>Now that we&rsquo;ve gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables. We&rsquo;ll create a database named <code>library</code> from the command line:</p>
 
 <p>Example:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">library</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">sqlite3</span> <span class="n">library</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -216,15 +220,7 @@
 <p>Next, we&rsquo;ll create a <code>books_tbl</code> table.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl</span> <span class="p">(</span>
-</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span><span class="p">,</span>
-</span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-</span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
