@@ -80,6 +80,12 @@ With these basic concepts out of the way, we'll get our hands dirty with some ba
 
 ####2) SQL Fundamentals
 
+This tutorial is meant for absolute beginners and meant to be hands-on in that we want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. We want to make sure you can complete basic SQL tasks.
+
+#####Setup
+
+For the sake of simplicity we'll use [SQLite3](https://sqlite.org/). If you're on Mac OSX you can install `SQLite3` using [Homebrew](http://brew.sh/) by running `brew install sqlite3`. Windows users can download and install `SQLite3` [here](http://www.sqlite.org/download.html). See [here](http://www.thegeekstuff.com/2011/07/install-sqlite3/) for Linux installation instructions.
+
 ##### Data Definition Language
 
 SQL has basics verbs. They are:
@@ -98,23 +104,19 @@ Just like the Ruby language has data types like `Array`, `Hash` etc, SQL also ha
 - Date data type             (date)
 
 ##### Creating a Database
-Now that we've gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables.
+Now that we've gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables. We'll create a database named `library` from the command line:
 
 Example:
 
 {% codeblock lang:sql %}
-CREATE DATABASE library;
+sqlite3 library
 {% endcodeblock %}
 
 ##### Table Creation
 Next, we'll create a `books_tbl` table.
 
 {% codeblock lang:sql %}
-  CREATE TABLE books_tbl (
-   id INTEGER,
-   title VARCHAR(20),
-   author VARCHAR(15)
-  );
+  CREATE TABLE books_tbl (id INTEGER, title VARCHAR(20), author VARCHAR(15));
 {% endcodeblock %}
 
 ##### Inserting data
