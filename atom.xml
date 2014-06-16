@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-06-16T17:14:44+00:00</updated>
+  <updated>2014-06-16T17:41:07+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -454,14 +454,29 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The Famous 5 has an <code>id</code> of 1 in our <code>fav_books_tbl</code> table; we know it&rsquo;s auhtor is Francine Pascal, with an <code>id</code> of 5 in our <code>authors</code> table. We can complete the association with this code:</p>
+<p>The Famous 5 has an <code>id</code> of 1 in our <code>fav_books_tbl</code> table; we know it&rsquo;s auhtor is Enid Blyton, with an <code>id</code> of 4 in our <code>authors</code> table. We can complete the association with this code:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>What this is saying is that update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 1 where <code>id</code> is 1.</p>
+<p>What this is saying is that update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
+
+<p>Lets update all the other <code>author_id</code> fields in our table:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 ]]></content>
   </entry>
   
