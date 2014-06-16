@@ -9,7 +9,7 @@
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Introduction In this blog post, we want to introduce you to SQL and Databases. We&rsquo;ll start by explaining the key concepts of databases. Later &hellip;">
+  <meta name="description" content="Introduction In this blog post, we want to introduce you to SQL and Databases. We want to make sur you understand what&rsquo;s happening behind the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,7 +110,7 @@
 
 <h2>Introduction</h2>
 
-<p>In this blog post, we want to introduce you to SQL and Databases. We&rsquo;ll start by explaining the key concepts of databases. Later, we&rsquo;ll pick up some basic SQL commands while buiding a database of our favourite books.</p>
+<p>In this blog post, we want to introduce you to SQL and Databases. We want to make sur you understand what&rsquo;s happening behind the scenes before diving in the <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a> world with Rails. We&rsquo;ll start by explaining the key concepts of databases. Later, we&rsquo;ll introduce you to some basic SQL commands and syntax while buiding a database of our favourite books.</p>
 
 <!-- In this blog post, we'll look at basic SQL concepts while building a database of our favorite books. The best way to learn is by practicing the commands in a real relational database. We'll make use of MySQL, however, any relational database product will also work. -->
 
@@ -130,7 +130,7 @@
 
 <p>Structured Query Language or <code>SQL</code> is the standard language used for  communicating with relational databases. Software which is used to manage digital databases is called a Database Management System (DBMS).</p>
 
-<p>We&rsquo;ll start by explaining the core concepts of Databases.</p>
+<p>What follows is an explanation of the core concepts of Databases.</p>
 
 <h5>What is a Table?</h5>
 
@@ -174,20 +174,20 @@
 
 <h4>2) SQL Fundamentals</h4>
 
-<p>This tutorial is meant for absolute beginners and meant to be hands-on in that we want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. We want to make sure you can complete basic SQL tasks.</p>
+<p><em><strong>Note on being hands-on:</strong> Like all crafts, you need hands-on practice to gain experience. That&rsquo;s the approach the rest of this tutorial takes. We want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. So buckle up and lets go!</em></p>
 
-<h5>Setup</h5>
+<h5>Getting started</h5>
 
 <p>For the sake of simplicity we&rsquo;ll use <a href="https://sqlite.org/">SQLite3</a>. If you&rsquo;re on Mac OSX you can install <code>SQLite3</code> using <a href="http://brew.sh/">Homebrew</a> by running <code>brew install sqlite3</code>. Windows users can download and install <code>SQLite3</code> <a href="http://www.sqlite.org/download.html">here</a>. See <a href="http://www.thegeekstuff.com/2011/07/install-sqlite3/">here</a> for Linux installation instructions.</p>
 
 <h5>Data Definition Language</h5>
 
-<p>SQL has basics verbs. They are:</p>
+<p>SQL has basics verbs. You can think of them as different ways to talk to a database. They are:</p>
 
 <ul>
 <li>Data Manipulation Language: INSERT, UPDATE, DELETE</li>
 <li>Data Query Language: SELECT</li>
-<li>Data Control Language: GRANT, REVOTE etc.</li>
+<li>Data Control Language: GRANT, REVOKE etc.</li>
 <li>Transaction Control Commands: COMMIT, ROLLBACK ect.</li>
 </ul>
 
@@ -197,21 +197,21 @@
 <p>Just like the Ruby language has data types like <code>Array</code>, <code>Hash</code> etc, SQL also has its special data-types. The common ones are:</p>
 
 <ul>
-<li>Variable length characters    (varchar)</li>
-<li>Integer values             (int)</li>
-<li>Decimal numbers            (decimal)</li>
-<li>Date data type             (date)</li>
+<li>Variable length characters    (<code>varchar</code>)</li>
+<li>Integer values             (<code>int</code>)</li>
+<li>Decimal numbers            (<code>decimal</code>)</li>
+<li>Date data type             (<code>date</code>)</li>
 </ul>
 
 
 <h5>Creating a Database</h5>
 
-<p>Now that we&rsquo;ve gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables. We&rsquo;ll create a database named <code>library</code> from the command line:</p>
+<p>Its time to get our feet wet vy creating our first database. Databases serve as a holding envelop for tables. If you recall from our earlier analogy, its like a spreadsheet. We&rsquo;ll create a database named <code>library</code> from the command line:</p>
 
 <p>Example:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">sqlite3</span> <span class="n">library</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">sqlite3</span> <span class="n">library</span><span class="p">.</span><span class="n">db</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -242,23 +242,11 @@
 <p>Contstraints are rules to abide by while doing SQL operations. Constraints help make data in your database more useful and structured. For instance, every book must have a title, author and year. Below we create a table that accepts <code>NULL</code> constraints in some fields.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl_cp</span> <span class="p">(</span>
-</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>   <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>   <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="k">NULL</span>
-</span><span class='line'>  <span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl_cp</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="k">NULL</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This means that only publisher field will accept empty values. Let&rsquo;s populate this table.</p>
+<p>What we&rsquo;ve done is to ensure that only <code>publisher</code> field will accept empty or <code>NULL</code> values. Let&rsquo;s populate this table.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -267,9 +255,27 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Now when we try to insert data into an column with a constraint set to <code>NOT NULL</code>, we&rsquo;ll see an error. Try it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="k">NULL</span><span class="p">,</span> <span class="s1">&#39;Some Book&#39;</span><span class="p">,</span> <span class="s1">&#39;Our favorite writer&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Error</span><span class="p">:</span> <span class="n">books_tbl_cp</span><span class="p">.</span><span class="n">id</span> <span class="n">may</span> <span class="k">not</span> <span class="n">be</span> <span class="k">NULL</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h5>Primary Key Constraint</h5>
 
-<p>We&rsquo;ve solved one problem, but we&rsquo;re faced with yet another. We have to ensure that none of the records would duplicate information about the same book. A primary key is used to ensure uniqueness of data. It&rsquo;s also used to identify a row of data in a table, is almost always a number value and does not allow <code>NULL</code> values. Also, a table can only have one primary key.</p>
+<p>We&rsquo;ve solved one problem, but we&rsquo;re faced with yet another. We have to ensure that none of the records would duplicate information about the same book. Let&rsquo;s demostrate we can actually do this with code that insert a duplicate <code>id</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Yet Another Awesome Book&#39;</span><span class="p">,</span> <span class="s1">&#39;John Doe&#39;</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A primary key is used to ensure uniqueness of data. It&rsquo;s also used to identify a row of data in a table, is almost always a number value and does not allow <code>NULL</code> values. Also, a table can only have one primary key. ID fields are generally used as primary keys.</p>
 
 <p>To deonstrate, lets create a new table <code>fav_books_tbl</code> with a <code>primary key</code> set to the <code>id</code> field. Also, we&rsquo;d like to have our <code>primary key</code> auto incremented without specifying a value.</p>
 
@@ -281,7 +287,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="p">(</span>
-</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
@@ -290,19 +296,27 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>ID fields are generally used as primary keys. Now, we do not have to specify the <code>id</code> value. Also, when we try to insert duplicate <code>id</code> fields, our databse will complain. Try it:</p>
+<p>Now, we do not have to specify the <code>id</code> value as it&rsquo;ll be tracked and auto-incremented by our database:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>Also, when we try to insert duplicate <code>id</code> fields, our databse will complain. Try it:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;NULL&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Error</span><span class="p">:</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">must</span> <span class="n">be</span> <span class="k">unique</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>We have learned about Primary Keys and why they&rsquo;re necessary. Also, we&rsquo;ve seen a different way of inserting data into a table. Next, we&rsquo;ll look at Unique Key Constraint.</p>
 
 <h5>Unique Key Constraint</h5>
 
