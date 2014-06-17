@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-06-17T13:43:40+00:00</updated>
+  <updated>2014-06-17T14:09:36+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -221,7 +221,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>Next, we&rsquo;ll create a <code>books_tbl</code> table.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">));</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -231,8 +231,8 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span>  <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span>  <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -243,7 +243,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>Contstraints are rules to abide by while doing SQL operations. Constraints help make data in your database more useful and structured. For instance, every book must have a title, author and year. Below we create a table that accepts <code>NULL</code> constraints in some fields.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_tbl_cp</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="k">NULL</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl_cp</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">author</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> <span class="n">publisher</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="k">NULL</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -251,8 +251,8 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="s1">&#39;Enid Blyton&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="s1">&#39;Francine Pascal&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -261,7 +261,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="k">NULL</span><span class="p">,</span> <span class="s1">&#39;Some Book&#39;</span><span class="p">,</span> <span class="s1">&#39;Our favorite writer&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="k">NULL</span><span class="p">,</span> <span class="s1">&#39;Some Book&#39;</span><span class="p">,</span> <span class="s1">&#39;Our favorite writer&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Error</span><span class="p">:</span> <span class="n">books_tbl_cp</span><span class="p">.</span><span class="n">id</span> <span class="n">may</span> <span class="k">not</span> <span class="n">be</span> <span class="k">NULL</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -272,13 +272,13 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>We&rsquo;ve solved one problem, but we&rsquo;re faced with yet another. We have to ensure that none of the records would duplicate information about the same book. Let&rsquo;s demostrate we can actually do this with code that insert a duplicate <code>id</code>:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Yet Another Awesome Book&#39;</span><span class="p">,</span> <span class="s1">&#39;John Doe&#39;</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl_cp</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Yet Another Awesome Book&#39;</span><span class="p">,</span> <span class="s1">&#39;John Doe&#39;</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>A primary key is used to ensure uniqueness of data. It&rsquo;s also used to identify a row of data in a table, is almost always a number value and does not allow <code>NULL</code> values. Also, a table can only have one primary key. ID fields are generally used as primary keys.</p>
 
-<p>To deonstrate, lets create a new table <code>fav_books_tbl</code> with a <code>primary key</code> set to the <code>id</code> field. Also, we&rsquo;d like to have our <code>primary key</code> auto incremented without specifying a value.</p>
+<p>To deonstrate, lets create a new table <code>books</code> with a <code>primary key</code> set to the <code>id</code> field. Also, we&rsquo;d like to have our <code>primary key</code> auto incremented without specifying a value.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -286,7 +286,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="p">(</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books</span> <span class="p">(</span>
 </span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">published</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
@@ -299,8 +299,8 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Famous 5&#39;</span><span class="p">,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -309,7 +309,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;NULL&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sweet Valley&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">,</span> <span class="s1">&#39;NULL&#39;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Error</span><span class="p">:</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">must</span> <span class="n">be</span> <span class="k">unique</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -331,8 +331,8 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">books_tbl</span><span class="p">;</span>
-</span><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">books_tbl_cp</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</span><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl_cp</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -346,12 +346,12 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Twelve Years A Slave&#39;</span><span class="p">,</span> <span class="mi">1853</span><span class="p">,</span> <span class="s1">&#39;Derby &amp; Miller, Auburn, New York&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;David and Goliath&#39;</span><span class="p">,</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;Little, Brown and Company&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Power of Habit&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Tales of The East&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Killing Kennedy&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Henry Holt and Company&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The 50th Law&#39;</span><span class="p">,</span> <span class="mi">2009</span><span class="p">,</span> <span class="s1">&#39;Harper Studio&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Twelve Years A Slave&#39;</span><span class="p">,</span> <span class="mi">1853</span><span class="p">,</span> <span class="s1">&#39;Derby &amp; Miller, Auburn, New York&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;David and Goliath&#39;</span><span class="p">,</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;Little, Brown and Company&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Power of Habit&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Tales of The East&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Killing Kennedy&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Henry Holt and Company&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The 50th Law&#39;</span><span class="p">,</span> <span class="mi">2009</span><span class="p">,</span> <span class="s1">&#39;Harper Studio&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -391,16 +391,16 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <h5>Selecting all records from a table</h5>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">books</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This query will return all rows in <code>fav_books_tbl</code> table.</p>
+<p>This query will return all rows in <code>books</code> table.</p>
 
 <h5>Selecting a limited number of columns</h5>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">author</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">author</span> <span class="k">FROM</span> <span class="n">books</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -409,28 +409,28 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>Suppose we want to order results from a query, say, by title and  published date.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Next lets further sort by descending and ascending respectively.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">DESC</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">DESC</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">ASC</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">published</span> <span class="k">ASC</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>We could order a query with an abbreviation instead of the column name.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">ASC</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">ASC</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -441,25 +441,25 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>The <code>WHERE</code> command gives us the ability to specify condtions in our query. If the condition is not met, no result will be returned form the database. The <code>WHERE</code> clause usually has two parts, <code>SELECT</code> and the <code>FROM</code> clause. We can query for all books with that were published in 2012:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">=</span> <span class="mi">2012</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">=</span> <span class="mi">2012</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>We can use other operators as <code>&lt;, &gt;, &lt;=</code> and also construct completx conditions with <code>AND</code> and <code>OR</code> boolean operators:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">&gt;</span> <span class="mi">1980</span> <span class="k">AND</span> <span class="n">publisher</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">&gt;</span> <span class="mi">1980</span> <span class="k">AND</span> <span class="n">publisher</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Here we select title and published columns from our <code>fav_books_tbl</code> table where <code>published</code> date is greated that 1980 and pusblisher is not empty.</p>
+<p>Here we select title and published columns from our <code>books</code> table where <code>published</code> date is greated that 1980 and pusblisher is not empty.</p>
 
 <h5>Updating Data</h5>
 
 <p>The <code>UPDATE</code> command gives us to abily to update existing records. The record mush exist in the databse for the <code>UPDATE</code> to take effect. Here is an example where we update the publisher for The Famous 5:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Hodder &amp; Stoughton&#39;</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">books</span> <span class="k">SET</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Hodder &amp; Stoughton&#39;</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -467,10 +467,10 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <p>You guessed correct, you can use the <code>DELETE</code> command to delete records form a table. We&rsquo;ll always want to use a <code>WHERE</code> clause in conjuction with <code>DELETE</code> unless we want to delete all records form the table.</p>
 
-<p>Let&rsquo;s delete the unknown publisher from <code>fav_books_tbl</code>:</p>
+<p>Let&rsquo;s delete the unknown publisher from <code>books</code>:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">WHERE</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -478,36 +478,36 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 
 <h4>4) One To One / One To Many Association</h4>
 
-<p>In designing our <code>fav_books_tbl</code> table we could have easily added an <code>author</code> column. But this tends to complicate data modeling and should be avoided. <code>author</code> is an entity by itself and so should be a seperate table. We&rsquo;ll use the Foreign Key concept to demonstrate One To One / One To Many relationships. Now suppose we want to join our <code>fav_books_tbl</code> and <code>authors</code> tables, in our case we&rsquo;ll create a foreign key <code>author_id</code> in our <code>fav_books_tbl</code> table:</p>
+<p>In designing our <code>books</code> table we could have easily added an <code>author</code> column. But this tends to complicate data modeling and should be avoided. <code>author</code> is an entity by itself and so should be a seperate table. We&rsquo;ll use the Foreign Key concept to demonstrate One To One / One To Many relationships. Now suppose we want to join our <code>books</code> and <code>authors</code> tables, in our case we&rsquo;ll create a foreign key <code>author_id</code> in our <code>books</code> table:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">author_id</span> <span class="nb">INTEGER</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">books</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">author_id</span> <span class="nb">INTEGER</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We&rsquo;ll want to populate our <code>author_id</code> column but before that let&rsquo;s display the data in our <code>fav_books_tbl</code> and <code>authors</code> tables:</p>
+<p>We&rsquo;ll want to populate our <code>author_id</code> column but before that let&rsquo;s display the data in our <code>books</code> and <code>authors</code> tables:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">books</span><span class="p">;</span>
 </span><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">authors</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The Famous 5 has an <code>id</code> of 1 in our <code>fav_books_tbl</code> table; we know it&rsquo;s auhtor is Enid Blyton, with an <code>id</code> of 4 in our <code>authors</code> table. We can complete the association with this code:</p>
+<p>The Famous 5 has an <code>id</code> of 1 in our <code>books</code> table; we know it&rsquo;s auhtor is Enid Blyton, with an <code>id</code> of 4 in our <code>authors</code> table. We can complete the association with this code:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">books</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>What this is saying update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
+<p>What this is saying update the <code>books</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
 
-<p>Just like that we have a one to many relationship between <code>fav_books_tbl</code> and <code>authors</code>.</p>
+<p>Just like that we have a one to many relationship between <code>books</code> and <code>authors</code>.</p>
 
 <h4>5) Join Table</h4>
 
-<p>Next we need to connect our <code>fav_books_tbl</code> and <code>authors</code> to have a bidirectional or many to many relationship. Join tables allow to achieve this in relational databases. In our case, we&rsquo;ll do this by creating a table <code>books_authors</code> and using the <code>id</code> columns from <code>fav_books_tbl</code> and <code>authors</code> tables which will allow us to relate data from both sides.</p>
+<p>Next we need to connect our <code>books</code> and <code>authors</code> to have a bidirectional or many to many relationship. Join tables allow to achieve this in relational databases. In our case, we&rsquo;ll do this by creating a table <code>books_authors</code> and using the <code>id</code> columns from <code>books</code> and <code>authors</code> tables which will allow us to relate data from both sides.</p>
 
 <p>Let&rsquo;s create our <code>books_authors</code> table:</p>
 
@@ -527,7 +527,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <p>We&rsquo;ll start with Killing Kennedy. Let&rsquo;s find its <code>id</code>:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Killing Kennedy&#39;</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">books</span> <span class="k">WHERE</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Killing Kennedy&#39;</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -549,7 +549,16 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>50th Law is co-authored by 50 Cent and Robert Greene:</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_authors</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">author_id</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_authors</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">author_id</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>6) Complex SQL Queries</h4>
 ]]></content>
   </entry>
   
