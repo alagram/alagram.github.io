@@ -10,7 +10,7 @@ categories: SQL
 Introduction
 -------------------
 
-In this blog post, we want to introduce you to SQL and Databases. We'll start by explaining the key concepts of databases. Later, we'll pick up some basic SQL commands while buiding a database of our favourite books.
+In this blog post, we want to introduce you to SQL and Databases. We want to make sur you understand what's happening behind the scenes before diving in the [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) world with Rails. We'll start by explaining the key concepts of databases. Later, we'll introduce you to some basic SQL commands and syntax while buiding a database of our favourite books.
 
 
 
@@ -29,7 +29,7 @@ A database is a collection of organized data. It is worth explaining that `relat
 
 Structured Query Language or `SQL` is the standard language used for  communicating with relational databases. Software which is used to manage digital databases is called a Database Management System (DBMS).
 
-We'll start by explaining the core concepts of Databases.
+What follows is an explanation of the core concepts of Databases.
 
 
 ##### What is a Table?
@@ -80,36 +80,37 @@ With these basic concepts out of the way, we'll get our hands dirty with some ba
 
 ####2) SQL Fundamentals
 
-This tutorial is meant for absolute beginners and meant to be hands-on in that we want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. We want to make sure you can complete basic SQL tasks.
 
-#####Setup
+___Note on being hands-on:__ Like all crafts, you need hands-on practice to gain experience. That's the approach the rest of this tutorial takes. We want you to actually write the codes and follow along. If you read through this tutorial without writing any code, it is likely you will understand the theories. But you will not actually be able to do it. We believe the best way to learn is by doing these tasks. So buckle up and lets go!_
+
+#####Getting started
 
 For the sake of simplicity we'll use [SQLite3](https://sqlite.org/). If you're on Mac OSX you can install `SQLite3` using [Homebrew](http://brew.sh/) by running `brew install sqlite3`. Windows users can download and install `SQLite3` [here](http://www.sqlite.org/download.html). See [here](http://www.thegeekstuff.com/2011/07/install-sqlite3/) for Linux installation instructions.
 
 ##### Data Definition Language
 
-SQL has basics verbs. They are:
+SQL has basics verbs. You can think of them as different ways to talk to a database. They are:
 
 - Data Manipulation Language: INSERT, UPDATE, DELETE
 - Data Query Language: SELECT
-- Data Control Language: GRANT, REVOTE etc.
+- Data Control Language: GRANT, REVOKE etc.
 - Transaction Control Commands: COMMIT, ROLLBACK ect.
 
 ##### SQL Data types
 Just like the Ruby language has data types like `Array`, `Hash` etc, SQL also has its special data-types. The common ones are:
 
-- Variable length characters    (varchar)
-- Integer values             (int)
-- Decimal numbers            (decimal)
-- Date data type             (date)
+- Variable length characters    (`varchar`)
+- Integer values             (`int`)
+- Decimal numbers            (`decimal`)
+- Date data type             (`date`)
 
 ##### Creating a Database
-Now that we've gone through some theory on SQL, its time to create our first database. Databases serve as a holding envelop for tables. We'll create a database named `library` from the command line:
+Its time to get our feet wet vy creating our first database. Databases serve as a holding envelop for tables. If you recall from our earlier analogy, its like a spreadsheet. We'll create a database named `library` from the command line:
 
 Example:
 
 {% codeblock lang:sql %}
-sqlite3 library
+sqlite3 library.db
 {% endcodeblock %}
 
 ##### Table Creation
@@ -135,48 +136,63 @@ So far, we've created a table and populated it with data, but we have some probl
 Contstraints are rules to abide by while doing SQL operations. Constraints help make data in your database more useful and structured. For instance, every book must have a title, author and year. Below we create a table that accepts `NULL` constraints in some fields.
 
 {% codeblock lang:sql %}
-  CREATE TABLE books_tbl_cp (
-   id INTEGER NOT NULL,
-   title VARCHAR(20) NOT NULL,
-   author VARCHAR(25) NOT NULL,
-   published INTEGER NOT NULL,
-   publisher VARCHAR(15) NULL
-  );
+  CREATE TABLE books_tbl_cp (id INTEGER NOT NULL, title VARCHAR(20) NOT NULL, author VARCHAR(25) NOT NULL, published INTEGER NOT NULL, publisher VARCHAR(15) NULL);
 {% endcodeblock %}
 
-This means that only publisher field will accept empty values. Let's populate this table.
+What we've done is to ensure that only `publisher` field will accept empty or `NULL` values. Let's populate this table.
 
 {% codeblock lang:sql %}
 INSERT INTO books_tbl_cp VALUES (1, 'The Famous 5', 'Enid Blyton', 1942, NULL);
 INSERT INTO books_tbl_cp VALUES (2, 'Sweet Valley', 'Francine Pascal', 1983, 'Random House');
 {% endcodeblock %}
 
+Now when we try to insert data into an column with a constraint set to `NOT NULL`, we'll see an error. Try it:
+
+{% codeblock lang:sql %}
+INSERT INTO books_tbl_cp VALUES (NULL, 'Some Book', 'Our favorite writer', 2001, 'Random House');
+
+Error: books_tbl_cp.id may not be NULL
+{% endcodeblock %}
+
 
 ##### Primary Key Constraint
-We've solved one problem, but we're faced with yet another. We have to ensure that none of the records would duplicate information about the same book. A primary key is used to ensure uniqueness of data. It's also used to identify a row of data in a table, is almost always a number value and does not allow `NULL` values. Also, a table can only have one primary key.
+We've solved one problem, but we're faced with yet another. We have to ensure that none of the records would duplicate information about the same book. Let's demostrate we can actually do this with code that insert a duplicate `id`:
+
+{% codeblock lang:sql %}
+INSERT INTO books_tbl_cp VALUES (1, 'Yet Another Awesome Book', 'John Doe', 2014, 'Random House');
+{% endcodeblock %}
+
+
+A primary key is used to ensure uniqueness of data. It's also used to identify a row of data in a table, is almost always a number value and does not allow `NULL` values. Also, a table can only have one primary key. ID fields are generally used as primary keys.
 
 To deonstrate, lets create a new table `fav_books_tbl` with a `primary key` set to the `id` field. Also, we'd like to have our `primary key` auto incremented without specifying a value.
 
 
 {% codeblock lang:sql %}
   CREATE TABLE fav_books_tbl (
-   id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
    title VARCHAR(60) NOT NULL,
-   author VARCHAR(25) NOT NULL,
    published INTEGER NOT NULL,
    publisher VARCHAR(50) NULL
   );
 {% endcodeblock %}
 
-ID fields are generally used as primary keys. Now, we do not have to specify the `id` value. Also, when we try to insert duplicate `id` fields, our databse will complain. Try it:
+Now, we do not have to specify the `id` value as it'll be tracked and auto-incremented by our database:
 
 {% codeblock lang:sql %}
-INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Famous 5', 'Enid Blyton', 1942, NULL);
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('The Famous 5', 1942, NULL);
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('Sweet Valley', 1983, 'Random House');
 {% endcodeblock %}
 
+Also, when we try to insert duplicate `id` fields, our databse will complain. Try it:
+
 {% codeblock lang:sql %}
-INSERT INTO fav_books_tbl VALUES (1, 'Sweet Valley', 'Francine Pascal', 1983, 'Random House');
+INSERT INTO fav_books_tbl VALUES (1, 'Sweet Valley', 1983, 'NULL');
+
+Error: PRIMARY KEY must be unique
 {% endcodeblock %}
+
+We have learned about Primary Keys and why they're necessary. Also, we've seen a different way of inserting data into a table. Next, we'll look at Unique Key Constraint.
 
 
 ##### Unique Key Constraint
@@ -192,7 +208,7 @@ ALTER TABLE fav_books_tbl MODIFY COLUMN title VARCHAR(60) NOT NULL UNIQUE;
 Now our `fav_books_tbl` table ensures the `title` column does not have duplicate records. Give it a shot:
 
 {% codeblock lang:sql %}
-INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Famous 5', 'Enid Blyton', 1942, NULL);
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('The Famous 5', 1942, NULL);
 {% endcodeblock %}
 
 
@@ -205,20 +221,7 @@ We drop tables in SQL with the `DROP TABLE` command. Lets go ahead and drop a fe
 
 {% codeblock lang:sql %}
 DROP TABLE books_tbl;
-{% endcodeblock %}
-
-##### Modifying tables
-We've already modified a table but we'll go over it again. After a table has been created, we can change its structure by using the `ALTER TABLE` command.
-
-We'll modify some attributes of `fav_books_tbl`. Lets change the `author` field to type `VARCHAR(100)`.
-
-{% codeblock lang:sql %}
-ALTER TABLE fav_books_tbl MODIFY author VARCHAR(100) NOT NULL;
-{% endcodeblock %}
-
-To verify that the change took effect you can use the `DESCRIBE` command:
-{% codeblock lang:sql %}
-DESCRIBE fav_books_tbl;
+DROP TABLE books_tbl_cp;
 {% endcodeblock %}
 
 
@@ -227,9 +230,26 @@ DESCRIBE fav_books_tbl;
 Before moving on to more interesting querying, lets insert some data into our table.
 
 {% codeblock lang:sql %}
-INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('Twelve Years A Slave', 'Solomon Northup', 1853, 'Derby & Miller, Auburn, New York');
-INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('David and Goliath', 'Malcolm Gladwell', 2013, 'Little, Brown and Company');
-INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Power of Habit', 'Charles Duhigg', 2012, 'Random House');
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('Twelve Years A Slave', 1853, 'Derby & Miller, Auburn, New York');
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('David and Goliath', 2013, 'Little, Brown and Company');
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('The Power of Habit', 2012, 'Random House');
+INSERT INTO fav_books_tbl (title, published, publisher) VALUES ('Tales of The East', 2001, 'Unknown');
+{% endcodeblock %}
+
+Also, lets create a table `authors` and add some data to it:
+
+{% codeblock lang:sql %}
+CREATE TABLE authors (
+   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+   name VARCHAR(100) NOT NULL
+  );
+
+INSERT INTO authors (name) VALUES ('Solomon Northup');
+INSERT INTO authors (name) VALUES ('Charles Duhigg');
+INSERT INTO authors (name) VALUES ('Malcolm Gladwell');
+INSERT INTO authors (name) VALUES ('Enid Blyton');
+INSERT INTO authors (name) VALUES ('Francine Pascal');
+
 {% endcodeblock %}
 
 
@@ -239,7 +259,7 @@ INSERT INTO fav_books_tbl (title, author, published, publisher) VALUES ('The Pow
 SELECT * FROM fav_books_tbl;
 {% endcodeblock %}
 
-This query will return all 4 rows in `fav_books_tbl` table.
+This query will return all rows in `fav_books_tbl` table.
 
 ##### Selecting a limited number of columns
 
@@ -247,16 +267,6 @@ This query will return all 4 rows in `fav_books_tbl` table.
 SELECT title, author FROM fav_books_tbl;
 {% endcodeblock %}
 
-Output:
-
-| title                 | author          |
-| -----------           | ------------    |
-| The Famous 5          | Enid Blyton
-| Twelve Years A Slave  | Solomon Northup
-| David and Goliath     | Malcolm Gladwell
-| The Power of Habit    | Charles Duhigg
-
-Output showing fields constructed in the query.
 
 
 ##### Ordering results
@@ -266,15 +276,6 @@ Suppose we want to order results from a query, say, by title and  published date
 SELECT title, published FROM fav_books_tbl ORDER BY published;
 {% endcodeblock %}
 
-Output:
-
-| title                 | published       |
-| -----------           | ------------    |
-| Twelve Years A Slave  | 1853
-| The Famous 5          | 1942
-| The Power of Habit    | 2012
-| David and Goliath     | 2013
-
 
 Next lets further sort by descending and ascending respectively.
 
@@ -282,25 +283,11 @@ Next lets further sort by descending and ascending respectively.
 SELECT title, published FROM fav_books_tbl ORDER BY published DESC;
 {% endcodeblock %}
 
-Output:
-
-| title                 | published       |
-| -----------           | ------------    |
-| David and Goliath     | 2013
-| The Power of Habit    | 2012
-| The Famous 5          | 1942
-| Twelve Years A Slave  | 1853
 
 {% codeblock lang:sql %}
 SELECT title, published FROM fav_books_tbl ORDER BY published ASC;
 {% endcodeblock %}
 
-| title                 | published       |
-| -----------           | ------------    |
-| Twelve Years A Slave  | 1853
-| The Famous 5          | 1942
-| The Power of Habit    | 2012
-| David and Goliath     | 2013
 
 We could order a query with an abbreviation instead of the column name.
 
@@ -310,3 +297,77 @@ SELECT title, published FROM fav_books_tbl ORDER BY 2 ASC;
 
 Abbreviations start from 1 which is given to the first column we specify et cetera. So we've succeeded in reproducing our previous query, with the 2 in place of `published`.
 
+
+##### WHERE clause
+
+The `WHERE` command gives us the ability to specify condtions in our query. If the condition is not met, no result will be returned form the database. The `WHERE` clause usually has two parts, `SELECT` and the `FROM` clause. We can query for all books with that were published in 2012:
+
+{% codeblock lang:sql %}
+SELECT * FROM fav_books_tbl WHERE published = 2012;
+{% endcodeblock %}
+
+We can use other operators as `<, >, <=` and also construct completx conditions with `AND` and `OR` boolean operators:
+
+{% codeblock lang:sql %}
+SELECT title, published FROM fav_books_tbl WHERE published > 1980 AND publisher IS NOT NULL;
+{% endcodeblock %}
+
+Here we select title and published columns from our `fav_books_tbl` table where `published` date is greated that 1980 and pusblisher is not empty.
+
+##### Updating Data
+The `UPDATE` command gives us to abily to update existing records. The record mush exist in the databse for the `UPDATE` to take effect. Here is an example where we update the publisher for The Famous 5:
+
+{% codeblock lang:sql %}
+UPDATE fav_books_tbl SET publisher = 'Hodder & Stoughton' WHERE id = 1;
+{% endcodeblock %}
+
+
+##### Deleting Data
+
+You guessed correct, you can use the `DELETE` command to delete records form a table. We'll always want to use a `WHERE` clause in conjuction with `DELETE` unless we want to delete all records form the table.
+
+Let's delete the unknown publisher from `fav_books_tbl`:
+
+{% codeblock lang:sql %}
+DELETE FROM fav_books_tbl WHERE publisher = 'Unknown';
+{% endcodeblock %}
+
+We'll turn our attention to databse association's next.
+
+
+####4) One To One / One To Many Association
+
+In designing our `fav_books_tbl` table we could have easily added an `author` column. But this tends to complicate data modeling and should be avoided. `author` is an entity by itself and so should be a seperate table. We'll use the Foreign Key concept to demonstrate One To One / One To Many relationships. Now suppose we want to join our `fav_books_tbl` and `authors` tables, in our case we'll create a foreign key `author_id` in our `fav_books_tbl` table:
+
+{% codeblock lang:sql %}
+ALTER TABLE fav_books_tbl ADD COLUMN author_id INTEGER;
+{% endcodeblock %}
+
+We'll want to populate our `author_id` column but before that let's display the data in our `fav_books_tbl` and `authors` tables
+
+{% codeblock lang:sql %}
+SELECT * FROM fav_books_tbl;
+SELECT * FROM authors;
+{% endcodeblock %}
+
+
+The Famous 5 has an `id` of 1 in our `fav_books_tbl` table; we know it's auhtor is Enid Blyton, with an `id` of 4 in our `authors` table. We can complete the association with this code:
+
+{% codeblock lang:sql %}
+UPDATE fav_books_tbl SET author_id = 4 WHERE ID = 1;
+{% endcodeblock %}
+
+What this is saying update the `fav_books_tbl` table with `author_id` equal to 4 where `id` is 1.
+
+Lets update all the other `author_id` fields in our table:
+{% codeblock lang:sql %}
+UPDATE fav_books_tbl SET author_id = 5 WHERE ID = 2;
+UPDATE fav_books_tbl SET author_id = 1 WHERE ID = 3;
+UPDATE fav_books_tbl SET author_id = 3 WHERE ID = 4;
+UPDATE fav_books_tbl SET author_id = 2 WHERE ID = 5;
+{% endcodeblock %}
+
+
+####5) Join Table
+
+Next we need to connect our `fav_books_tbl` and `authors` to have a bidirectional relationship.
