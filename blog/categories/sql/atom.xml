@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQL | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/sql/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-06-17T11:05:26+00:00</updated>
+  <updated>2014-06-17T13:43:40+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -223,18 +223,6 @@
 
 <p>Let&rsquo;s things up a notch by exploring the concept of a unique key. A unique key, like the primary key is used to ensure uniqueness of data. Unique key, makes sure that data is not duplicated in two rows in the database. There are subtle differences between the two. For example, a table can have more than one unique key. A field with a unique key can take only one NULL value.</p>
 
-<p>In our case, we can now decide to make <code>title</code> field unique. This would ensure that there are no duplicate titles in our table. This time we&rsquo;ll only modify the column.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="k">MODIFY</span> <span class="k">COLUMN</span> <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">UNIQUE</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Now our <code>fav_books_tbl</code> table ensures the <code>title</code> column does not have duplicate records. Give it a shot:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">The</span> <span class="n">Famous</span> <span class="mi">5</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">1942</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
 <h4>4) Operations on Tables</h4>
 
 <p>Lets clean up our database by learning a few Table Operations.</p>
@@ -257,10 +245,14 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Twelve</span> <span class="n">Years</span> <span class="n">A</span> <span class="n">Slave</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">1853</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Derby</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">Miller</span><span class="p">,</span> <span class="n">Auburn</span><span class="p">,</span> <span class="k">New</span> <span class="n">York</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">David</span> <span class="k">and</span> <span class="n">Goliath</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">2013</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Little</span><span class="p">,</span> <span class="n">Brown</span> <span class="k">and</span> <span class="n">Company</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">The</span> <span class="n">Power</span> <span class="k">of</span> <span class="n">Habit</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">2012</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Random</span> <span class="n">House</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Tales</span> <span class="k">of</span> <span class="n">The</span> <span class="n">East</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">2001</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="k">Unknown</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Killing</span> <span class="n">Kennedy</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">2012</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Henry</span> <span class="n">Holt</span> <span class="k">and</span> <span class="n">Company</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">The</span> <span class="mi">50</span><span class="n">th</span> <span class="n">Law</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="mi">2009</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Harper</span> <span class="n">Studio</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Also, lets create a table <code>authors</code> and add some data to it:</p>
@@ -277,6 +269,8 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">authors</span> <span class="p">(</span>
 </span><span class='line'>   <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
 </span><span class='line'>   <span class="n">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
@@ -286,9 +280,11 @@
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Charles</span> <span class="n">Duhigg</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Malcolm</span> <span class="n">Gladwell</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Enid</span> <span class="n">Blyton</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Francine</span> <span class="k">Pascal</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Francine</span> <span class="k">Pascal</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Bill</span> <span class="n">O</span><span class="err">&#39;</span><span class="n">Reilly</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Martin</span> <span class="n">Dugard</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="mi">50</span> <span class="n">Cent</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">authors</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Robert</span> <span class="n">Greene</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h5>Selecting all records from a table</h5>
@@ -375,7 +371,7 @@
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">fav_books_tbl</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">author_id</span> <span class="nb">INTEGER</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>We&rsquo;ll want to populate our <code>author_id</code> column but before that let&rsquo;s display the data in our <code>fav_books_tbl</code> and <code>authors</code> tables</p>
+<p>We&rsquo;ll want to populate our <code>author_id</code> column but before that let&rsquo;s display the data in our <code>fav_books_tbl</code> and <code>authors</code> tables:</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -391,20 +387,47 @@
 
 <p>What this is saying update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
 
-<p>Lets update all the other <code>author_id</code> fields in our table:
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-</span><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">author_id</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">WHERE</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>Just like that we have a one to many relationship between <code>fav_books_tbl</code> and <code>authors</code>.</p>
 
 <h4>5) Join Table</h4>
 
-<p>Next we need to connect our <code>fav_books_tbl</code> and <code>authors</code> to have a bidirectional relationship.</p>
+<p>Next we need to connect our <code>fav_books_tbl</code> and <code>authors</code> to have a bidirectional or many to many relationship. Join tables allow to achieve this in relational databases. In our case, we&rsquo;ll do this by creating a table <code>books_authors</code> and using the <code>id</code> columns from <code>fav_books_tbl</code> and <code>authors</code> tables which will allow us to relate data from both sides.</p>
+
+<p>Let&rsquo;s create our <code>books_authors</code> table:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">books_authors</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTOINCREMENT</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">book_id</span> <span class="nb">INTEGER</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">author_id</span> <span class="nb">INTEGER</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>We&rsquo;ll start with Killing Kennedy. Let&rsquo;s find its <code>id</code>:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">title</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">Killing</span> <span class="n">Kennedy</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Killing Kennedy has an <code>id</code> of 7.</p>
+
+<p>We also know that Bill O'Reilly and Martin Dugard co-authored the book; Let&rsquo;s find their <code>id</code>&rsquo;s</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">authors</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Bill O'Reilly has an <code>id</code> of 6 and Martin Dugard has an <code>id</code> of 7. We now have enough information to populate <code>books_authors</code>:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_authors</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">author_id</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">books_authors</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">author_id</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
