@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQL | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/sql/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-06-17T15:58:24+00:00</updated>
+  <updated>2014-06-17T15:59:17+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -120,8 +120,6 @@
 <h5>Creating a Database</h5>
 
 <p>Its time to get our feet wet vy creating our first database. Databases serve as a holding envelop for tables. If you recall from our earlier analogy, its like a spreadsheet. We&rsquo;ll create a database named <code>library</code> from the command line:</p>
-
-<p>Example:</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">sqlite3</span> <span class="n">library</span><span class="p">.</span><span class="n">db</span>
