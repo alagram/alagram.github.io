@@ -356,9 +356,11 @@
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
+<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Twelve Years A Slave&#39;</span><span class="p">,</span> <span class="mi">1853</span><span class="p">,</span> <span class="s1">&#39;Derby &amp; Miller, Auburn, New York&#39;</span><span class="p">);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;David and Goliath&#39;</span><span class="p">,</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;Little, Brown and Company&#39;</span><span class="p">);</span>
 </span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;The Power of Habit&#39;</span><span class="p">,</span> <span class="mi">2012</span><span class="p">,</span> <span class="s1">&#39;Random House&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fav_books_tbl</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">publisher</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;Tales of The East&#39;</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -435,6 +437,46 @@
 
 <p>Abbreviations start from 1 which is given to the first column we specify et cetera. So we&rsquo;ve succeeded in reproducing our previous query, with the 2 in place of <code>published</code>.</p>
 
+<h5>WHERE clause</h5>
+
+<p>The <code>WHERE</code> command gives us the ability to specify condtions in our query. If the condition is not met, no result will be returned form the database. The <code>WHERE</code> clause usually has two parts, <code>SELECT</code> and the <code>FROM</code> clause. We can query for all books with that were published in 2012:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">=</span> <span class="mi">2012</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can use other operators as <code>&lt;, &gt;, &lt;=</code> and also construct completx conditions with <code>AND</code> and <code>OR</code> boolean operators:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">published</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">published</span> <span class="o">&gt;</span> <span class="mi">1980</span> <span class="k">AND</span> <span class="n">publisher</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we select title and published columns from our <code>fav_books_tbl</code> table where <code>published</code> date is greated that 1980 and pusblisher is not empty.</p>
+
+<h5>Updating Data</h5>
+
+<p>The <code>UPDATE</code> command gives us to abily to update existing records. The record mush exist in the databse for the <code>UPDATE</code> to take effect. Here is an example where we update the publisher for The Famous 5:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">fav_books_tbl</span> <span class="k">SET</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Hodder &amp; Stoughton&#39;</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Deleting Data</h5>
+
+<p>You guessed correct, you can use the <code>DELETE</code> command to delete records form a table. We&rsquo;ll always want to use a <code>WHERE</code> clause in conjuction with <code>DELETE</code> unless we want to delete all records form the table.</p>
+
+<p>Let&rsquo;s delete the unknown publisher from <code>fav_books_tbl</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">fav_books_tbl</span> <span class="k">WHERE</span> <span class="n">publisher</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;ll turn our attention to databse association&rsquo;s next.</p>
+
 <h4>4) One To One / One To Many Association</h4>
 
 <p>In designing our <code>fav_books_tbl</code> table we could have easily added an <code>author</code> column. But this tends to complicate data modeling and should be avoided. <code>author</code> is an entity by itself and so should be a seperate table. We&rsquo;ll use the Foreign Key concept to demonstrate One To One / One To Many relationships. Now suppose we want to join our <code>fav_books_tbl</code> and <code>authors</code> tables, in our case we&rsquo;ll create a foreign key <code>author_id</code> in our <code>fav_books_tbl</code> table:</p>
@@ -460,7 +502,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>What this is saying is that update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
+<p>What this is saying update the <code>fav_books_tbl</code> table with <code>author_id</code> equal to 4 where <code>id</code> is 1.</p>
 
 <p>Lets update all the other <code>author_id</code> fields in our table:</p>
 
@@ -475,7 +517,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h4>5) Join Table</h4>
 
+<p>Next we need to connect our <code>fav_books_tbl</code> and <code>authors</code> to have a bidirectional relationship.</p>
 </div>
 
 
