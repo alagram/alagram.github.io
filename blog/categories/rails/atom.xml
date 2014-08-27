@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-06-20T13:27:46+00:00</updated>
+  <updated>2014-08-27T17:01:49+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Seeding Data in Rails]]></title>
+    <link href="http://alagram.github.io/blog/2014/08/27/seeding-data/"/>
+    <updated>2014-08-27T16:43:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/08/27/seeding-data</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
+
+<ol>
+<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&rsquo;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
+<li><p>Populate your <code>seeds.rb</code> with all the data you need. This approach is your sure bet to get default values in your database in less time and is stress-free.</p></li>
+</ol>
+
+
+<p>Example seed file:</p>
+
+<p><code>ruby
+Video.create(title: "South Park", description: "A very funny video", small_cover_url: "/tmp/south_park.jpg", large_cover_url: "/tmp/monk_large.jpg")
+Video.create(title: "Futurama", description: "I like this one too...", small_cover_url: "/tmp/futurama.jpg", large_cover_url: "/tmp/monk_large.jpg")
+Video.create(title: "Monk", description: "Not bad. I'll watch this again.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
+</code></p>
+
+<p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
+
+<p><code>bash
+rake db:seed
+</code></p>
+
+<p>That its all it takes. When things get out of hand, you can start on a clean slate by running this in your terminal:</p>
+
+<p><code>bash
+rake db:drop
+rake db:create
+rake db:migrate
+rake db:seed
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Set Up Staging Environment for an App]]></title>
