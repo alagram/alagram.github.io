@@ -17,6 +17,7 @@ Imagine you've finished building a feature with tests and want to play with it i
 Example seed file:
 
 ```ruby
+# seed.rb
 Video.create(title: "South Park", description: "A very funny video", small_cover_url: "/tmp/south_park.jpg", large_cover_url: "/tmp/monk_large.jpg")
 Video.create(title: "Futurama", description: "I like this one too...", small_cover_url: "/tmp/futurama.jpg", large_cover_url: "/tmp/monk_large.jpg")
 Video.create(title: "Monk", description: "Not bad. I'll watch this again.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
