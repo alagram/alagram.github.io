@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-08-27T17:01:49+00:00</updated>
+  <updated>2014-08-28T06:00:22+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -31,11 +31,14 @@
 
 <p>Example seed file:</p>
 
-<p><code>ruby
-Video.create(title: "South Park", description: "A very funny video", small_cover_url: "/tmp/south_park.jpg", large_cover_url: "/tmp/monk_large.jpg")
-Video.create(title: "Futurama", description: "I like this one too...", small_cover_url: "/tmp/futurama.jpg", large_cover_url: "/tmp/monk_large.jpg")
-Video.create(title: "Monk", description: "Not bad. I'll watch this again.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
-</code></p>
+<p>```ruby</p>
+
+<h1>seed.rb</h1>
+
+<p>Video.create(title: &ldquo;South Park&rdquo;, description: &ldquo;A very funny video&rdquo;, small_cover_url: &ldquo;/tmp/south_park.jpg&rdquo;, large_cover_url: &ldquo;/tmp/monk_large.jpg&rdquo;)
+Video.create(title: &ldquo;Futurama&rdquo;, description: &ldquo;I like this one too&hellip;&rdquo;, small_cover_url: &ldquo;/tmp/futurama.jpg&rdquo;, large_cover_url: &ldquo;/tmp/monk_large.jpg&rdquo;)
+Video.create(title: &ldquo;Monk&rdquo;, description: &ldquo;Not bad. I&rsquo;ll watch this again.&rdquo;, small_cover_url: &ldquo;/tmp/monk.jpg&rdquo;, large_cover_url: &ldquo;/tmp/monk_large.jpg&rdquo;)
+```</p>
 
 <p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
 
