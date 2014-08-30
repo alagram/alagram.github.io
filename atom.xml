@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-08-30T17:45:15+00:00</updated>
+  <updated>2014-08-30T17:50:34+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -66,7 +66,7 @@
 
 <h3>5. Code review and merge</h3>
 
-<p>After all reviews have been made and changes effected, you can merge it into your <code>master</code> branch by going to your <code>pull request</code> and clicking the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+<p>After all reviews have been made and changes effected, you&rsquo;ll want to merge it into your <code>master</code>.</p>
 
 <p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
 
@@ -79,7 +79,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Continue until the process is complete.</p>
+<p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
 
 <h3>6. Pull changes</h3>
 
