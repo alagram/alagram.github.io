@@ -50,7 +50,7 @@ When you need feedback or assitance, or believe you work on the new feature is c
 
 ### 5. Code review and merge
 
-After all reviews have been made and changes effected, you can merge it into your `master` branch by going to your `pull request` and clicking the `merge` buton to `merge` it back to `master` branch.
+After all reviews have been made and changes effected, you'll want to merge it into your `master`.
 
 Note that, while the `pull request` is open, you can still `commit` and `push` code up to your remote feature branch. This means any correction can be made while the `pull request` is open. For example:
 
@@ -60,8 +60,7 @@ git commit -m "added extra validations"
 git push origin authentication
 ```
 
-Continue until the process is complete.
-
+Continue until the process is complete. When yoy're done, go to your `pull request` and click on the `merge` buton to `merge` it back to `master` branch.
 
 ### 6. Pull changes
 
