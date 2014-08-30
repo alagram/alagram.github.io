@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-08-28T06:00:22+00:00</updated>
+  <updated>2014-08-30T17:40:34+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Github Flow and Review Process]]></title>
+    <link href="http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process/"/>
+    <updated>2014-08-28T09:33:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
+
+<h3>1. Anything on <code>master</code> can be deployed</h3>
+
+<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+
+<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
+
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># make sure you&#39;re on your master branch</span>
+</span><span class='line'>git checkout -b authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above is the same as running:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git branch authentication
+</span><span class='line'>git checkout authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
+
+<h3>3. Push code up</h3>
+
+<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git push origin authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
+
+<h3>4. Create a pull request</h3>
+
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+
+<h3>5. Code review</h3>
+
+<p>After all reviews have been made and changes effected, you can merge it into your <code>master</code> branch by going to your <code>pull request</code> and clicking the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+
+<p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add your_filename.rb
+</span><span class='line'>git commit -m <span class="s2">&quot;added extra validations&quot;</span>
+</span><span class='line'>git push origin authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Continue until the process is complete.</p>
+
+<h3>6. Merge</h3>
+
+<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git pull origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>7. Deploy</h3>
+
+<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Seeding Data in Rails]]></title>

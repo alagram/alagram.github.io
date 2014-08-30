@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Seeding Data in Rails - Albert Agram</title>
+  <title>Github Flow and Review Process - Albert Agram</title>
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into &hellip;">
+  <meta name="description" content="Git is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alagram.github.io/blog/2014/08/27/seeding-data">
+  <link rel="canonical" href="http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Albert Agram" type="application/atom+xml">
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Seeding Data in Rails</h1>
+      <h1 class="entry-title">Github Flow and Review Process</h1>
     
     
       <p class="meta">
@@ -95,7 +95,7 @@
   
 
 
-<time datetime="2014-08-27T16:43:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+<time datetime="2014-08-28T09:33:00+00:00" pubdate data-updated="true">Aug 28<span>th</span>, 2014</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://alagram.github.io">Comments</a>
@@ -108,46 +108,85 @@
 <div class="entry-content"><!-- more -->
 
 
-<p>Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
 
-<ol>
-<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&rsquo;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
-<li><p>Populate your <code>seeds.rb</code> with all the data you need. This approach is your sure bet to get default values in your database in less time and is stress-free.</p></li>
-</ol>
+<h3>1. Anything on <code>master</code> can be deployed</h3>
+
+<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+
+<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
+
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># make sure you&#39;re on your master branch</span>
+</span><span class='line'>git checkout -b authentication
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Example seed file:</p>
+<p>The above is the same as running:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git branch authentication
+</span><span class='line'>git checkout authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
+
+<h3>3. Push code up</h3>
+
+<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git push origin authentication
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
+
+<h3>4. Create a pull request</h3>
+
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+
+<h3>5. Code review</h3>
+
+<p>After all reviews have been made and changes effected, you can merge it into your <code>master</code> branch by going to your <code>pull request</code> and clicking the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+
+<p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># seed.rb</span>
-</span><span class='line'><span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;South Park&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;A very funny video&quot;</span><span class="p">,</span> <span class="n">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/south_park.jpg&quot;</span><span class="p">,</span> <span class="n">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;I like this one too...&quot;</span><span class="p">,</span> <span class="n">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/futurama.jpg&quot;</span><span class="p">,</span> <span class="n">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Monk&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Not bad. I&#39;ll watch this again.&quot;</span><span class="p">,</span> <span class="n">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk.jpg&quot;</span><span class="p">,</span> <span class="n">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git add your_filename.rb
+</span><span class='line'>git commit -m <span class="s2">&quot;added extra validations&quot;</span>
+</span><span class='line'>git push origin authentication
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
+<p>Continue until the process is complete.</p>
+
+<h3>6. Merge</h3>
+
+<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:seed
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout master
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>That its all it takes. When things get out of hand, you can start on a clean slate by running this in your terminal:</p>
+<p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:drop
-</span><span class='line'>rake db:create
-</span><span class='line'>rake db:migrate
-</span><span class='line'>rake db:seed
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git pull origin master
 </span></code></pre></td></tr></table></div></figure>
 
+
+<h3>7. Deploy</h3>
+
+<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
 </div>
 
 
@@ -170,14 +209,8 @@
   
 
 
-<time datetime="2014-08-27T16:43:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+<time datetime="2014-08-28T09:33:00+00:00" pubdate data-updated="true">Aug 28<span>th</span>, 2014</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/rails/'>Rails</a>
-  
-</span>
 
 
     </p>
@@ -191,10 +224,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/04/19/set-up-staging-environment-for-an-app/" title="Previous Post: Set Up Staging Environment for an App">&laquo; Set Up Staging Environment for an App</a>
+        <a class="basic-alignment left" href="/blog/2014/08/27/seeding-data/" title="Previous Post: Seeding Data in Rails">&laquo; Seeding Data in Rails</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/08/28/github-flow-and-review-process/" title="Next Post: Github Flow and Review Process">Github Flow and Review Process &raquo;</a>
       
     </p>
   </footer>
@@ -307,8 +338,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://alagram.github.io/blog/2014/08/27/seeding-data/';
-        var disqus_url = 'http://alagram.github.io/blog/2014/08/27/seeding-data/';
+        var disqus_identifier = 'http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process/';
+        var disqus_url = 'http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process/';
         var disqus_script = 'embed.js';
       
     (function () {
