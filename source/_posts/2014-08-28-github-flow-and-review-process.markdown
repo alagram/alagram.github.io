@@ -48,7 +48,7 @@ This will create a new remote branch named `authentication` on the remote server
 When you need feedback or assitance, or believe you work on the new feature is complete, open a [pull request](https://help.github.com/articles/creating-a-pull-request). You'll need to create this `pull request` from your feature branch to your `master` branch. When you're done, collaborators can review your commits.
 
 
-### 5. Code review
+### 5. Code review and merge
 
 After all reviews have been made and changes effected, you can merge it into your `master` branch by going to your `pull request` and clicking the `merge` buton to `merge` it back to `master` branch.
 
@@ -63,7 +63,7 @@ git push origin authentication
 Continue until the process is complete.
 
 
-### 6. Merge
+### 6. Pull changes
 
 Now on your terminal, you'll switch to your `master` branch:
 
