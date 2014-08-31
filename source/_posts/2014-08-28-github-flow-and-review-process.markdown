@@ -3,7 +3,7 @@ layout: post
 title: "Github Flow and Review Process"
 date: 2014-08-28 09:33
 comments: true
-categories:
+categories: [Git, Rails]
 ---
 
 <!-- more -->
