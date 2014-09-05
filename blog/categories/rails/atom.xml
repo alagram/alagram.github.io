@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-08-31T13:52:24+00:00</updated>
+  <updated>2014-09-05T20:37:37+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,309 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Test using TDD with Rspec]]></title>
+    <link href="http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec/"/>
+    <updated>2014-09-05T19:12:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<h2>Introduction</h2>
+
+<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&rsquo;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&rsquo;ll implement a method named <code>search_by_title</code>.</p>
+
+<h2>How I Write Tests</h2>
+
+<p>  1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
+
+<p>  2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
+
+<p>  3) Run test and let it fail.</p>
+
+<p>  4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
+
+<h3>The code</h3>
+
+<p>By following step 1, I write out all the test cases I want to cover:</p>
+
+<p>```ruby
+require &ldquo;rails_helper&rdquo;</p>
+
+<p>RSpec.describe Video, :type => :model do
+  it { should belong_to :category }
+  it { should validate_presence_of :title }
+  it { should validate_presence_of :description }</p>
+
+<p>  describe &ldquo;search_by_title&rdquo; do</p>
+
+<pre><code>it "returns an empty array if there is no match"
+it "returns an array of one video for an exact match"
+it "returns an array of one video for a partial match"
+it "returns an array of all matches ordered by created_at"
+it "returns an empty array for a search with an empty string"
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>The video model in <code>app/models/video.rb</code> looks like this:</p>
+
+<p><code>ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category
+  validates_presence_of :title, :description
+end
+</code></p>
+
+<p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
+
+<p><code>ruby
+it "returns an empty array if there is no match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("hello")).to eq([])
+end
+</code></p>
+
+<p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
+
+<p>Test is complaining about <code>NoMethodError: undefined method search_by_title for #&lt;Class:0x007f9ec0ad0d98&gt;</code></p>
+
+<p>Next, make that little change in <code>app/models/video.rb</code>; step 4:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category</p>
+
+<p>  validates_presence_of :title, :description</p>
+
+<p>  def self.search_by_title
+  end
+end
+```</p>
+
+<p>Run test again:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
+
+<p>This time the failure is <code>ArgumentError: wrong number of arguments (1 for 0)</code>. In our test, we pass a parameter to the method and have to replicate that in the real code.</p>
+
+<p>Let&rsquo;s make that change:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base</p>
+
+<p>  &hellip;</p>
+
+<p>  def self.search_by_title(search_term)
+  end
+end
+```</p>
+
+<p>Run the test again:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
+
+<p>There is another error:</p>
+
+<p><code>bash
+expected: []
+got: nil
+</code></p>
+
+<p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base</p>
+
+<p>  &hellip;</p>
+
+<p>  def self.search_by_title(search_term)</p>
+
+<pre><code>[]
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
+
+<p>Now when we run the test again, we&rsquo;ll have a passing test:</p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_4.png" title="Spec 4" ></p>
+
+<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&rsquo;re forced to drive-out the actually implementation of the method:</p>
+
+<p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category</p>
+
+<p>  validates_presence_of :title, :description</p>
+
+<p>  def self.search_by_title(search_term)</p>
+
+<pre><code>return [] if search_term.blank?
+where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>And our test code will be:</p>
+
+<p>```ruby
+require &ldquo;rails_helper&rdquo;</p>
+
+<p>RSpec.describe Video, :type => :model do
+  it { should belong_to :category }
+  it { should validate_presence_of :title }
+  it { should validate_presence_of :description }</p>
+
+<p>  describe &ldquo;search_by_title&rdquo; do</p>
+
+<pre><code>it "returns an empty array if there is no match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("hello")).to eq([])
+end
+
+it "returns an array of one video for an exact match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("Futurama")).to eq([futurama])
+end
+
+it "returns an array of one video for a partial match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("urama")).to eq([futurama])
+end
+
+it "returns an array of all matches ordered by created_at" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
+end
+
+it "returns an empty array for a search with an empty string" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("")).to eq([])
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>And all our tests pass:</p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_pass.png" title="Spec Pass" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Github Flow and Review Process]]></title>
+    <link href="http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process/"/>
+    <updated>2014-08-28T09:33:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
+
+<h3>1. Anything on <code>master</code> can be deployed</h3>
+
+<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+
+<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
+
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
+
+<p>```bash</p>
+
+<h1>make sure you&rsquo;re on your master branch</h1>
+
+<p>git checkout -b authentication
+```</p>
+
+<p>The above is the same as running:</p>
+
+<p><code>bash
+git branch authentication
+git checkout authentication
+</code></p>
+
+<p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
+
+<h3>3. Push code up</h3>
+
+<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
+
+<p><code>bash
+git push origin authentication
+</code></p>
+
+<p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
+
+<h3>4. Create a pull request</h3>
+
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+
+<h3>5. Code review and merge</h3>
+
+<p>After all reviews have been made and changes effected, you&rsquo;ll want to merge it into your <code>master</code>.</p>
+
+<p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
+
+<p><code>bash
+git add your_filename.rb
+git commit -m "added extra validations"
+git push origin authentication
+</code></p>
+
+<p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+
+<h3>6. Pull changes</h3>
+
+<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
+
+<p><code>bash
+git checkout master
+</code></p>
+
+<p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
+
+<p><code>bash
+git pull origin master
+</code></p>
+
+<h3>7. Deploy</h3>
+
+<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Seeding Data in Rails]]></title>
@@ -201,151 +504,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Migrating to PostgreSQL]]></title>
-    <link href="http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql/"/>
-    <updated>2013-11-23T18:53:00+00:00</updated>
-    <id>http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql</id>
-    <content type="html"><![CDATA[<!-- more -->
-
-
-<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&rsquo;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
-
-<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&rsquo;d like to put out here for anyone going through this.</p>
-
-<p>The real problem starts during the process of pulling data from SQLite database with <a href="https://github.com/ricardochimal/taps">Taps</a>. This gem provides a <code>taps</code> command that will help serve the one database and also pull data from it into another. First we have to serve our current SQLite database by passing <code>taps</code> a path to the database and also set a username and password. Then we can pull the data from this database into our Postgres database.</p>
-
-<p>However after running this command I got an error that read something like this:</p>
-
-<pre><code>taps cannot load such file -- sqlite3 (LoadError)
-</code></pre>
-
-<p>Huh? After hours of frustration I found that <code>Taps</code> depends on <code>rack</code> version <code>1.0.1</code>.</p>
-
-<h2>Solution</h2>
-
-<p>Added the this to <code>Gemfile</code></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lsquo;rack&rsquo;,’1.0.1’</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Then on Terminal run this&hellip;</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Terminal </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>bundle update rack</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p><code>Taps</code> will now successfully pull data from SQLite into Postgres.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Uploading multiple files with carrierwave using a nested form]]></title>
-    <link href="http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/"/>
-    <updated>2013-11-04T17:00:00+00:00</updated>
-    <id>http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form</id>
-    <content type="html"><![CDATA[<!-- more -->
-
-
-<p>I recently needed to create a form for uploading multiple files to a given object. I implemented this with <a href="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a> and <a href="https://github.com/tors/jquery-fileupload-rails">jQuery File Upload</a> gems.</p>
-
-<p>Before we start, we need to make sure models and migrations are setup.
-For images, we have the following migration:</p>
-
-<pre><code>class CreateImages &lt; ActiveRecord::Migration
-  def change
-    create_table :images do |t|
-    t.string :image
-    t.integer :fraud_id
-
-    t.timestamps
-  end
-end
-</code></pre>
-
-<p>I have the following classes:</p>
-
-<pre><code>class Fraud &lt; ActiveRecord::Base
-  has_many :images
-  accepts_nested_attributes_for :images
-end
-
-class Image &lt; ActiveRecord::Base
-  belongs_to :fraud
-end
-</code></pre>
-
-<p>Added gems to Gemfile:</p>
-
-<pre><code>gem 'carrierwave'
-gem 'jquery-fileupload-rails'
-</code></pre>
-
-<p>Run <code>bundle install</code> to install gems and dependencies.</p>
-
-<p>Then we create a carrierwave uploader with <code>rails generate uploader image</code> and mount the uploader:</p>
-
-<pre><code>class Image &lt; ActiveRecord::Base
-  belongs_to :fraud
-
-  mount_uploader :image, ImageUploader
-end
-</code></pre>
-
-<p>The carrierwave uploader helps by doing all the heavy lifting with regard to uploading the files.</p>
-
-<p>Now we are ready to work on the view, where the form is modified in the following way:</p>
-
-<pre><code>= render 'shared/errors', object: @fraud
-
-= form_for @fraud, html: { class: "form-horizontal", autocomplete: "off", multipart: true } do |f|
-  %fieldset
-    .control-group
-      = f.label :title, class: 'control-label'
-      .controls
-        = f.text_field :title, class: 'span3'
-    .control-group
-      = f.label :description, class: 'control-label'
-      .controls
-        = f.text_area :description, rows: 6, class: 'span6'
-    .control-group
-      = f.label :fraud_date, class: 'control-label'
-      .controls
-        = f.text_field :fraud_date, class: 'span3 fraud_date'
-    .control-group
-      = f.fields_for :images, Image.new do |ff|
-        = ff.label :image, "Upload Evidence", class: 'control-label'
-        .controls
-          = ff.file_field :image, multiple: true, class: 'btn btn-file', id: 'upload-image', name: "fraud[images_attributes][][image]"
-  %fieldset.actions.control-group
-    .controls
-      = f.submit class: 'btn', id: 'submit-data'
-</code></pre>
-
-<p>The form setup is a typical form with a few details:
-<code>= f.fields_for :images, Image.new do |ff|</code> creates a nested form. <code>accepts_nested_attributes_for</code> allows the creation of a related object along with the main object. There is good documentation of this <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html#method-i-accepts_nested_attributes_for">here</a>. So in this example, we are creating an instance of <code>Fraud</code> class while simultaneously creating an instance of an <code>Image</code> class.</p>
-
-<p>Since by default, most browsers do not allow selection of multiple files, we use <code>multiple: true</code> to change this. Also, we have to change the <code>name</code> attribute of our nested form to make it work with carrierwave. The attribute finally looks like this:</p>
-
-<pre><code>name: "fraud[images_attributes][][image]"
-</code></pre>
-
-<p>Lastly, we need our images to be uploaded on submit. jQuery File Upload gem by default tries to upload files immediately after its attached, we need to change this.</p>
-
-<p> We grab the id&rsquo;s of the file field and the submit button and use coffeescript to change this default behaviour to fit our needs:</p>
-
-<pre><code>$ -&gt;
-  $("#upload-image").fileupload
-  add: (e, data) -&gt;
-    data.context = $("#submit-data")
-    data.submit()
-</code></pre>
-
-<p>That&rsquo;s all folks! With this, on submit, Rails knows to create an instance of Fraud and instances of Image. There is a natural association with Fraud and Image.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-08-31T13:52:24+00:00</updated>
+  <updated>2014-09-05T20:37:37+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,227 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Test using TDD with Rspec]]></title>
+    <link href="http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec/"/>
+    <updated>2014-09-05T19:12:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<h2>Introduction</h2>
+
+<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&rsquo;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&rsquo;ll implement a method named <code>search_by_title</code>.</p>
+
+<h2>How I Write Tests</h2>
+
+<p>  1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
+
+<p>  2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
+
+<p>  3) Run test and let it fail.</p>
+
+<p>  4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
+
+<h3>The code</h3>
+
+<p>By following step 1, I write out all the test cases I want to cover:</p>
+
+<p>```ruby
+require &ldquo;rails_helper&rdquo;</p>
+
+<p>RSpec.describe Video, :type => :model do
+  it { should belong_to :category }
+  it { should validate_presence_of :title }
+  it { should validate_presence_of :description }</p>
+
+<p>  describe &ldquo;search_by_title&rdquo; do</p>
+
+<pre><code>it "returns an empty array if there is no match"
+it "returns an array of one video for an exact match"
+it "returns an array of one video for a partial match"
+it "returns an array of all matches ordered by created_at"
+it "returns an empty array for a search with an empty string"
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>The video model in <code>app/models/video.rb</code> looks like this:</p>
+
+<p><code>ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category
+  validates_presence_of :title, :description
+end
+</code></p>
+
+<p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
+
+<p><code>ruby
+it "returns an empty array if there is no match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("hello")).to eq([])
+end
+</code></p>
+
+<p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
+
+<p>Test is complaining about <code>NoMethodError: undefined method search_by_title for #&lt;Class:0x007f9ec0ad0d98&gt;</code></p>
+
+<p>Next, make that little change in <code>app/models/video.rb</code>; step 4:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category</p>
+
+<p>  validates_presence_of :title, :description</p>
+
+<p>  def self.search_by_title
+  end
+end
+```</p>
+
+<p>Run test again:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
+
+<p>This time the failure is <code>ArgumentError: wrong number of arguments (1 for 0)</code>. In our test, we pass a parameter to the method and have to replicate that in the real code.</p>
+
+<p>Let&rsquo;s make that change:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base</p>
+
+<p>  &hellip;</p>
+
+<p>  def self.search_by_title(search_term)
+  end
+end
+```</p>
+
+<p>Run the test again:</p>
+
+<p><code>bash
+rspec spec/models/video_spec.rb
+</code></p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
+
+<p>There is another error:</p>
+
+<p><code>bash
+expected: []
+got: nil
+</code></p>
+
+<p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base</p>
+
+<p>  &hellip;</p>
+
+<p>  def self.search_by_title(search_term)</p>
+
+<pre><code>[]
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
+
+<p>Now when we run the test again, we&rsquo;ll have a passing test:</p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_4.png" title="Spec 4" ></p>
+
+<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&rsquo;re forced to drive-out the actually implementation of the method:</p>
+
+<p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
+
+<p>```ruby
+class Video &lt; ActiveRecord::Base
+  belongs_to :category</p>
+
+<p>  validates_presence_of :title, :description</p>
+
+<p>  def self.search_by_title(search_term)</p>
+
+<pre><code>return [] if search_term.blank?
+where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>And our test code will be:</p>
+
+<p>```ruby
+require &ldquo;rails_helper&rdquo;</p>
+
+<p>RSpec.describe Video, :type => :model do
+  it { should belong_to :category }
+  it { should validate_presence_of :title }
+  it { should validate_presence_of :description }</p>
+
+<p>  describe &ldquo;search_by_title&rdquo; do</p>
+
+<pre><code>it "returns an empty array if there is no match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("hello")).to eq([])
+end
+
+it "returns an array of one video for an exact match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("Futurama")).to eq([futurama])
+end
+
+it "returns an array of one video for a partial match" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!")
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("urama")).to eq([futurama])
+end
+
+it "returns an array of all matches ordered by created_at" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
+end
+
+it "returns an empty array for a search with an empty string" do
+  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+  expect(Video.search_by_title("")).to eq([])
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>And all our tests pass:</p>
+
+<p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_pass.png" title="Spec Pass" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing multiple file upload with Rspec, Fabrication and carrierwave]]></title>
