@@ -37,3 +37,11 @@ rake db:create
 rake db:migrate
 rake db:seed
 ```
+
+This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.
+
+There is a simple `rake` task to complish all this in one fell swoop:
+
+```bash
+rake db:reset
+```
