@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-05T20:37:37+00:00</updated>
+  <updated>2014-09-09T08:38:09+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Form Builders in Rails]]></title>
+    <link href="http://alagram.github.io/blog/2014/09/05/custom-form-builders-in-rails/"/>
+    <updated>2014-09-05T20:40:00+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/09/05/custom-form-builders-in-rails</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Simple Test using TDD with Rspec]]></title>
@@ -546,6 +555,15 @@
 </span><span class='line'>rake db:create
 </span><span class='line'>rake db:migrate
 </span><span class='line'>rake db:seed
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.</p>
+
+<p>There is a simple <code>rake</code> task to complish all this in one fell swoop:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:reset
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>

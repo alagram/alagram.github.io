@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-05T20:37:37+00:00</updated>
+  <updated>2014-09-09T08:38:09+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -356,6 +356,14 @@ rake db:drop
 rake db:create
 rake db:migrate
 rake db:seed
+</code></p>
+
+<p>This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.</p>
+
+<p>There is a simple <code>rake</code> task to complish all this in one fell swoop:</p>
+
+<p><code>bash
+rake db:reset
 </code></p>
 ]]></content>
   </entry>
