@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-09T08:38:09+00:00</updated>
+  <updated>2014-09-15T11:56:36+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Custom Form Builders in Rails]]></title>
-    <link href="http://alagram.github.io/blog/2014/09/05/custom-form-builders-in-rails/"/>
-    <updated>2014-09-05T20:40:00+00:00</updated>
-    <id>http://alagram.github.io/blog/2014/09/05/custom-form-builders-in-rails</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Simple Test using TDD with Rspec]]></title>
