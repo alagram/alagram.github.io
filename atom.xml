@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-15T11:56:36+00:00</updated>
+  <updated>2014-09-16T07:45:23+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Simple Test using TDD with Rspec]]></title>
+    <title type="html"><![CDATA[Simple Test Using TDD With Rspec]]></title>
     <link href="http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec/"/>
     <updated>2014-09-05T19:12:00+00:00</updated>
     <id>http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec</id>
@@ -324,7 +324,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Types of Testing and shoulda-matchers]]></title>
+    <title type="html"><![CDATA[Types of Testing and Shoulda-matchers]]></title>
     <link href="http://alagram.github.io/blog/2014/08/31/types-of-testing-and-shoulda-matchers/"/>
     <updated>2014-08-31T11:11:00+00:00</updated>
     <id>http://alagram.github.io/blog/2014/08/31/types-of-testing-and-shoulda-matchers</id>
@@ -690,7 +690,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Testing multiple file upload with Rspec, Fabrication and carrierwave]]></title>
+    <title type="html"><![CDATA[Testing Multiple File Upload With Rspec, Fabrication and Carrierwave]]></title>
     <link href="http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave/"/>
     <updated>2013-11-28T20:26:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave</id>
@@ -865,7 +865,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Uploading multiple files with carrierwave using a nested form]]></title>
+    <title type="html"><![CDATA[Uploading Multiple Files With Carrierwave Using a Nested Form]]></title>
     <link href="http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form/"/>
     <updated>2013-11-04T17:00:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form</id>
@@ -1006,7 +1006,7 @@ end
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Fix Octopress rake new_post problem on Zsh]]></title>
+    <title type="html"><![CDATA[Fix Octopress Rake New_post Problem on Zsh]]></title>
     <link href="http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh/"/>
     <updated>2013-08-15T16:35:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh</id>
@@ -1195,7 +1195,7 @@ Enter a title for your post:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Getting familiar with Ruby Arrays and Hash Methods.]]></title>
+    <title type="html"><![CDATA[Getting Familiar With Ruby Arrays and Hash Methods.]]></title>
     <link href="http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes/"/>
     <updated>2013-05-17T14:37:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes</id>
@@ -1320,7 +1320,7 @@ We can do something like this:</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Welcome to my Coding Blog]]></title>
+    <title type="html"><![CDATA[Welcome to My Coding Blog]]></title>
     <link href="http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog/"/>
     <updated>2013-05-17T02:54:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog</id>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rspec | Albert Agram]]></title>
+  <title><![CDATA[Category: rspec | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-15T11:56:36+00:00</updated>
+  <updated>2014-09-16T07:45:23+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -39,51 +39,44 @@
 
 <p>By following step 1, I write out all the test cases I want to cover:</p>
 
-<p>```ruby
-require &ldquo;rails_helper&rdquo;</p>
+<pre><code class="ruby">require "rails_helper"
 
-<p>RSpec.describe Video, :type => :model do
+RSpec.describe Video, :type =&gt; :model do
   it { should belong_to :category }
   it { should validate_presence_of :title }
-  it { should validate_presence_of :description }</p>
+  it { should validate_presence_of :description }
 
-<p>  describe &ldquo;search_by_title&rdquo; do</p>
-
-<pre><code>it "returns an empty array if there is no match"
-it "returns an array of one video for an exact match"
-it "returns an array of one video for a partial match"
-it "returns an array of all matches ordered by created_at"
-it "returns an empty array for a search with an empty string"
-</code></pre>
-
-<p>  end
+  describe "search_by_title" do
+    it "returns an empty array if there is no match"
+    it "returns an array of one video for an exact match"
+    it "returns an array of one video for a partial match"
+    it "returns an array of all matches ordered by created_at"
+    it "returns an empty array for a search with an empty string"
+  end
 end
-```</p>
+</code></pre>
 
 <p>The video model in <code>app/models/video.rb</code> looks like this:</p>
 
-<p><code>ruby
-class Video &lt; ActiveRecord::Base
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
   belongs_to :category
   validates_presence_of :title, :description
 end
-</code></p>
+</code></pre>
 
 <p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
 
-<p><code>ruby
-it "returns an empty array if there is no match" do
+<pre><code class="ruby">it "returns an empty array if there is no match" do
   futurama = Video.create(title: "Futurama", description: "Space Travel!")
   back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
   expect(Video.search_by_title("hello")).to eq([])
 end
-</code></p>
+</code></pre>
 
 <p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
 
@@ -91,22 +84,20 @@ rspec spec/models/video_spec.rb
 
 <p>Next, make that little change in <code>app/models/video.rb</code>; step 4:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base
-  belongs_to :category</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  belongs_to :category
 
-<p>  validates_presence_of :title, :description</p>
+  validates_presence_of :title, :description
 
-<p>  def self.search_by_title
+  def self.search_by_title
   end
 end
-```</p>
+</code></pre>
 
 <p>Run test again:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
 
@@ -114,46 +105,39 @@ rspec spec/models/video_spec.rb
 
 <p>Let&rsquo;s make that change:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
 
-<p>  &hellip;</p>
+  ...
 
-<p>  def self.search_by_title(search_term)
+  def self.search_by_title(search_term)
   end
 end
-```</p>
+</code></pre>
 
 <p>Run the test again:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
 
 <p>There is another error:</p>
 
-<p><code>bash
-expected: []
+<pre><code class="bash">expected: []
 got: nil
-</code></p>
+</code></pre>
 
 <p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
 
-<p>  &hellip;</p>
+  ...
 
-<p>  def self.search_by_title(search_term)</p>
-
-<pre><code>[]
-</code></pre>
-
-<p>  end
+  def self.search_by_title(search_term)
+    []
+  end
 end
-```</p>
+</code></pre>
 
 <p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
 
@@ -165,68 +149,60 @@ end
 
 <p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base
-  belongs_to :category</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  belongs_to :category
 
-<p>  validates_presence_of :title, :description</p>
+  validates_presence_of :title, :description
 
-<p>  def self.search_by_title(search_term)</p>
-
-<pre><code>return [] if search_term.blank?
-where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
-</code></pre>
-
-<p>  end
+  def self.search_by_title(search_term)
+    return [] if search_term.blank?
+    where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
+  end
 end
-```</p>
+</code></pre>
 
 <p>And our test code will be:</p>
 
-<p>```ruby
-require &ldquo;rails_helper&rdquo;</p>
+<pre><code class="ruby">require "rails_helper"
 
-<p>RSpec.describe Video, :type => :model do
+RSpec.describe Video, :type =&gt; :model do
   it { should belong_to :category }
   it { should validate_presence_of :title }
-  it { should validate_presence_of :description }</p>
+  it { should validate_presence_of :description }
 
-<p>  describe &ldquo;search_by_title&rdquo; do</p>
+  describe "search_by_title" do
+    it "returns an empty array if there is no match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("hello")).to eq([])
+    end
 
-<pre><code>it "returns an empty array if there is no match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("hello")).to eq([])
-end
+    it "returns an array of one video for an exact match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("Futurama")).to eq([futurama])
+    end
 
-it "returns an array of one video for an exact match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("Futurama")).to eq([futurama])
-end
+    it "returns an array of one video for a partial match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("urama")).to eq([futurama])
+    end
 
-it "returns an array of one video for a partial match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("urama")).to eq([futurama])
-end
+    it "returns an array of all matches ordered by created_at" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
+    end
 
-it "returns an array of all matches ordered by created_at" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
-end
-
-it "returns an empty array for a search with an empty string" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("")).to eq([])
+    it "returns an empty array for a search with an empty string" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("")).to eq([])
+    end
+  end
 end
 </code></pre>
-
-<p>  end
-end
-```</p>
 
 <p>And all our tests pass:</p>
 
@@ -255,7 +231,7 @@ end
 </ul>
 
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -273,13 +249,7 @@ end
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Expense</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Expense</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">has_many</span> <span class="ss">:images</span>
 </span><span class='line'>  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:reject_if</span> <span class="o">=&gt;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="kp">attr</span><span class="o">|</span> <span class="kp">attr</span><span class="o">[&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">image</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">].</span><span class="n">blank?</span> <span class="p">}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
@@ -287,25 +257,19 @@ end
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="kp">private</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def must_have_image&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  def must_have_image</span>
+</span><span class='line'><span class="sr">    errors[:base] &amp;lt;&amp;lt; &amp;ldquo;Please upload image&amp;rdquo; if images_empty?</span>
+</span><span class='line'><span class="sr">  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">errors</span><span class="o">[</span><span class="ss">:base</span><span class="o">]</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s2">&quot;Please upload image&quot;</span> <span class="k">if</span> <span class="n">images_empty?</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def images_empty?&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">images</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">images_empty?</span>
+</span><span class='line'>    <span class="n">images</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span></code></pre></td></tr></table></div></figure></p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -315,11 +279,11 @@ end
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;  mount_uploader :image, ImageUploader</span>
 </span><span class='line'><span class="sr">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>With this, create an Image object first as shown <a href="https://github.com/carrierwaveuploader/carrierwave/wiki/How-to%3A-Use-test-fixtures">here</a>:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -328,25 +292,19 @@ end
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">file</span> <span class="p">{</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;ActionDispatch::Http::UploadedFile.new(</span>
-</span><span class='line'><span class="sr">  :tempfile =&amp;gt; File.new(Rails.root.join(&quot;spec/su</span><span class="n">pport</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="s2">&quot;)),</span>
-</span><span class='line'><span class="s2">  :type =&amp;gt; &#39;image/jpg&#39;,</span>
-</span><span class='line'><span class="s2">  :filename =&amp;gt; File.basename(File.new(Rails.root.join(&quot;</span><span class="n">spec</span><span class="o">/</span><span class="n">support</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="s2">&quot;)))</span>
-</span><span class='line'><span class="s2">)</span>
-</span><span class='line'><span class="s2">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="s2">&lt;p&gt;  }</span>
-</span><span class='line'><span class="s2">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span><span class='line'>  <span class="n">file</span> <span class="p">{</span>
+</span><span class='line'>    <span class="no">ActionDispatch</span><span class="o">::&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;Http::UploadedFile.new&quot;</span><span class="o">&gt;</span><span class="no">Http</span><span class="o">::</span><span class="no">UploadedFile</span><span class="o">.</span><span class="n">new</span><span class="o">&lt;</span><span class="sr">/a&gt;(</span>
+</span><span class='line'><span class="sr">      :tempfile =&gt; File.new(Rails.root.join(&amp;ldquo;spec/su</span><span class="n">pport</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)),</span>
+</span><span class='line'>      <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">image</span><span class="o">/</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'>      <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">spec</span><span class="o">/</span><span class="n">support</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)))</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&rsquo;s my final code:
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -358,11 +316,11 @@ end
 </span><span class='line'>  <span class="n">exp_date</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
 </span><span class='line'>  <span class="n">images_attributes</span> <span class="p">{</span> <span class="o">[</span><span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>There is another way to do this through the controller spec without adding the last line in the Fabricator above:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -370,21 +328,15 @@ end
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">POST</span> <span class="n">create</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">creates</span> <span class="n">a</span> <span class="kp">new</span> <span class="n">expense</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;exp_params = Fabricate.attributes_for(:expense)</span>
-</span><span class='line'><span class="sr">img_params = Fabricate.attributes_for(:image)</span>
-</span><span class='line'><span class="sr">post :create, expense: exp_params.merge(images_attributes: [img_params])</span>
-</span><span class='line'><span class="sr">expect(Expense.count).to eq(1)</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span><span class='line'><span class="sr">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span><span class='line'>  <span class="n">it</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">creates</span> <span class="n">a</span> <span class="kp">new</span> <span class="n">expense</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">exp_params</span> <span class="o">=</span> <span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:expense</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">img_params</span> <span class="o">=</span> <span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">post</span> <span class="ss">:create</span><span class="p">,</span> <span class="ss">expense</span><span class="p">:</span> <span class="n">exp_params</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="ss">images_attributes</span><span class="p">:</span> <span class="o">[</span><span class="n">img_params</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="no">Expense</span><span class="o">.</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 ]]></content>
   </entry>
   

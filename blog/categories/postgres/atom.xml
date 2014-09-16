@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Postgres | Albert Agram]]></title>
+  <title><![CDATA[Category: postgres | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/postgres/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-15T11:56:36+00:00</updated>
+  <updated>2014-09-16T07:45:23+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -27,27 +27,21 @@
 
 <p>Upon feather research, I found that to do full-text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">def</span> <span class="k">self</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">conditons</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span><span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">to_tsvector</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="n">conditons</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span><span class="n">EOS</span>
+</span><span class='line'>    <span class="n">to_tsvector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">where</span><span class="p">(</span><span class="n">conditons</span><span class="p">,</span> <span class="n">query</span><span class="p">).</span><span class="k">order</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">created_at</span> <span class="k">DESC</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h3>References</h3>
 

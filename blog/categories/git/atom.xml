@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Git | Albert Agram]]></title>
+  <title><![CDATA[Category: git | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-15T11:56:36+00:00</updated>
+  <updated>2014-09-16T07:45:23+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -31,19 +31,15 @@
 
 <p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
 
-<p>```bash</p>
-
-<h1>make sure you&rsquo;re on your master branch</h1>
-
-<p>git checkout -b authentication
-```</p>
+<pre><code class="bash"># make sure you're on your master branch
+git checkout -b authentication
+</code></pre>
 
 <p>The above is the same as running:</p>
 
-<p><code>bash
-git branch authentication
+<pre><code class="bash">git branch authentication
 git checkout authentication
-</code></p>
+</code></pre>
 
 <p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
 
@@ -51,9 +47,8 @@ git checkout authentication
 
 <p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
 
-<p><code>bash
-git push origin authentication
-</code></p>
+<pre><code class="bash">git push origin authentication
+</code></pre>
 
 <p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
 
@@ -67,11 +62,10 @@ git push origin authentication
 
 <p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
 
-<p><code>bash
-git add your_filename.rb
+<pre><code class="bash">git add your_filename.rb
 git commit -m "added extra validations"
 git push origin authentication
-</code></p>
+</code></pre>
 
 <p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
 
@@ -79,15 +73,13 @@ git push origin authentication
 
 <p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
 
-<p><code>bash
-git checkout master
-</code></p>
+<pre><code class="bash">git checkout master
+</code></pre>
 
 <p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
 
-<p><code>bash
-git pull origin master
-</code></p>
+<pre><code class="bash">git pull origin master
+</code></pre>
 
 <h3>7. Deploy</h3>
 

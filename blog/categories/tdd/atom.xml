@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: TDD | Albert Agram]]></title>
+  <title><![CDATA[Category: tdd | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-15T11:56:36+00:00</updated>
+  <updated>2014-09-16T07:45:23+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -39,51 +39,44 @@
 
 <p>By following step 1, I write out all the test cases I want to cover:</p>
 
-<p>```ruby
-require &ldquo;rails_helper&rdquo;</p>
+<pre><code class="ruby">require "rails_helper"
 
-<p>RSpec.describe Video, :type => :model do
+RSpec.describe Video, :type =&gt; :model do
   it { should belong_to :category }
   it { should validate_presence_of :title }
-  it { should validate_presence_of :description }</p>
+  it { should validate_presence_of :description }
 
-<p>  describe &ldquo;search_by_title&rdquo; do</p>
-
-<pre><code>it "returns an empty array if there is no match"
-it "returns an array of one video for an exact match"
-it "returns an array of one video for a partial match"
-it "returns an array of all matches ordered by created_at"
-it "returns an empty array for a search with an empty string"
-</code></pre>
-
-<p>  end
+  describe "search_by_title" do
+    it "returns an empty array if there is no match"
+    it "returns an array of one video for an exact match"
+    it "returns an array of one video for a partial match"
+    it "returns an array of all matches ordered by created_at"
+    it "returns an empty array for a search with an empty string"
+  end
 end
-```</p>
+</code></pre>
 
 <p>The video model in <code>app/models/video.rb</code> looks like this:</p>
 
-<p><code>ruby
-class Video &lt; ActiveRecord::Base
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
   belongs_to :category
   validates_presence_of :title, :description
 end
-</code></p>
+</code></pre>
 
 <p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
 
-<p><code>ruby
-it "returns an empty array if there is no match" do
+<pre><code class="ruby">it "returns an empty array if there is no match" do
   futurama = Video.create(title: "Futurama", description: "Space Travel!")
   back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
   expect(Video.search_by_title("hello")).to eq([])
 end
-</code></p>
+</code></pre>
 
 <p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
 
@@ -91,22 +84,20 @@ rspec spec/models/video_spec.rb
 
 <p>Next, make that little change in <code>app/models/video.rb</code>; step 4:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base
-  belongs_to :category</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  belongs_to :category
 
-<p>  validates_presence_of :title, :description</p>
+  validates_presence_of :title, :description
 
-<p>  def self.search_by_title
+  def self.search_by_title
   end
 end
-```</p>
+</code></pre>
 
 <p>Run test again:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
 
@@ -114,46 +105,39 @@ rspec spec/models/video_spec.rb
 
 <p>Let&rsquo;s make that change:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
 
-<p>  &hellip;</p>
+  ...
 
-<p>  def self.search_by_title(search_term)
+  def self.search_by_title(search_term)
   end
 end
-```</p>
+</code></pre>
 
 <p>Run the test again:</p>
 
-<p><code>bash
-rspec spec/models/video_spec.rb
-</code></p>
+<pre><code class="bash">rspec spec/models/video_spec.rb
+</code></pre>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
 
 <p>There is another error:</p>
 
-<p><code>bash
-expected: []
+<pre><code class="bash">expected: []
 got: nil
-</code></p>
+</code></pre>
 
 <p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
 
-<p>  &hellip;</p>
+  ...
 
-<p>  def self.search_by_title(search_term)</p>
-
-<pre><code>[]
-</code></pre>
-
-<p>  end
+  def self.search_by_title(search_term)
+    []
+  end
 end
-```</p>
+</code></pre>
 
 <p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
 
@@ -165,68 +149,60 @@ end
 
 <p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
 
-<p>```ruby
-class Video &lt; ActiveRecord::Base
-  belongs_to :category</p>
+<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  belongs_to :category
 
-<p>  validates_presence_of :title, :description</p>
+  validates_presence_of :title, :description
 
-<p>  def self.search_by_title(search_term)</p>
-
-<pre><code>return [] if search_term.blank?
-where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
-</code></pre>
-
-<p>  end
+  def self.search_by_title(search_term)
+    return [] if search_term.blank?
+    where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
+  end
 end
-```</p>
+</code></pre>
 
 <p>And our test code will be:</p>
 
-<p>```ruby
-require &ldquo;rails_helper&rdquo;</p>
+<pre><code class="ruby">require "rails_helper"
 
-<p>RSpec.describe Video, :type => :model do
+RSpec.describe Video, :type =&gt; :model do
   it { should belong_to :category }
   it { should validate_presence_of :title }
-  it { should validate_presence_of :description }</p>
+  it { should validate_presence_of :description }
 
-<p>  describe &ldquo;search_by_title&rdquo; do</p>
+  describe "search_by_title" do
+    it "returns an empty array if there is no match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("hello")).to eq([])
+    end
 
-<pre><code>it "returns an empty array if there is no match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("hello")).to eq([])
-end
+    it "returns an array of one video for an exact match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("Futurama")).to eq([futurama])
+    end
 
-it "returns an array of one video for an exact match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("Futurama")).to eq([futurama])
-end
+    it "returns an array of one video for a partial match" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!")
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("urama")).to eq([futurama])
+    end
 
-it "returns an array of one video for a partial match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("urama")).to eq([futurama])
-end
+    it "returns an array of all matches ordered by created_at" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
+    end
 
-it "returns an array of all matches ordered by created_at" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
-end
-
-it "returns an empty array for a search with an empty string" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("")).to eq([])
+    it "returns an empty array for a search with an empty string" do
+      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
+      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
+      expect(Video.search_by_title("")).to eq([])
+    end
+  end
 end
 </code></pre>
-
-<p>  end
-end
-```</p>
 
 <p>And all our tests pass:</p>
 
@@ -258,44 +234,39 @@ end
 
 <p>In Test Driven Development (TDD) you&rsquo;ll typically want to test your own code. <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> is a library that simplifies testing common Rails functionality like associations and validations. Suppose we have a <code>video</code> model with the following code:</p>
 
-<p>```ruby</p>
+<pre><code class="ruby"># video.rb
+class Video &lt; ActiveRecord::Base
+  belongs_to :category
 
-<h1>video.rb</h1>
-
-<p>class Video &lt; ActiveRecord::Base
-  belongs_to :category</p>
-
-<p>  validates_presence_of :title, :description
+  validates_presence_of :title, :description
 end
-```</p>
+</code></pre>
 
 <p>using <code>shoulda-matchers</code> we can write a few lines of code to test the functionality of our code:</p>
 
-<p><code>ruby
-it { should belong_to :category }
+<pre><code class="ruby">it { should belong_to :category }
 it { should validate_presence_of :title }
 it { should validate_presence_of :description }
-</code></p>
+</code></pre>
 
 <p>These simple lines can take the place of all the following tests:</p>
 
-<p>```ruby
-it &ldquo;belongs to a category&rdquo; do
-  cat = Category.create(name: &ldquo;Action&rdquo;)
-  vid = Video.create(title: &ldquo;Yet another fake video&rdquo;, description: &ldquo;Not sure&hellip;&rdquo;, category: cat)
+<pre><code class="ruby">it "belongs to a category" do
+  cat = Category.create(name: "Action")
+  vid = Video.create(title: "Yet another fake video", description: "Not sure...", category: cat)
   expect(vid.category).to eq(cat)
-end</p>
+end
 
-<p>it &ldquo;does not save video without a title&rdquo; do
-  video = Video.create(description: &ldquo;I like this movie&rdquo;)
-  expect(Video.count).to eq(0)
-end</p>
-
-<p>it &ldquo;does not save a video without a description&rdquo; do
-  video = Video.create(title: &ldquo;Robocop&rdquo;)
+it "does not save video without a title" do
+  video = Video.create(description: "I like this movie")
   expect(Video.count).to eq(0)
 end
-```</p>
+
+it "does not save a video without a description" do
+  video = Video.create(title: "Robocop")
+  expect(Video.count).to eq(0)
+end
+</code></pre>
 ]]></content>
   </entry>
   
