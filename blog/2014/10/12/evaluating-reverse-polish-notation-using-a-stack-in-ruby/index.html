@@ -155,7 +155,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'># Postfix
 </span><span class='line'>4 7 3 + 8 * 16 + *</span></code></pre></td></tr></table></div></figure>
 
-<h3 id="evaluating-postfix/reverse-polish-notation-expressions-(rpn)">Evaluating Postfix/Reverse Polish Notation Expressions (RPN)</h3>
+<h3 id="evaluating-postfix/reverse-polish-notation-(rpn)-expressions">Evaluating Postfix/Reverse Polish Notation (RPN) Expressions</h3>
 
 <p>The reason RPN is easier is, the operators are right next to the operands they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>4 7 3 + 8 * 16 + *</code> to illustrate. RPN is evaluated by reading the expression from left to right and performing the operation as soon as you see it.  Reading from left to right, the first operator we see is <code>+</code>. Since addition is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>+</code> will take effect on the last two numbers <code>7</code> and <code>3</code>. After evaluation <code>7 + 3</code> the result of that is placed into the original expression and is transformed into:</p>
 
