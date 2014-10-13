@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-10-13T11:01:11+00:00</updated>
+  <updated>2014-10-13T13:15:06+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -27,16 +27,16 @@
 4 + 9  # Infix notation
 4 9 +  # Postfix notation or Reverse Polish Notation
 </code></pre></div>
-<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to us the <em>infix notation</em>. Further when you write expressions like:</p>
+<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to is the <em>infix notation</em>. Further when you write expressions like:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">7 + 5
 7 + 4 * 2
-30 - 8 + 13 * 2
+4 * 7 + 3 * 8 + 16
 </code></pre></div>
-<p>We&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however the expressions become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition. In the end you&#39;d have to simplify the second expression to become:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">(7 + 4) * 2
+<p>we&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however things become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition etc. In the end you&#39;d have to simplify the second expression to become:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">((7 + 4) * 2)
 </code></pre></div>
 <p>and the third to look like:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">((30 - 8) + (13 * 2))
+<div class="highlight"><pre><code class="language-text" data-lang="text">(4 * (((7 + 3) * 8) + 16))
 </code></pre></div>
 <p>before easy simplification can take place. In other words, when more operators are combined doing the calculation is not always straightforward.</p>
 
@@ -49,24 +49,27 @@
 <li>You never need parentheses.</li>
 </ol>
 
-<p>Let&#39;s see it in action by transforming the expression <code>30 - 8 + 13 * 2</code> to prefix and postfix notation:</p>
+<p>Let&#39;s see it in action by transforming the expression <code>4 * (((7 + 3) * 8) + 16)</code> to prefix and postfix notation:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"># Prefix
-* + - 30 8 13 2
+* 4 + * + 7 3 8 16
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text"># Postfix
-30 8 - 13 + 2 *
+4 7 3 + 8 * 16 + *
 </code></pre></div>
-<h3 id="evaluating-postfix/reverse-polish-notation-expressions">Evaluating Postfix/Reverse Polish Notation Expressions</h3>
+<h3 id="evaluating-postfix/reverse-polish-notation-expressions-(rpn)">Evaluating Postfix/Reverse Polish Notation Expressions (RPN)</h3>
 
-<p>The reason RPN is easier is the operators are right next to the operator they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>30 8 - 13 + 2 *</code> to illustrate. Reading from left to right, the first operation we see is <code>-</code>. Since subtraction is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>-</code> will take effect on the last two numbers <code>30</code> and <code>8</code>. After evaluation <code>30 - 8</code> the result of that is placed into the original expression and is transformed into:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">22 13 + 2 *
+<p>The reason RPN is easier is, the operators are right next to the operands they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>4 7 3 + 8 * 16 + *</code> to illustrate. RPN is evaluated by reading the expression from left to right and performing the operation as soon as you see it.  Reading from left to right, the first operator we see is <code>+</code>. Since addition is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>+</code> will take effect on the last two numbers <code>7</code> and <code>3</code>. After evaluation <code>7 + 3</code> the result of that is placed into the original expression and is transformed into:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">4 10 8 * 16 + *
 </code></pre></div>
-<p>The next operation we see is <code>+</code> which is also a binary operation. <code>22 + 13</code> is evaluated and the expression is transformed into:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">35 2 *
+<p>The next operation we see is <code>*</code> which is also a binary operation. <code>10 * 8</code> is evaluated and the expression is transformed into:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">4 80 16 + *
+</code></pre></div>
+<p>Next, we see the <code>+</code> operator and we perform <code>80 + 16</code> which turns the expression into:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">4 96 *
 </code></pre></div>
 <p>Finally, we see <code>*</code> another binary operation. The final evaluation becomes:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">35 * 2
+<div class="highlight"><pre><code class="language-text" data-lang="text">4 * 96
 </code></pre></div>
-<p>which gives us <code>70</code>.</p>
+<p>which gives us <code>384</code>.</p>
 
 <p>The algorithm for parsing RPN expressions is called the <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> and is implemented using a stack. We dive into that next and implement a stack class in Ruby.</p>
 
@@ -158,9 +161,9 @@
 <p>We&#39;re doing a few things here. <code>tokens</code> helps us split the expression into tokens based on spaces and <code>numeric?</code> helps us determine if the token is a number or not. The <code>evaluate</code> method is where everything happens. In <code>evaluate</code> we&#39;re iterating through the tokens and checking if it&#39;s a number or an operator. If it&#39;s a number, it&#39;s pushed onto the stack. If it&#39;s not a number, it&#39;s an operator, in which case the topmost token is popped from the stack and named <code>rhs</code>. The next token is also popped and named <code>lsh</code>. These tokens become operands and the operation is performed. After this the result is pushed back onto the stack. After all the tokens are check and all operations performed, the last item in the stack is popped to give us the final evaluated value.</p>
 
 <p>Example:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;30 8 - 13 + 2 *&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;4 7 3 + 8 * 16 + *&quot;</span><span class="p">)</span>
 
-<span class="o">=&gt;</span> <span class="mi">70</span>
+<span class="o">=&gt;</span> <span class="mi">384</span>
 </code></pre></div>
 <p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class but I&#39;ll leave that up to the reader.</p>
 ]]></content>

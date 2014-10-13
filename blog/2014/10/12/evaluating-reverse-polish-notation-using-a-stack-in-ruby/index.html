@@ -113,24 +113,24 @@
 </span><span class='line'>4 + 9  # Infix notation
 </span><span class='line'>4 9 +  # Postfix notation or Reverse Polish Notation</span></code></pre></td></tr></table></div></figure>
 
-<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to us the <em>infix notation</em>. Further when you write expressions like:</p>
+<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to is the <em>infix notation</em>. Further when you write expressions like:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>7 + 5
 </span><span class='line'>7 + 4 * 2
-</span><span class='line'>30 - 8 + 13 * 2</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>4 * 7 + 3 * 8 + 16</span></code></pre></td></tr></table></div></figure>
 
-<p>We&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however the expressions become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition. In the end you&#39;d have to simplify the second expression to become:</p>
+<p>we&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however things become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition etc. In the end you&#39;d have to simplify the second expression to become:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(7 + 4) * 2</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>((7 + 4) * 2)</span></code></pre></td></tr></table></div></figure>
 
 <p>and the third to look like:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>((30 - 8) + (13 * 2))</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(4 * (((7 + 3) * 8) + 16))</span></code></pre></td></tr></table></div></figure>
 
 <p>before easy simplification can take place. In other words, when more operators are combined doing the calculation is not always straightforward.</p>
 
@@ -143,36 +143,41 @@
 <li>You never need parentheses.</li>
 </ol>
 
-<p>Let&#39;s see it in action by transforming the expression <code>30 - 8 + 13 * 2</code> to prefix and postfix notation:</p>
+<p>Let&#39;s see it in action by transforming the expression <code>4 * (((7 + 3) * 8) + 16)</code> to prefix and postfix notation:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'># Prefix
-</span><span class='line'>* + - 30 8 13 2</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>* 4 + * + 7 3 8 16</span></code></pre></td></tr></table></div></figure>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'># Postfix
-</span><span class='line'>30 8 - 13 + 2 *</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>4 7 3 + 8 * 16 + *</span></code></pre></td></tr></table></div></figure>
 
-<h3 id="evaluating-postfix/reverse-polish-notation-expressions">Evaluating Postfix/Reverse Polish Notation Expressions</h3>
+<h3 id="evaluating-postfix/reverse-polish-notation-expressions-(rpn)">Evaluating Postfix/Reverse Polish Notation Expressions (RPN)</h3>
 
-<p>The reason RPN is easier is the operators are right next to the operator they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>30 8 - 13 + 2 *</code> to illustrate. Reading from left to right, the first operation we see is <code>-</code>. Since subtraction is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>-</code> will take effect on the last two numbers <code>30</code> and <code>8</code>. After evaluation <code>30 - 8</code> the result of that is placed into the original expression and is transformed into:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>22 13 + 2 *</span></code></pre></td></tr></table></div></figure>
-
-<p>The next operation we see is <code>+</code> which is also a binary operation. <code>22 + 13</code> is evaluated and the expression is transformed into:</p>
+<p>The reason RPN is easier is, the operators are right next to the operands they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>4 7 3 + 8 * 16 + *</code> to illustrate. RPN is evaluated by reading the expression from left to right and performing the operation as soon as you see it.  Reading from left to right, the first operator we see is <code>+</code>. Since addition is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>+</code> will take effect on the last two numbers <code>7</code> and <code>3</code>. After evaluation <code>7 + 3</code> the result of that is placed into the original expression and is transformed into:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>35 2 *</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>4 10 8 * 16 + *</span></code></pre></td></tr></table></div></figure>
+
+<p>The next operation we see is <code>*</code> which is also a binary operation. <code>10 * 8</code> is evaluated and the expression is transformed into:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>4 80 16 + *</span></code></pre></td></tr></table></div></figure>
+
+<p>Next, we see the <code>+</code> operator and we perform <code>80 + 16</code> which turns the expression into:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>4 96 *</span></code></pre></td></tr></table></div></figure>
 
 <p>Finally, we see <code>*</code> another binary operation. The final evaluation becomes:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>35 * 2</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>4 * 96</span></code></pre></td></tr></table></div></figure>
 
-<p>which gives us <code>70</code>.</p>
+<p>which gives us <code>384</code>.</p>
 
 <p>The algorithm for parsing RPN expressions is called the <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> and is implemented using a stack. We dive into that next and implement a stack class in Ruby.</p>
 
@@ -348,9 +353,9 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;30 8 - 13 + 2 *&quot;</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;4 7 3 + 8 * 16 + *&quot;</span><span class="p">)</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">=&gt;</span> <span class="mi">70</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">384</span>
 </span></code></pre></td></tr></table></div></figure>
 
 <p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class but I&#39;ll leave that up to the reader.</p>
