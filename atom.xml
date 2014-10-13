@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-10-13T13:19:12+00:00</updated>
+  <updated>2014-10-13T13:21:31+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -276,7 +276,7 @@
 </span><span class='line'><span class="o">=&gt;</span> <span class="mi">384</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class but I&#39;ll leave that up to the reader.</p>
+<p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class and I&#39;ll leave that up to the reader.</p>
 ]]></content>
   </entry>
   
