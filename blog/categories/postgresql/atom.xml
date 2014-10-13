@@ -4,7 +4,7 @@
   <title><![CDATA[Category: postgresql | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -20,29 +20,26 @@
     <id>http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&#39;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
 
-<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&rsquo;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
-
-<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&rsquo;d like to put out here for anyone going through this.</p>
+<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&#39;d like to put out here for anyone going through this.</p>
 
 <p>The real problem starts during the process of pulling data from SQLite database with <a href="https://github.com/ricardochimal/taps">Taps</a>. This gem provides a <code>taps</code> command that will help serve the one database and also pull data from it into another. First we have to serve our current SQLite database by passing <code>taps</code> a path to the database and also set a username and password. Then we can pull the data from this database into our Postgres database.</p>
 
 <p>However after running this command I got an error that read something like this:</p>
-
-<pre><code>taps cannot load such file -- sqlite3 (LoadError)
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">taps cannot load such file -- sqlite3 (LoadError)
+</code></pre></div>
 <p>Huh? After hours of frustration I found that <code>Taps</code> depends on <code>rack</code> version <code>1.0.1</code>.</p>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 
 <p>Added the this to <code>Gemfile</code></p>
 
 <p><figure class='code'><figcaption><span>Gemfile </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lsquo;rack&rsquo;,’1.0.1’</span></code></pre></td></tr></table></div></figure></p>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&#39;rack&#39;,’1.0.1’</span></code></pre></td></tr></table></div></figure></p>
 
-<p>Then on Terminal run this&hellip;</p>
+<p>Then on Terminal run this&#8230;</p>
 
 <p><figure class='code'><figcaption><span>Terminal </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

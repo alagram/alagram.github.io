@@ -96,7 +96,6 @@
 
 <div class="entry-content"><!-- more -->
 
-
 <p>This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks like Rails.</p>
 
 <p>Now lets have some fun with some examples of Array and Hash mehtods.</p>
@@ -127,45 +126,37 @@
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>It prints every element in the array and returns the entire array at the end.</p>
 
 <p>Next, lets use the <code>select</code> method to select all even elements from <code>my_array</code>.
-We can do something like this:</p>
-
+We can do something like this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></p>
 
-
-<p>Or we can do this:</p>
-
+<p>Or we can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span><span class="o">.</span><span class="n">even?</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Cute right?</p>
 
-<p>Note: Select returns an array by default, so we didn&rsquo;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&rsquo;s going to be selected, if its false it won&rsquo;t be selected.</p>
+<p>Note: Select returns an array by default, so we didn&#39;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&#39;s going to be selected, if its false it won&#39;t be selected.</p>
 
-<p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:</p>
-
+<p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">225</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Note: We can use the <code>map</code> method to achieve the same result.</p>
 
-<p>If we have a hash, how do we get the key and value pairs? We&rsquo;ll use the <code>each</code> method.</p>
-
+<p>If we have a hash, how do we get the key and value pairs? We&#39;ll use the <code>each</code> method.
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -184,11 +175,9 @@ We can do something like this:</p>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span> <span class="n">value</span> <span class="n">is</span> <span class="mi">20</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span> <span class="n">value</span> <span class="n">is</span> <span class="n">fergie</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span> <span class="n">value</span> <span class="n">is</span> <span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></p>
 
-
-<p>What if we want only the keys from a hash? We&rsquo;ll use the <code>each_key</code> method like so:</p>
-
+<p>What if we want only the keys from a hash? We&#39;ll use the <code>each_key</code> method like so:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -207,8 +196,7 @@ We can do something like this:</p>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Conclusion: Array and Hash methods are very good to know and this post has covered just a few. Learn more about these methods by looking at several Ruby/Rails APIs.</p>
 </div>
@@ -265,6 +253,10 @@ We can do something like this:</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -278,10 +270,6 @@ We can do something like this:</p>
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

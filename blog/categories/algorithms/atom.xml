@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: algorithms | Albert Agram]]></title>
+  <link href="http://alagram.github.io/blog/categories/algorithms/atom.xml" rel="self"/>
+  <link href="http://alagram.github.io/"/>
+  <updated>2014-10-13T11:01:11+00:00</updated>
+  <id>http://alagram.github.io/</id>
+  <author>
+    <name><![CDATA[Albert Agram]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Evaluating Reverse Polish Notation using a Stack in Ruby]]></title>
+    <link href="http://alagram.github.io/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/"/>
+    <updated>2014-10-12T10:45:18+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Let&#39;s say you want to add two numbers <code>4</code> and <code>9</code>, you&#39;ll have three ways to go about it:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+ 4 9  # Prefix notation or Polish Notation
+4 + 9  # Infix notation
+4 9 +  # Postfix notation or Reverse Polish Notation
+</code></pre></div>
+<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to us the <em>infix notation</em>. Further when you write expressions like:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">7 + 5
+7 + 4 * 2
+30 - 8 + 13 * 2
+</code></pre></div>
+<p>We&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however the expressions become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition. In the end you&#39;d have to simplify the second expression to become:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(7 + 4) * 2
+</code></pre></div>
+<p>and the third to look like:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">((30 - 8) + (13 * 2))
+</code></pre></div>
+<p>before easy simplification can take place. In other words, when more operators are combined doing the calculation is not always straightforward.</p>
+
+<p>Believe it or not, even though they might look unusual at first, Prefix Notation (<a href="http://en.wikipedia.org/wiki/Polish_notation">Polish Notation</a>) and Postfix Notation (<a href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>) offer advantages that let us perform such calculations with ease.</p>
+
+<h3 id="advantages-of-prefix-and-postfix-notation">Advantages of Prefix and Postfix notation</h3>
+
+<ol>
+<li>You don&#39;t need the idea of &quot;order of operation&quot;.</li>
+<li>You never need parentheses.</li>
+</ol>
+
+<p>Let&#39;s see it in action by transforming the expression <code>30 - 8 + 13 * 2</code> to prefix and postfix notation:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># Prefix
+* + - 30 8 13 2
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text"># Postfix
+30 8 - 13 + 2 *
+</code></pre></div>
+<h3 id="evaluating-postfix/reverse-polish-notation-expressions">Evaluating Postfix/Reverse Polish Notation Expressions</h3>
+
+<p>The reason RPN is easier is the operators are right next to the operator they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>30 8 - 13 + 2 *</code> to illustrate. Reading from left to right, the first operation we see is <code>-</code>. Since subtraction is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>-</code> will take effect on the last two numbers <code>30</code> and <code>8</code>. After evaluation <code>30 - 8</code> the result of that is placed into the original expression and is transformed into:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">22 13 + 2 *
+</code></pre></div>
+<p>The next operation we see is <code>+</code> which is also a binary operation. <code>22 + 13</code> is evaluated and the expression is transformed into:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">35 2 *
+</code></pre></div>
+<p>Finally, we see <code>*</code> another binary operation. The final evaluation becomes:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">35 * 2
+</code></pre></div>
+<p>which gives us <code>70</code>.</p>
+
+<p>The algorithm for parsing RPN expressions is called the <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> and is implemented using a stack. We dive into that next and implement a stack class in Ruby.</p>
+
+<h3 id="stack">Stack</h3>
+
+<p>A <a href="http://en.wikipedia.org/wiki/Stack_%28abstract_data_type%29">stack</a> is an <a href="http://en.wikipedia.org/wiki/Abstract_data_type">abstract data type</a> that is common and is used all over. An example of a stack is a stack of plates on a table. Say you have 4 plates on top of each other on a table, the only way to add a plate to the stack is by adding it to the top. Also, the only way to get a plate off the stack is by taking it from the top. Hence, it adhere&#39;s to the <strong>last in, first out</strong> or <a href="http://en.wikipedia.org/wiki/LIFO_%28computing%29">LIFO</a> pattern. You can think of an abstract data type as a collection of data and a set of operations on it with specifications on how those operations behave. A stack is an abstract data type because an implementation that satisfies those operations is an accepted implementation. A stack has a few operations namely:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> push(item)    -&gt; place new item on stack
+ pop           -&gt; remove most recent item added to stack
+ peek          -&gt; return most recent item added to the stack (don&#39;t remove)
+ empty?        -&gt; returns true if nothing on stack, returns false otherwise
+</code></pre></div>
+<p>With <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> in mind, let&#39;s create a Stack class in Ruby:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Stack</span>
+  <span class="k">class</span> <span class="nc">UnderFlowError</span> <span class="o">&lt;</span> <span class="no">StandardError</span><span class="p">;</span><span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@stack</span> <span class="o">=</span> <span class="o">[]</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">empty?</span>
+    <span class="vi">@stack</span><span class="o">.</span><span class="n">empty?</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="vi">@stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">pop</span>
+    <span class="k">raise</span> <span class="no">UnderFlowError</span><span class="p">,</span> <span class="s2">&quot;Stack is empty&quot;</span> <span class="k">if</span> <span class="n">empty?</span>
+    <span class="vi">@stack</span><span class="o">.</span><span class="n">pop</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">peek</span>
+    <span class="vi">@stack</span><span class="o">.</span><span class="n">last</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Note we&#39;re raising an error just in case an empty stack is being popped.</p>
+
+<p>Next, lets create a class to handle RPN expression evaluation with addition, multiplication and subtraction operators:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># rpn_expression.rb</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="c1"># Stack class omitted for brevity</span>
+
+<span class="k">class</span> <span class="nc">RPNExpression</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="vi">@expr</span> <span class="o">=</span> <span class="n">expr</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">evaluate</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="no">Stack</span><span class="o">.</span><span class="n">new</span>
+
+    <span class="n">tokens</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span>
+      <span class="k">if</span> <span class="n">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_i</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="k">raise</span> <span class="s2">&quot;whaaaat I don&#39;t know this token?&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">tokens</span>
+    <span class="vi">@expr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=~</span> <span class="sr">/^-?\d\+$/</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>We&#39;re doing a few things here. <code>tokens</code> helps us split the expression into tokens based on spaces and <code>numeric?</code> helps us determine if the token is a number or not. The <code>evaluate</code> method is where everything happens. In <code>evaluate</code> we&#39;re iterating through the tokens and checking if it&#39;s a number or an operator. If it&#39;s a number, it&#39;s pushed onto the stack. If it&#39;s not a number, it&#39;s an operator, in which case the topmost token is popped from the stack and named <code>rhs</code>. The next token is also popped and named <code>lsh</code>. These tokens become operands and the operation is performed. After this the result is pushed back onto the stack. After all the tokens are check and all operations performed, the last item in the stack is popped to give us the final evaluated value.</p>
+
+<p>Example:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;30 8 - 13 + 2 *&quot;</span><span class="p">)</span>
+
+<span class="o">=&gt;</span> <span class="mi">70</span>
+</code></pre></div>
+<p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class but I&#39;ll leave that up to the reader.</p>
+]]></content>
+  </entry>
+  
+</feed>

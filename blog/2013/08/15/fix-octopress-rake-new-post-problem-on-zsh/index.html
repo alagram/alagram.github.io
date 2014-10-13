@@ -9,7 +9,7 @@
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Creating a post on Octopress uses a rake command like so:rake new_post["My New Post"] However when you try to create a new post within zsh shell it &hellip;">
+  <meta name="description" content="Creating a post on Octopress uses a rake command like so:rake new_post[&quot;My New Post&quot;] However when you try to create a new post within zsh &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,25 +96,20 @@
 
 <div class="entry-content"><!-- more -->
 
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post[&quot;My New Post&quot;]</code></p>
 
-<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
-
-<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
-
-<pre><code>$ rake new_post["My New Post"]
+<p>However when you try to create a new post within zsh shell it doesn&#39;t work. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ rake new_post[&quot;My New Post&quot;]
 zsh: no matches found: new_post[My New Post]
-</code></pre>
-
+</code></pre></div>
 <p>After following worked for me after doing some googling.</p>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 
 <p>You can fix this problem by simply running <code>rake new_post</code></p>
-
-<pre><code>rake new_post
+<div class="highlight"><pre><code class="language-text" data-lang="text">rake new_post
 Enter a title for your post:
-</code></pre>
-
+</code></pre></div>
 <p>This will then prompt for title of post and then create it. Done!</p>
 </div>
 
@@ -170,6 +165,10 @@ Enter a title for your post:
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -183,10 +182,6 @@ Enter a title for your post:
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

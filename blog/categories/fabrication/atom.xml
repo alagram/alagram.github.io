@@ -4,7 +4,7 @@
   <title><![CDATA[Category: fabrication | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/fabrication/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -20,19 +20,17 @@
     <id>http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
 <p>I ran into some problems when testing controller code with Rpsec while generating objects with fabrication. Most tests failed after I set validation on an Image object.</p>
 
 <p>My setup:</p>
 
 <ul>
-<li>fabrication (2.9.3)</li>
-<li>rspec-rails (2.14.0)</li>
-<li>faker (1.2.0)</li>
-<li>ruby 2.0.0p247</li>
-<li>OSX 10.9</li>
+<li> fabrication (2.9.3)</li>
+<li> rspec-rails (2.14.0)</li>
+<li> faker (1.2.0)</li>
+<li> ruby 2.0.0p247</li>
+<li> OSX 10.9</li>
 </ul>
-
 
 <p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -54,22 +52,22 @@
 <span class='line-number'>18</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Expense</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">has_many</span> <span class="ss">:images</span>
-</span><span class='line'>  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:reject_if</span> <span class="o">=&gt;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="kp">attr</span><span class="o">|</span> <span class="kp">attr</span><span class="o">[&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">image</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">].</span><span class="n">blank?</span> <span class="p">}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:reject_if</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="kp">attr</span><span class="o">|</span> <span class="kp">attr</span><span class="o">[&amp;</span><span class="c1">#39;image&amp;#39;].blank? }&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  validate :must_have_image&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">validate</span> <span class="ss">:must_have_image</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="kp">private</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;private&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def must_have_image</span>
-</span><span class='line'><span class="sr">    errors[:base] &amp;lt;&amp;lt; &amp;ldquo;Please upload image&amp;rdquo; if images_empty?</span>
-</span><span class='line'><span class="sr">  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">must_have_image</span>
+</span><span class='line'>    <span class="n">errors</span><span class="o">[</span><span class="ss">:base</span><span class="o">]</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="no">Please</span> <span class="n">upload</span> <span class="n">image</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="k">if</span> <span class="n">images_empty?</span>
+</span><span class='line'>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">images_empty?</span>
-</span><span class='line'>    <span class="n">images</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;def images_empty?</span>
+</span><span class='line'><span class="sr">    images.empty?</span>
+</span><span class='line'><span class="sr">  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -77,10 +75,10 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Image</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Image</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:expense</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  mount_uploader :image, ImageUploader</span>
+</span><span class='line'><span class="sr">&lt;p&gt;mount_uploader :image, ImageUploader</span>
 </span><span class='line'><span class="sr">end</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
@@ -97,16 +95,16 @@
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span> <span class="k">do</span>
 </span><span class='line'>  <span class="n">file</span> <span class="p">{</span>
-</span><span class='line'>    <span class="no">ActionDispatch</span><span class="o">::&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;Http::UploadedFile.new&quot;</span><span class="o">&gt;</span><span class="no">Http</span><span class="o">::</span><span class="no">UploadedFile</span><span class="o">.</span><span class="n">new</span><span class="o">&lt;</span><span class="sr">/a&gt;(</span>
-</span><span class='line'><span class="sr">      :tempfile =&gt; File.new(Rails.root.join(&amp;ldquo;spec/su</span><span class="n">pport</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)),</span>
-</span><span class='line'>      <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">image</span><span class="o">/</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
-</span><span class='line'>      <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">spec</span><span class="o">/</span><span class="n">support</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)))</span>
+</span><span class='line'>    <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Http</span><span class="o">::</span><span class="no">UploadedFile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:tempfile</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">spec</span><span class="o">/</span><span class="n">support</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;)),</span>
+</span><span class='line'>      <span class="ss">:type</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">&amp;</span><span class="c1">#39;image/jpg&amp;#39;,</span>
+</span><span class='line'>      <span class="ss">:filename</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">spec</span><span class="o">/</span><span class="n">support</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;)))</span>
 </span><span class='line'>    <span class="p">)</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&rsquo;s my final code:
+<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&#39;s my final code:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -114,9 +112,9 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:expense</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">title</span> <span class="p">{</span> <span class="ss">Faker</span><span class="p">:</span><span class="ss">:Lorem</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">join</span> <span class="p">}</span>
-</span><span class='line'>  <span class="n">description</span> <span class="p">{</span> <span class="ss">Faker</span><span class="p">:</span><span class="ss">:Lorem</span><span class="o">.</span><span class="n">paragraph</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>  <span class="n">exp_date</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
+</span><span class='line'>  <span class="n">title</span> <span class="p">{</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Lorem</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">join</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">description</span> <span class="p">{</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Lorem</span><span class="o">.</span><span class="n">paragraph</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">exp_date</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;)</span>
 </span><span class='line'>  <span class="n">images_attributes</span> <span class="p">{</span> <span class="o">[</span><span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></p>
@@ -131,8 +129,8 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">POST</span> <span class="n">create</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">creates</span> <span class="n">a</span> <span class="kp">new</span> <span class="n">expense</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="k">do</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="no">POST</span> <span class="n">create</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">creates</span> <span class="n">a</span> <span class="kp">new</span> <span class="n">expense</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="k">do</span>
 </span><span class='line'>    <span class="n">exp_params</span> <span class="o">=</span> <span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:expense</span><span class="p">)</span>
 </span><span class='line'>    <span class="n">img_params</span> <span class="o">=</span> <span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span>
 </span><span class='line'>    <span class="n">post</span> <span class="ss">:create</span><span class="p">,</span> <span class="ss">expense</span><span class="p">:</span> <span class="n">exp_params</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="ss">images_attributes</span><span class="p">:</span> <span class="o">[</span><span class="n">img_params</span><span class="o">]</span><span class="p">)</span>

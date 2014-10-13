@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -20,25 +20,20 @@
     <id>http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post[&quot;My New Post&quot;]</code></p>
 
-<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
-
-<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
-
-<pre><code>$ rake new_post["My New Post"]
+<p>However when you try to create a new post within zsh shell it doesn&#39;t work. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ rake new_post[&quot;My New Post&quot;]
 zsh: no matches found: new_post[My New Post]
-</code></pre>
-
+</code></pre></div>
 <p>After following worked for me after doing some googling.</p>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 
 <p>You can fix this problem by simply running <code>rake new_post</code></p>
-
-<pre><code>rake new_post
+<div class="highlight"><pre><code class="language-text" data-lang="text">rake new_post
 Enter a title for your post:
-</code></pre>
-
+</code></pre></div>
 <p>This will then prompt for title of post and then create it. Done!</p>
 ]]></content>
   </entry>

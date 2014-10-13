@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -20,190 +20,165 @@
     <id>http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<h2 id="introduction">Introduction</h2>
 
-<h2>Introduction</h2>
+<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&#39;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&#39;ll implement a method named <code>search_by_title</code>.</p>
 
-<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&rsquo;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&rsquo;ll implement a method named <code>search_by_title</code>.</p>
+<h2 id="how-i-write-tests">How I Write Tests</h2>
 
-<h2>How I Write Tests</h2>
+<p>1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
 
-<p>  1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
+<p>2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
 
-<p>  2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
+<p>3) Run test and let it fail.</p>
 
-<p>  3) Run test and let it fail.</p>
+<p>4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
 
-<p>  4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
-
-<h3>The code</h3>
+<h3 id="the-code">The code</h3>
 
 <p>By following step 1, I write out all the test cases I want to cover:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s2">&quot;rails_helper&quot;</span>
 
-<pre><code class="ruby">require "rails_helper"
+<span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="no">Video</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">belong_to</span> <span class="ss">:category</span> <span class="p">}</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:title</span> <span class="p">}</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:description</span> <span class="p">}</span>
 
-RSpec.describe Video, :type =&gt; :model do
-  it { should belong_to :category }
-  it { should validate_presence_of :title }
-  it { should validate_presence_of :description }
-
-  describe "search_by_title" do
-    it "returns an empty array if there is no match"
-    it "returns an array of one video for an exact match"
-    it "returns an array of one video for a partial match"
-    it "returns an array of all matches ordered by created_at"
-    it "returns an empty array for a search with an empty string"
-  end
-end
-</code></pre>
-
+  <span class="n">describe</span> <span class="s2">&quot;search_by_title&quot;</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an empty array if there is no match&quot;</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an array of one video for an exact match&quot;</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an array of one video for a partial match&quot;</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an array of all matches ordered by created_at&quot;</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an empty array for a search with an empty string&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>The video model in <code>app/models/video.rb</code> looks like this:</p>
-
-<pre><code class="ruby">class Video &lt; ActiveRecord::Base
-  belongs_to :category
-  validates_presence_of :title, :description
-end
-</code></pre>
-
-<p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
-
-<pre><code class="ruby">it "returns an empty array if there is no match" do
-  futurama = Video.create(title: "Futurama", description: "Space Travel!")
-  back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-  expect(Video.search_by_title("hello")).to eq([])
-end
-</code></pre>
-
-<p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
-
-<pre><code class="bash">rspec spec/models/video_spec.rb
-</code></pre>
-
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Video</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:category</span>
+  <span class="n">validates_presence_of</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Next, I&#39;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s2">&quot;returns an empty array if there is no match&quot;</span> <span class="k">do</span>
+  <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">)</span>
+  <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+  <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Now I&#39;ll run the test and let it fail; step 3:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rspec spec/models/video_spec.rb
+</code></pre></div>
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
 
 <p>Test is complaining about <code>NoMethodError: undefined method search_by_title for #&lt;Class:0x007f9ec0ad0d98&gt;</code></p>
 
 <p>Next, make that little change in <code>app/models/video.rb</code>; step 4:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Video</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:category</span>
 
-<pre><code class="ruby">class Video &lt; ActiveRecord::Base
-  belongs_to :category
+  <span class="n">validates_presence_of</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span>
 
-  validates_presence_of :title, :description
-
-  def self.search_by_title
-  end
-end
-</code></pre>
-
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_by_title</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>Run test again:</p>
-
-<pre><code class="bash">rspec spec/models/video_spec.rb
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rspec spec/models/video_spec.rb
+</code></pre></div>
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
 
 <p>This time the failure is <code>ArgumentError: wrong number of arguments (1 for 0)</code>. In our test, we pass a parameter to the method and have to replicate that in the real code.</p>
 
-<p>Let&rsquo;s make that change:</p>
+<p>Let&#39;s make that change:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Video</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 
-<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
 
-  ...
-
-  def self.search_by_title(search_term)
-  end
-end
-</code></pre>
-
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_by_title</span><span class="p">(</span><span class="n">search_term</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>Run the test again:</p>
-
-<pre><code class="bash">rspec spec/models/video_spec.rb
-</code></pre>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rspec spec/models/video_spec.rb
+</code></pre></div>
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
 
 <p>There is another error:</p>
-
-<pre><code class="bash">expected: []
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">expected: <span class="o">[]</span>
 got: nil
-</code></pre>
-
+</code></pre></div>
 <p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Video</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 
-<pre><code class="ruby">class Video &lt; ActiveRecord::Base
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
 
-  ...
-
-  def self.search_by_title(search_term)
-    []
-  end
-end
-</code></pre>
-
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_by_title</span><span class="p">(</span><span class="n">search_term</span><span class="p">)</span>
+    <span class="o">[]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
 
-<p>Now when we run the test again, we&rsquo;ll have a passing test:</p>
+<p>Now when we run the test again, we&#39;ll have a passing test:</p>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_4.png" title="Spec 4" ></p>
 
-<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&rsquo;re forced to drive-out the actually implementation of the method:</p>
+<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&#39;re forced to drive-out the actually implementation of the method:</p>
 
 <p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Video</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:category</span>
 
-<pre><code class="ruby">class Video &lt; ActiveRecord::Base
-  belongs_to :category
+  <span class="n">validates_presence_of</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span>
 
-  validates_presence_of :title, :description
-
-  def self.search_by_title(search_term)
-    return [] if search_term.blank?
-    where("title LIKE ?", "%#{search_term}%").order("created_at DESC")
-  end
-end
-</code></pre>
-
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_by_title</span><span class="p">(</span><span class="n">search_term</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">[]</span> <span class="k">if</span> <span class="n">search_term</span><span class="o">.</span><span class="n">blank?</span>
+    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;title LIKE ?&quot;</span><span class="p">,</span> <span class="s2">&quot;%</span><span class="si">#{</span><span class="n">search_term</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s2">&quot;created_at DESC&quot;</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>And our test code will be:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s2">&quot;rails_helper&quot;</span>
 
-<pre><code class="ruby">require "rails_helper"
+<span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="no">Video</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">belong_to</span> <span class="ss">:category</span> <span class="p">}</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:title</span> <span class="p">}</span>
+  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:description</span> <span class="p">}</span>
 
-RSpec.describe Video, :type =&gt; :model do
-  it { should belong_to :category }
-  it { should validate_presence_of :title }
-  it { should validate_presence_of :description }
+  <span class="n">describe</span> <span class="s2">&quot;search_by_title&quot;</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">&quot;returns an empty array if there is no match&quot;</span> <span class="k">do</span>
+      <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">)</span>
+      <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+      <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span>
+    <span class="k">end</span>
 
-  describe "search_by_title" do
-    it "returns an empty array if there is no match" do
-      futurama = Video.create(title: "Futurama", description: "Space Travel!")
-      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-      expect(Video.search_by_title("hello")).to eq([])
-    end
+    <span class="n">it</span> <span class="s2">&quot;returns an array of one video for an exact match&quot;</span> <span class="k">do</span>
+      <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">)</span>
+      <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+      <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;Futurama&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[</span><span class="n">futurama</span><span class="o">]</span><span class="p">)</span>
+    <span class="k">end</span>
 
-    it "returns an array of one video for an exact match" do
-      futurama = Video.create(title: "Futurama", description: "Space Travel!")
-      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-      expect(Video.search_by_title("Futurama")).to eq([futurama])
-    end
+    <span class="n">it</span> <span class="s2">&quot;returns an array of one video for a partial match&quot;</span> <span class="k">do</span>
+      <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">)</span>
+      <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+      <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;urama&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[</span><span class="n">futurama</span><span class="o">]</span><span class="p">)</span>
+    <span class="k">end</span>
 
-    it "returns an array of one video for a partial match" do
-      futurama = Video.create(title: "Futurama", description: "Space Travel!")
-      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-      expect(Video.search_by_title("urama")).to eq([futurama])
-    end
+    <span class="n">it</span> <span class="s2">&quot;returns an array of all matches ordered by created_at&quot;</span> <span class="k">do</span>
+      <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">,</span> <span class="ss">created_at</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">ago</span><span class="p">)</span>
+      <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+      <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;Futur&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[</span><span class="n">back_to_future</span><span class="p">,</span> <span class="n">futurama</span><span class="o">]</span><span class="p">)</span>
+    <span class="k">end</span>
 
-    it "returns an array of all matches ordered by created_at" do
-      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-      expect(Video.search_by_title("Futur")).to eq([back_to_future, futurama])
-    end
-
-    it "returns an empty array for a search with an empty string" do
-      futurama = Video.create(title: "Futurama", description: "Space Travel!", created_at: 1.day.ago)
-      back_to_future = Video.create(title: "Back to Future", description: "Time Travel")
-      expect(Video.search_by_title("")).to eq([])
-    end
-  end
-end
-</code></pre>
-
+    <span class="n">it</span> <span class="s2">&quot;returns an empty array for a search with an empty string&quot;</span> <span class="k">do</span>
+      <span class="n">futurama</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Space Travel!&quot;</span><span class="p">,</span> <span class="ss">created_at</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">ago</span><span class="p">)</span>
+      <span class="n">back_to_future</span> <span class="o">=</span> <span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Back to Future&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Time Travel&quot;</span><span class="p">)</span>
+      <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">search_by_title</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
 <p>And all our tests pass:</p>
 
 <p><img src="/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_pass.png" title="Spec Pass" ></p>
@@ -217,70 +192,57 @@ end
     <id>http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&#39;re working on a project by yourself, it&#39;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
 
-<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
+<h3 id="1.-anything-on-master-can-be-deployed">1. Anything on <code>master</code> can be deployed</h3>
 
-<h3>1. Anything on <code>master</code> can be deployed</h3>
+<p>If anything is on the <code>master</code> branch, it&#39;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
 
-<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+<h3 id="2.-create-descriptively-named-local-branch-off-master.">2. Create descriptively named local branch off <code>master</code>.</h3>
 
-<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
-
-<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
-
-<pre><code class="bash"># make sure you're on your master branch
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&#39;re working on a new feature for authentication, you&#39;ll typically do something like so:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># make sure you&#39;re on your master branch</span>
 git checkout -b authentication
-</code></pre>
-
+</code></pre></div>
 <p>The above is the same as running:</p>
-
-<pre><code class="bash">git branch authentication
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git branch authentication
 git checkout authentication
-</code></pre>
-
+</code></pre></div>
 <p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
 
-<h3>3. Push code up</h3>
+<h3 id="3.-push-code-up">3. Push code up</h3>
 
-<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
-
-<pre><code class="bash">git push origin authentication
-</code></pre>
-
+<p>You&#39;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&#39;re ready to push up to your remote server, you&#39;ll enter this command on your terminal:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git push origin authentication
+</code></pre></div>
 <p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
 
-<h3>4. Create a pull request</h3>
+<h3 id="4.-create-a-pull-request">4. Create a pull request</h3>
 
-<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&#39;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&#39;re done, collaborators can review your commits.</p>
 
-<h3>5. Code review and merge</h3>
+<h3 id="5.-code-review-and-merge">5. Code review and merge</h3>
 
-<p>After all reviews have been made and changes effected, you&rsquo;ll want to merge it into your <code>master</code>.</p>
+<p>After all reviews have been made and changes effected, you&#39;ll want to merge it into your <code>master</code>.</p>
 
 <p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
-
-<pre><code class="bash">git add your_filename.rb
-git commit -m "added extra validations"
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git add your_filename.rb
+git commit -m <span class="s2">&quot;added extra validations&quot;</span>
 git push origin authentication
-</code></pre>
+</code></pre></div>
+<p>Continue until the process is complete. When yoy&#39;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
 
-<p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+<h3 id="6.-pull-changes">6. Pull changes</h3>
 
-<h3>6. Pull changes</h3>
-
-<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
-
-<pre><code class="bash">git checkout master
-</code></pre>
-
+<p>Now on your terminal, you&#39;ll switch to your <code>master</code> branch:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git checkout master
+</code></pre></div>
 <p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git pull origin master
+</code></pre></div>
+<h3 id="7.-deploy">7. Deploy</h3>
 
-<pre><code class="bash">git pull origin master
-</code></pre>
-
-<h3>7. Deploy</h3>
-
-<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
+<p>Once it&#39;s merged to <code>master</code>, you can deploy.</p>
 ]]></content>
   </entry>
   
@@ -291,43 +253,33 @@ git push origin authentication
     <id>http://alagram.github.io/blog/2014/08/27/seeding-data</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
-<p>Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
+<p>Imagine you&#39;ve finished building a feature with tests and want to play with it in the UI. You&#39;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
 
 <ol>
-<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&rsquo;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
+<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&#39;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
 <li><p>Populate your <code>seeds.rb</code> with all the data you need. This approach is your sure bet to get default values in your database in less time and is stress-free.</p></li>
 </ol>
 
-
 <p>Example seed file:</p>
-
-<pre><code class="ruby"># seed.rb
-Video.create(title: "South Park", description: "A very funny video", small_cover_url: "/tmp/south_park.jpg", large_cover_url: "/tmp/monk_large.jpg")
-Video.create(title: "Futurama", description: "I like this one too...", small_cover_url: "/tmp/futurama.jpg", large_cover_url: "/tmp/monk_large.jpg")
-Video.create(title: "Monk", description: "Not bad. I'll watch this again.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
-</code></pre>
-
-<p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
-
-<pre><code class="bash">rake db:seed
-</code></pre>
-
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># seed.rb</span>
+<span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;South Park&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;A very funny video&quot;</span><span class="p">,</span> <span class="ss">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/south_park.jpg&quot;</span><span class="p">,</span> <span class="ss">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
+<span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Futurama&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;I like this one too...&quot;</span><span class="p">,</span> <span class="ss">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/futurama.jpg&quot;</span><span class="p">,</span> <span class="ss">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
+<span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Monk&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Not bad. I&#39;ll watch this again.&quot;</span><span class="p">,</span> <span class="ss">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk.jpg&quot;</span><span class="p">,</span> <span class="ss">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>After filling in all data you want to be created, you&#39;ll simply run the following command in your terminal:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rake db:seed
+</code></pre></div>
 <p>That its all it takes. When things get out of hand, you can start on a clean slate by running this in your terminal:</p>
-
-<pre><code class="bash">rake db:drop
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rake db:drop
 rake db:create
 rake db:migrate
 rake db:seed
-</code></pre>
-
+</code></pre></div>
 <p>This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.</p>
 
 <p>There is a simple <code>rake</code> task to complish all this in one fell swoop:</p>
-
-<pre><code class="bash">rake db:reset
-</code></pre>
-]]></content>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">rake db:reset
+</code></pre></div>]]></content>
   </entry>
   
   <entry>
@@ -337,23 +289,19 @@ rake db:seed
     <id>http://alagram.github.io/blog/2014/04/19/set-up-staging-environment-for-an-app</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&#39;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
 
-<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&rsquo;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
+<h2 id="with-app-not-deployed-to-production">With App Not Deployed to Production</h2>
 
-<h2>With App Not Deployed to Production</h2>
+<p>If your app has not been pushed to production, i.e , it&#39;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
 
-<p>If your app has not been pushed to production, i.e , it&rsquo;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
+<h2 id="with-app-already-deployed-to-production">With App Already Deployed to Production</h2>
 
-<h2>With App Already Deployed to Production</h2>
-
-<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&rsquo;ll run</p>
-
-<pre><code>heroku fork -a googleclone googleclone-staging
-</code></pre>
-
+<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&#39;ll run</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">heroku fork -a googleclone googleclone-staging
+</code></pre></div>
 <p>This will create a copy of googleclone called googleclone-clone</p>
-
-<pre><code>Creating fork googleclone-staging... done
+<div class="highlight"><pre><code class="language-text" data-lang="text">Creating fork googleclone-staging... done
 Copying slug... done
 Adding heroku-postgresql:some-dev... done
 Adding pgbackups:plus to googleclone... done
@@ -361,9 +309,8 @@ Adding pgbackups:plus to googleclone-staging... done
 Transferring database (this can take some time)...  done
 Copying config vars... done
 Fork complete, view it at http://googleclone-staging.herokuapp.com/
-</code></pre>
-
-<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
+</code></pre></div>
+<p>With this taken care of, we&#39;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&#39;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
 
 <p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -393,30 +340,30 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <span class='line-number'>26</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;lib/</span><span class="n">tasks</span><span class="o">/</span><span class="n">deploy</span><span class="o">.</span><span class="n">rake</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'><span class="sr">&lt;h1 id=&quot;lib/</span><span class="n">tasks</span><span class="o">/</span><span class="n">deploy</span><span class="o">.</span><span class="n">rake</span><span class="s2">&quot;&gt;lib/tasks/deploy.rake&lt;/h1&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;require &amp;lsquo;paratrooper&amp;rsquo;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;require &amp;#39;paratrooper&amp;#39;&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">namespace</span> <span class="ss">:deploy</span> <span class="k">do</span>
-</span><span class='line'> <span class="n">desc</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Deploy</span> <span class="n">app</span> <span class="k">in</span> <span class="n">staging</span> <span class="n">environment</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'> <span class="n">task</span> <span class="ss">:staging</span> <span class="k">do</span>
-</span><span class='line'>   <span class="n">deployment</span> <span class="o">=</span> <span class="no">Paratrooper</span><span class="o">::</span><span class="no">Deploy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">googleclone</span><span class="o">-</span><span class="n">staging</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">tag</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">staging</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;namespace :deploy do</span>
+</span><span class='line'><span class="s2"> desc &amp;#39;Deploy app in staging environment&amp;#39;</span>
+</span><span class='line'><span class="s2"> task :staging do</span>
+</span><span class='line'><span class="s2">   deployment = Paratrooper::Deploy.new(&amp;quot;googleclone-staging&amp;quot;, tag: &amp;#39;staging&amp;#39;)&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;   deployment.deploy</span>
-</span><span class='line'><span class="sr"> end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;deployment.deploy</span>
+</span><span class='line'><span class="s2"> end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span> <span class="n">desc</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Deploy</span> <span class="n">app</span> <span class="k">in</span> <span class="n">production</span> <span class="n">environment</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'> <span class="n">task</span> <span class="ss">:production</span> <span class="k">do</span>
-</span><span class='line'>   <span class="n">deployment</span> <span class="o">=</span> <span class="no">Paratrooper</span><span class="o">::</span><span class="no">Deploy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">googleclone</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="k">do</span> <span class="o">|</span><span class="n">deploy</span><span class="o">|</span>
-</span><span class='line'>     <span class="n">deploy</span><span class="o">.</span><span class="n">tag</span>              <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">production</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
-</span><span class='line'>     <span class="n">deploy</span><span class="o">.</span><span class="n">match_tag</span>        <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">staging</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'>   <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;desc &amp;#39;Deploy app in production environment&amp;#39;</span>
+</span><span class='line'><span class="s2"> task :production do</span>
+</span><span class='line'><span class="s2">   deployment = Paratrooper::Deploy.new(&amp;quot;googleclone&amp;quot;) do |deploy|</span>
+</span><span class='line'><span class="s2">     deploy.tag              = &amp;#39;production&amp;#39;,</span>
+</span><span class='line'><span class="s2">     deploy.match_tag        = &amp;#39;staging&amp;#39;</span>
+</span><span class='line'><span class="s2">   end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;   deployment.deploy</span>
-</span><span class='line'><span class="sr"> end</span>
-</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;deployment.deploy</span>
+</span><span class='line'><span class="s2"> end</span>
+</span><span class='line'><span class="s2">end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now we can call  <code>rake deploy:staging</code> and <code>rake deploy:production</code> to deploy to <code>staging</code> and <code>production</code> environments respectively.</p>
@@ -432,10 +379,9 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     <id>http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>I&#39;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
 
-<p>I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
-
-<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&rsquo;t cut it. Lets assume we&rsquo;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&rsquo;t feel right.</p>
+<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&#39;t cut it. Lets assume we&#39;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&#39;t feel right.</p>
 
 <p>Upon feather research, I found that to do full-text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
 
@@ -448,20 +394,19 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">def</span> <span class="k">self</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">conditons</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span><span class="n">EOS</span>
-</span><span class='line'>    <span class="n">to_tsvector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">to_tsvector</span><span class="p">(</span><span class="o">&amp;#</span><span class="mi">39</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;#</span><span class="mi">39</span><span class="p">;,</span> <span class="k">CAST</span><span class="p">(</span><span class="n">avals</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="k">AS</span> <span class="nb">text</span><span class="p">))</span> <span class="o">@@</span> <span class="n">plainto_tsquery</span><span class="p">(</span><span class="o">&amp;#</span><span class="mi">39</span><span class="p">;</span><span class="n">english</span><span class="o">&amp;#</span><span class="mi">39</span><span class="p">;,</span> <span class="o">#</span><span class="err">{</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">EOS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">where</span><span class="p">(</span><span class="n">conditons</span><span class="p">,</span> <span class="n">query</span><span class="p">).</span><span class="k">order</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">created_at</span> <span class="k">DESC</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">where</span><span class="p">(</span><span class="n">conditons</span><span class="p">,</span> <span class="n">query</span><span class="p">).</span><span class="k">order</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">created_at</span> <span class="k">DESC</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<h3>References</h3>
+<h3 id="references">References</h3>
 
 <ul>
-<li><a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
-<li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
+<li> <a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
+<li> <a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
 </ul>
-
 ]]></content>
   </entry>
   

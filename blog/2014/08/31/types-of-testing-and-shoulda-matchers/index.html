@@ -99,22 +99,21 @@
 
 <div class="entry-content"><!-- more -->
 
+<h2 id="introduction">Introduction</h2>
 
-<h2>Introduction</h2>
+<p>When developing software, how do you know something works? Its certain that all software have bugs and the only way to make sure the code you&#39;ve written is bug-free is by designing test cases to test against your codebase. It is the most objective way to say confidently that a feature works and things did not break. This post looks at types of testing and how to use <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> to test common Rails functionality.</p>
 
-<p>When developing software, how do you know something works? Its certain that all software have bugs and the only way to make sure the code you&rsquo;ve written is bug-free is by designing test cases to test against your codebase. It is the most objective way to say confidently that a feature works and things did not break. This post looks at types of testing and how to use <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> to test common Rails functionality.</p>
+<h3 id="types-of-testing">Types of testing</h3>
 
-<h3>Types of testing</h3>
+<p>1) <em><strong>Unit Tests</strong></em>: Unit tests involve testing different components in isolation. You&#39;ll typically focus on one block at a time and make sure all cases are covered. In the Rails context, unit testing includes tests for models, views, helpers and routes in isolation. In sum, you&#39;re focusing on one thing at a time. Unit tests are the fastest in terms of speed and offer the best coverage.</p>
 
-<p>1) <em><strong>Unit Tests</strong></em>: Unit tests involve testing different components in isolation. You&rsquo;ll typically focus on one block at a time and make sure all cases are covered. In the Rails context, unit testing includes tests for models, views, helpers and routes in isolation. In sum, you&rsquo;re focusing on one thing at a time. Unit tests are the fastest in terms of speed and offer the best coverage.</p>
+<p>2) <em><strong>Functional Tests</strong></em>: Functional tests involve testing multiple components together. This is another way of making sure different parts of a system work in tandem. In the Rails context, functional testing includes controller tests. Typically the controller is where you pull multiple models and make them work with eachother to generate data before passing them over to the views. You&#39;ll also be testing request and response cycles.</p>
 
-<p>2) <em><strong>Functional Tests</strong></em>: Functional tests involve testing multiple components together. This is another way of making sure different parts of a system work in tandem. In the Rails context, functional testing includes controller tests. Typically the controller is where you pull multiple models and make them work with eachother to generate data before passing them over to the views. You&rsquo;ll also be testing request and response cycles.</p>
+<p>3) <em><strong>Integration Tests</strong></em>: This involves following a business process to make sure that not only do components work together, but can also work together to achieve a business objective. Integration testing involves mimicking the end-user by driving through the browser. You can login, fill a form, submit forms, click links and buttons etc. Integration tests are more realistic because you&#39;re following what a user of your system would do.</p>
 
-<p>3) <em><strong>Integration Tests</strong></em>: This involves following a business process to make sure that not only do components work together, but can also work together to achieve a business objective. Integration testing involves mimicking the end-user by driving through the browser. You can login, fill a form, submit forms, click links and buttons etc. Integration tests are more realistic because you&rsquo;re following what a user of your system would do.</p>
+<h3 id="shoulda-matcher">shoulda-matcher</h3>
 
-<h3>shoulda-matcher</h3>
-
-<p>In Test Driven Development (TDD) you&rsquo;ll typically want to test your own code. <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> is a library that simplifies testing common Rails functionality like associations and validations. Suppose we have a <code>video</code> model with the following code:</p>
+<p>In Test Driven Development (TDD) you&#39;ll typically want to test your own code. <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> is a library that simplifies testing common Rails functionality like associations and validations. Suppose we have a <code>video</code> model with the following code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -130,7 +129,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>using <code>shoulda-matchers</code> we can write a few lines of code to test the functionality of our code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -140,7 +138,6 @@
 </span><span class='line'><span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:title</span> <span class="p">}</span>
 </span><span class='line'><span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:description</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>These simple lines can take the place of all the following tests:</p>
 
@@ -175,7 +172,6 @@
 </span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 </div>
 
 
@@ -236,6 +232,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -249,10 +249,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

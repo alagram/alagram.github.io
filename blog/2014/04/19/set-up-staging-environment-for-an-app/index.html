@@ -99,23 +99,19 @@
 
 <div class="entry-content"><!-- more -->
 
+<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&#39;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
 
-<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&rsquo;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
+<h2 id="with-app-not-deployed-to-production">With App Not Deployed to Production</h2>
 
-<h2>With App Not Deployed to Production</h2>
+<p>If your app has not been pushed to production, i.e , it&#39;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
 
-<p>If your app has not been pushed to production, i.e , it&rsquo;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
+<h2 id="with-app-already-deployed-to-production">With App Already Deployed to Production</h2>
 
-<h2>With App Already Deployed to Production</h2>
-
-<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&rsquo;ll run</p>
-
-<pre><code>heroku fork -a googleclone googleclone-staging
-</code></pre>
-
+<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&#39;ll run</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">heroku fork -a googleclone googleclone-staging
+</code></pre></div>
 <p>This will create a copy of googleclone called googleclone-clone</p>
-
-<pre><code>Creating fork googleclone-staging... done
+<div class="highlight"><pre><code class="language-text" data-lang="text">Creating fork googleclone-staging... done
 Copying slug... done
 Adding heroku-postgresql:some-dev... done
 Adding pgbackups:plus to googleclone... done
@@ -123,9 +119,8 @@ Adding pgbackups:plus to googleclone-staging... done
 Transferring database (this can take some time)...  done
 Copying config vars... done
 Fork complete, view it at http://googleclone-staging.herokuapp.com/
-</code></pre>
-
-<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
+</code></pre></div>
+<p>With this taken care of, we&#39;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&#39;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -172,7 +167,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'> <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Now we can call  <code>rake deploy:staging</code> and <code>rake deploy:production</code> to deploy to <code>staging</code> and <code>production</code> environments respectively.</p>
 
@@ -237,6 +231,10 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -250,10 +248,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of &hellip;">
+  <meta name="description" content="I&#39;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -99,10 +99,9 @@
 
 <div class="entry-content"><!-- more -->
 
+<p>I&#39;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
 
-<p>I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
-
-<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&rsquo;t cut it. Lets assume we&rsquo;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&rsquo;t feel right.</p>
+<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&#39;t cut it. Lets assume we&#39;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&#39;t feel right.</p>
 
 <p>Upon feather research, I found that to do full-text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
 
@@ -122,14 +121,12 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<h3>References</h3>
+<h3 id="references">References</h3>
 
 <ul>
-<li><a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
-<li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
+<li> <a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
+<li> <a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
 </ul>
-
 </div>
 
 
@@ -190,6 +187,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -203,10 +204,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

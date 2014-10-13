@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -20,70 +20,57 @@
     <id>http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&#39;re working on a project by yourself, it&#39;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
 
-<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
+<h3 id="1.-anything-on-master-can-be-deployed">1. Anything on <code>master</code> can be deployed</h3>
 
-<h3>1. Anything on <code>master</code> can be deployed</h3>
+<p>If anything is on the <code>master</code> branch, it&#39;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
 
-<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+<h3 id="2.-create-descriptively-named-local-branch-off-master.">2. Create descriptively named local branch off <code>master</code>.</h3>
 
-<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
-
-<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
-
-<pre><code class="bash"># make sure you're on your master branch
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&#39;re working on a new feature for authentication, you&#39;ll typically do something like so:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># make sure you&#39;re on your master branch</span>
 git checkout -b authentication
-</code></pre>
-
+</code></pre></div>
 <p>The above is the same as running:</p>
-
-<pre><code class="bash">git branch authentication
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git branch authentication
 git checkout authentication
-</code></pre>
-
+</code></pre></div>
 <p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
 
-<h3>3. Push code up</h3>
+<h3 id="3.-push-code-up">3. Push code up</h3>
 
-<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
-
-<pre><code class="bash">git push origin authentication
-</code></pre>
-
+<p>You&#39;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&#39;re ready to push up to your remote server, you&#39;ll enter this command on your terminal:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git push origin authentication
+</code></pre></div>
 <p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
 
-<h3>4. Create a pull request</h3>
+<h3 id="4.-create-a-pull-request">4. Create a pull request</h3>
 
-<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&#39;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&#39;re done, collaborators can review your commits.</p>
 
-<h3>5. Code review and merge</h3>
+<h3 id="5.-code-review-and-merge">5. Code review and merge</h3>
 
-<p>After all reviews have been made and changes effected, you&rsquo;ll want to merge it into your <code>master</code>.</p>
+<p>After all reviews have been made and changes effected, you&#39;ll want to merge it into your <code>master</code>.</p>
 
 <p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
-
-<pre><code class="bash">git add your_filename.rb
-git commit -m "added extra validations"
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git add your_filename.rb
+git commit -m <span class="s2">&quot;added extra validations&quot;</span>
 git push origin authentication
-</code></pre>
+</code></pre></div>
+<p>Continue until the process is complete. When yoy&#39;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
 
-<p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+<h3 id="6.-pull-changes">6. Pull changes</h3>
 
-<h3>6. Pull changes</h3>
-
-<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
-
-<pre><code class="bash">git checkout master
-</code></pre>
-
+<p>Now on your terminal, you&#39;ll switch to your <code>master</code> branch:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git checkout master
+</code></pre></div>
 <p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git pull origin master
+</code></pre></div>
+<h3 id="7.-deploy">7. Deploy</h3>
 
-<pre><code class="bash">git pull origin master
-</code></pre>
-
-<h3>7. Deploy</h3>
-
-<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
+<p>Once it&#39;s merged to <code>master</code>, you can deploy.</p>
 ]]></content>
   </entry>
   
@@ -94,19 +81,17 @@ git push origin authentication
     <id>http://alagram.github.io/blog/2013/08/16/deploying-to-heroku</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
 <p><a href="http://www.heroku.com">Heroku</a> is great for rapid prototyping and testing ideas. All you have to do is <code>git push heroku master</code> right? Wonderful.</p>
 
 <p>However, sometimes deploying can be somewhat daunting, with so many errors messages to deal with. Below is my own Heroku deployment checklist:</p>
 
-<h2>Steps</h2>
+<h2 id="steps">Steps</h2>
 
 <ol>
 <li><p>Create an App on Heroku dashboard eg. <code>boboobo</code> and select appropriate region.</p></li>
 <li><p>Copy Git URL in this case <code>git@heroku.com:boboobo.git</code> and run <code>git remote add heroku git@heroku.com:boboobo.git</code> in the App directory.</p></li>
 <li><p>After making changes in local directory, stage files, commit and then deploy code via <code>git push heroku master</code> or <code>git push heroku mod1:master</code> (when deploying from branch mod1)</p></li>
 </ol>
-
 
 <p>After generating migrations, do the following to avoid any nasty errors</p>
 
@@ -117,8 +102,7 @@ git push origin authentication
 <li><p>Also do <code>heroku logs -t</code> and <code>heroku run console</code> to check server logs and db in console respectively.</p></li>
 </ol>
 
-
-<p>After successfully deploying this app you&rsquo;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
+<p>After successfully deploying this app you&#39;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
 ]]></content>
   </entry>
   

@@ -102,7 +102,6 @@ end # The above class can also be written in one line &hellip;">
 
 <div class="entry-content"><!-- more -->
 
-
 <p>We can create an empty class in Ruby by using the following syntax:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -117,7 +116,6 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'><span class="k">class</span> <span class="nc">Animal</span><span class="p">;</span> <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Next, lets initialize our class with the <code>initialize</code> method like so:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -129,7 +127,6 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Our Animal class can now hold vairables, in the form of instance variables and class vairables. Instance variables always start with <code>@</code> while class varaibles start with <code>@@</code>. We have to make sure every Animal we create has a name by giving it <code>@name</code> instance varaible. This way only the Animal class and instances of that class will have access to <code>@name</code>.</p>
 
@@ -145,16 +142,13 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Now we can create an instance of our Animal class by calling the <code>new</code> method on <code>Animal</code> class and passing an argument.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="no">Animal</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bruno&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Class variables are attached to the entire class, not just an instance of the class. For instance we can set up a simple BankAccount class and use class variables to track how many instance of the class have been created like so:</p>
-
+<p>Class variables are attached to the entire class, not just an instance of the class. For instance we can set up a simple BankAccount class and use class variables to track how many instance of the class have been created like so:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -191,12 +185,11 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'>
 </span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Number of accounts created is </span><span class="si">#{</span><span class="no">BankAccount</span><span class="o">.</span><span class="n">accounts_created</span><span class="si">}</span><span class="s2">.&quot;</span>
 </span><span class='line'><span class="c1"># =&gt; Number of accounts created is 3.</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>So now everytime a new instance of BankAcoount is created <code>@@total_accounts</code> is increamented by one. Simple right?</p>
 
-<p>The above illustration also subtly introduced the concept of Class mehtods. These usually start with <code>self</code>. In the context of the class <code>self</code> referes to the current class, hence they can be called directed without creating an instance of a class.</p>
+<p>The above illustration also subtly introduced the concept of Class mehtods. These usually start with <code>self</code>. In the context of the class <code>self</code> referes to the current class, hence they can be called directed without creating an instance of a class. </p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -215,7 +208,6 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'><span class="no">Book</span><span class="o">.</span><span class="n">title</span>
 </span><span class='line'><span class="c1"># =&gt; The title of this book is &#39;Outliers&#39;.</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Instance methods, on the other hand, can only be called by creating an instance of the class.</p>
 
@@ -248,7 +240,6 @@ end # The above class can also be written in one line &hellip;">
 </span><span class='line'>
 </span><span class='line'><span class="c1"># =&gt; The book has X number of pages and the author is Malcolm Gladwell.</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>The <code>def</code> keyword creates an instance method. Hence the only way <code>info</code> method can be called is by creating an instance of <code>Author</code>.</p>
 </div>
@@ -305,6 +296,10 @@ end # The above class can also be written in one line &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -318,10 +313,6 @@ end # The above class can also be written in one line &hellip;">
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coding | Albert Agram]]></title>
   <link href="http://alagram.github.io/blog/categories/coding/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -19,7 +19,6 @@
     <updated>2013-05-17T14:37:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes</id>
     <content type="html"><![CDATA[<!-- more -->
-
 
 <p>This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks like Rails.</p>
 
@@ -48,7 +47,7 @@
 </span><span class='line'><span class="mi">12</span>
 </span><span class='line'><span class="mi">13</span>
 </span><span class='line'><span class="mi">15</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="o">]</span>
+</span><span class='line'><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>It prints every element in the array and returns the entire array at the end.</p>
@@ -58,30 +57,30 @@ We can do something like this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
+</span><span class='line'><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Or we can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span><span class="o">.</span><span class="n">even?</span> <span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
+</span><span class='line'><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Cute right?</p>
 
-<p>Note: Select returns an array by default, so we didn&rsquo;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&rsquo;s going to be selected, if its false it won&rsquo;t be selected.</p>
+<p>Note: Select returns an array by default, so we didn&#39;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&#39;s going to be selected, if its false it won&#39;t be selected.</p>
 
 <p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">225</span><span class="o">]</span>
+</span><span class='line'><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">225</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Note: We can use the <code>map</code> method to achieve the same result.</p>
 
-<p>If we have a hash, how do we get the key and value pairs? We&rsquo;ll use the <code>each</code> method.
+<p>If we have a hash, how do we get the key and value pairs? We&#39;ll use the <code>each</code> method.
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -92,11 +91,11 @@ We can do something like this:
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">man</span> <span class="n">united</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fergie</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">location</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">man</span> <span class="n">united</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">fergie</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="ss">location</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;club.each { |key, val| puts &amp;ldquo;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="sr"> value is </span><span class="si">#{</span><span class="n">val</span><span class="si">}</span><span class="sr">&amp;rdquo; }&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;club.each { |key, val| puts &amp;quot;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="sr"> value is </span><span class="si">#{</span><span class="n">val</span><span class="si">}</span><span class="sr">&amp;quot; }&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="no">Produces</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;produces&quot;</span><span class="o">&gt;</span><span class="no">Produces</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;key is name value is man uinted</span>
 </span><span class='line'><span class="sr">key is title value is 20</span>
@@ -104,7 +103,7 @@ We can do something like this:
 </span><span class='line'><span class="sr">key is location value is old trafford manchester</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<p>What if we want only the keys from a hash? We&rsquo;ll use the <code>each_key</code> method like so:
+<p>What if we want only the keys from a hash? We&#39;ll use the <code>each_key</code> method like so:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -115,11 +114,11 @@ We can do something like this:
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">man</span> <span class="n">united</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fergie</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">location</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">club</span> <span class="o">=</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">man</span> <span class="n">united</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="ss">titles</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="ss">manager</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">fergie</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;,</span> <span class="ss">location</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;club.each_key { |key| puts &amp;ldquo;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="sr">&amp;rdquo;}&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;club.each_key { |key| puts &amp;quot;key is </span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="sr">&amp;quot;}&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="no">Produces</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;produces&quot;</span><span class="o">&gt;</span><span class="no">Produces</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;key is name</span>
 </span><span class='line'><span class="sr">key is title</span>

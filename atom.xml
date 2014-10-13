@@ -4,7 +4,7 @@
   <title><![CDATA[Albert Agram]]></title>
   <link href="http://alagram.github.io/atom.xml" rel="self"/>
   <link href="http://alagram.github.io/"/>
-  <updated>2014-09-16T07:45:23+00:00</updated>
+  <updated>2014-10-13T11:01:11+00:00</updated>
   <id>http://alagram.github.io/</id>
   <author>
     <name><![CDATA[Albert Agram]]></name>
@@ -14,28 +14,289 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Evaluating Reverse Polish Notation Using a Stack in Ruby]]></title>
+    <link href="http://alagram.github.io/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/"/>
+    <updated>2014-10-12T10:45:18+00:00</updated>
+    <id>http://alagram.github.io/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby</id>
+    <content type="html"><![CDATA[<!-- more -->
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Let&#39;s say you want to add two numbers <code>4</code> and <code>9</code>, you&#39;ll have three ways to go about it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ 4 9  # Prefix notation or Polish Notation
+</span><span class='line'>4 + 9  # Infix notation
+</span><span class='line'>4 9 +  # Postfix notation or Reverse Polish Notation</span></code></pre></td></tr></table></div></figure>
+
+<p>First we have the <code>Prefix notation</code> or <code>Polish notation</code>, <code>Infix notation</code> and <code>Postfix notation</code> or <code>Reverse Polish Notation</code>. What we&#39;re used to us the <em>infix notation</em>. Further when you write expressions like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>7 + 5
+</span><span class='line'>7 + 4 * 2
+</span><span class='line'>30 - 8 + 13 * 2</span></code></pre></td></tr></table></div></figure>
+
+<p>We&#39;ve been trained to look at <em>infix notation</em> and instantly know how to do the calculation. Simple expressions like the first can be straight forward, however the expressions become ambiguous when the expression becomes complex like we have in the second and third examples. We&#39;ll have to use parenthesis everywhere and take note of order of operation when evaluating such expressions. By order of operation, I mean we know to do multiplication before addition. In the end you&#39;d have to simplify the second expression to become:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(7 + 4) * 2</span></code></pre></td></tr></table></div></figure>
+
+<p>and the third to look like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>((30 - 8) + (13 * 2))</span></code></pre></td></tr></table></div></figure>
+
+<p>before easy simplification can take place. In other words, when more operators are combined doing the calculation is not always straightforward.</p>
+
+<p>Believe it or not, even though they might look unusual at first, Prefix Notation (<a href="http://en.wikipedia.org/wiki/Polish_notation">Polish Notation</a>) and Postfix Notation (<a href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>) offer advantages that let us perform such calculations with ease.</p>
+
+<h3 id="advantages-of-prefix-and-postfix-notation">Advantages of Prefix and Postfix notation</h3>
+
+<ol>
+<li>You don&#39;t need the idea of &quot;order of operation&quot;.</li>
+<li>You never need parentheses.</li>
+</ol>
+
+<p>Let&#39;s see it in action by transforming the expression <code>30 - 8 + 13 * 2</code> to prefix and postfix notation:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Prefix
+</span><span class='line'>* + - 30 8 13 2</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Postfix
+</span><span class='line'>30 8 - 13 + 2 *</span></code></pre></td></tr></table></div></figure>
+
+<h3 id="evaluating-postfix/reverse-polish-notation-expressions">Evaluating Postfix/Reverse Polish Notation Expressions</h3>
+
+<p>The reason RPN is easier is the operators are right next to the operator they&#39;re operating on. In other words, the first operator you see is the first operator you apply. Whereas in infix notation the operator you apply can be arbitrarily far into the expression. Let&#39;s use the expression <code>30 8 - 13 + 2 *</code> to illustrate. Reading from left to right, the first operation we see is <code>-</code>. Since subtraction is a <a href="http://en.wikipedia.org/wiki/Binary_operation">binary operation</a> the <code>-</code> will take effect on the last two numbers <code>30</code> and <code>8</code>. After evaluation <code>30 - 8</code> the result of that is placed into the original expression and is transformed into:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>22 13 + 2 *</span></code></pre></td></tr></table></div></figure>
+
+<p>The next operation we see is <code>+</code> which is also a binary operation. <code>22 + 13</code> is evaluated and the expression is transformed into:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>35 2 *</span></code></pre></td></tr></table></div></figure>
+
+<p>Finally, we see <code>*</code> another binary operation. The final evaluation becomes:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>35 * 2</span></code></pre></td></tr></table></div></figure>
+
+<p>which gives us <code>70</code>.</p>
+
+<p>The algorithm for parsing RPN expressions is called the <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> and is implemented using a stack. We dive into that next and implement a stack class in Ruby.</p>
+
+<h3 id="stack">Stack</h3>
+
+<p>A <a href="http://en.wikipedia.org/wiki/Stack_%28abstract_data_type%29">stack</a> is an <a href="http://en.wikipedia.org/wiki/Abstract_data_type">abstract data type</a> that is common and is used all over. An example of a stack is a stack of plates on a table. Say you have 4 plates on top of each other on a table, the only way to add a plate to the stack is by adding it to the top. Also, the only way to get a plate off the stack is by taking it from the top. Hence, it adhere&#39;s to the <strong>last in, first out</strong> or <a href="http://en.wikipedia.org/wiki/LIFO_%28computing%29">LIFO</a> pattern. You can think of an abstract data type as a collection of data and a set of operations on it with specifications on how those operations behave. A stack is an abstract data type because an implementation that satisfies those operations is an accepted implementation. A stack has a few operations namely:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> push(item)    -&gt; place new item on stack
+</span><span class='line'> pop           -&gt; remove most recent item added to stack
+</span><span class='line'> peek          -&gt; return most recent item added to the stack (don't remove)
+</span><span class='line'> empty?        -&gt; returns true if nothing on stack, returns false otherwise</span></code></pre></td></tr></table></div></figure>
+
+<p>With <a href="http://en.wikipedia.org/wiki/Shunting-yard_algorithm">Shunting-yard algorithm</a> in mind, let&#39;s create a Stack class in Ruby:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Stack</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">UnderFlowError</span> <span class="o">&lt;</span> <span class="no">StandardError</span><span class="p">;</span><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@stack</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">empty?</span>
+</span><span class='line'>    <span class="vi">@stack</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">pop</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">UnderFlowError</span><span class="p">,</span> <span class="s2">&quot;Stack is empty&quot;</span> <span class="k">if</span> <span class="n">empty?</span>
+</span><span class='line'>    <span class="vi">@stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">peek</span>
+</span><span class='line'>    <span class="vi">@stack</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Note we&#39;re raising an error just in case an empty stack is being popped.</p>
+
+<p>Next, lets create a class to handle RPN expression evaluation with addition, multiplication and subtraction operators:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># rpn_expression.rb</span>
+</span><span class='line'><span class="o">.</span>
+</span><span class='line'><span class="o">.</span>
+</span><span class='line'><span class="o">.</span>
+</span><span class='line'><span class="c1"># Stack class omitted for brevity</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">RPNExpression</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@expr</span> <span class="o">=</span> <span class="n">expr</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">evaluate</span>
+</span><span class='line'>    <span class="n">stack</span> <span class="o">=</span> <span class="no">Stack</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">tokens</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_i</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span>
+</span><span class='line'>        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span>
+</span><span class='line'>        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="k">raise</span> <span class="s2">&quot;whaaaat I don&#39;t know this token?&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">tokens</span>
+</span><span class='line'>    <span class="vi">@expr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">token</span> <span class="o">=~</span> <span class="sr">/^-?\d\+$/</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>We&#39;re doing a few things here. <code>tokens</code> helps us split the expression into tokens based on spaces and <code>numeric?</code> helps us determine if the token is a number or not. The <code>evaluate</code> method is where everything happens. In <code>evaluate</code> we&#39;re iterating through the tokens and checking if it&#39;s a number or an operator. If it&#39;s a number, it&#39;s pushed onto the stack. If it&#39;s not a number, it&#39;s an operator, in which case the topmost token is popped from the stack and named <code>rhs</code>. The next token is also popped and named <code>lsh</code>. These tokens become operands and the operation is performed. After this the result is pushed back onto the stack. After all the tokens are check and all operations performed, the last item in the stack is popped to give us the final evaluated value.</p>
+
+<p>Example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">RPNExpression</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;30 8 - 13 + 2 *&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">70</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Try it. There are other ways of simplifying the <code>RPNExpression</code> class but I&#39;ll leave that up to the reader.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Simple Test Using TDD With Rspec]]></title>
     <link href="http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec/"/>
     <updated>2014-09-05T19:12:00+00:00</updated>
     <id>http://alagram.github.io/blog/2014/09/05/simple-test-using-tdd-with-rspec</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<h2 id="introduction">Introduction</h2>
 
-<h2>Introduction</h2>
+<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&#39;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&#39;ll implement a method named <code>search_by_title</code>.</p>
 
-<p>Test Driven Development is great for driving out implementation of features in software development. In this post, I&rsquo;m going to go through how I write tests using the TDD approach with <a href="https://github.com/rspec/rspec-rails">Rspec</a> by going through the steps to drive out the implementation of simple search feature. We&rsquo;ll implement a method named <code>search_by_title</code>.</p>
+<h2 id="how-i-write-tests">How I Write Tests</h2>
 
-<h2>How I Write Tests</h2>
+<p>1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
 
-<p>  1) I start by thinking about all the test cases I want to cover. That is, thinking on a high level on what the functionality should achieve. This allows me to have more complete coverage of what I want my code to accomplish instead of diving straight into one test, making it pass and then figuring out what the next test should be.</p>
+<p>2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
 
-<p>  2) Setup data for tests, perform action and put an assertion on the result of the action.</p>
+<p>3) Run test and let it fail.</p>
 
-<p>  3) Run test and let it fail.</p>
+<p>4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
 
-<p>  4) Finally, take small steps to make the test pass. This is because in TDD you want to write the simplest code to make a test pass and also make sure that every piece of code you write is going to be the result of a failing test.</p>
-
-<h3>The code</h3>
+<h3 id="the-code">The code</h3>
 
 <p>By following step 1, I write out all the test cases I want to cover:</p>
 
@@ -71,7 +332,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>The video model in <code>app/models/video.rb</code> looks like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -84,8 +344,7 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Next, I&rsquo;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
+<p>Next, I&#39;ll set up the data I need for the first test, perform an action and make an assertion on the result; step 2. The code for the first test looks like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -99,13 +358,11 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Now I&rsquo;ll run the test and let it fail; step 3:</p>
+<p>Now I&#39;ll run the test and let it fail; step 3:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rspec spec/models/video_spec.rb
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p><img src="http://alagram.github.io/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_1.png" title="Spec 1" ></p>
 
@@ -131,19 +388,17 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Run test again:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rspec spec/models/video_spec.rb
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p><img src="http://alagram.github.io/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_2.png" title="Spec 2" ></p>
 
 <p>This time the failure is <code>ArgumentError: wrong number of arguments (1 for 0)</code>. In our test, we pass a parameter to the method and have to replicate that in the real code.</p>
 
-<p>Let&rsquo;s make that change:</p>
+<p>Let&#39;s make that change:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -161,13 +416,11 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Run the test again:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rspec spec/models/video_spec.rb
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p><img src="http://alagram.github.io/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_3.png" title="Spec 3" ></p>
 
@@ -178,7 +431,6 @@
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>expected: <span class="o">[]</span>
 </span><span class='line'>got: nil
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>The easiest change to make the test pass is to return an empty array in the <code>search_by_title</code> method:</p>
 
@@ -200,14 +452,13 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>At this point, if all all method does is to return an empty array this is all we need to satisfy that.</p>
 
-<p>Now when we run the test again, we&rsquo;ll have a passing test:</p>
+<p>Now when we run the test again, we&#39;ll have a passing test:</p>
 
 <p><img src="http://alagram.github.io/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_4.png" title="Spec 4" ></p>
 
-<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&rsquo;re forced to drive-out the actually implementation of the method:</p>
+<p>Fortunately, we have other test cases that we do want to satisfy and by following this simple process for each test, we&#39;re forced to drive-out the actually implementation of the method:</p>
 
 <p>Our final code in <code>app/models/video.rb</code> will look like this:</p>
 
@@ -232,7 +483,6 @@
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>And our test code will be:</p>
 
@@ -316,7 +566,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>And all our tests pass:</p>
 
 <p><img src="http://alagram.github.io/images/2014-09-05-simle-test-using-tdd-with-rspec/spec_pass.png" title="Spec Pass" ></p>
@@ -330,22 +579,21 @@
     <id>http://alagram.github.io/blog/2014/08/31/types-of-testing-and-shoulda-matchers</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<h2 id="introduction">Introduction</h2>
 
-<h2>Introduction</h2>
+<p>When developing software, how do you know something works? Its certain that all software have bugs and the only way to make sure the code you&#39;ve written is bug-free is by designing test cases to test against your codebase. It is the most objective way to say confidently that a feature works and things did not break. This post looks at types of testing and how to use <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> to test common Rails functionality.</p>
 
-<p>When developing software, how do you know something works? Its certain that all software have bugs and the only way to make sure the code you&rsquo;ve written is bug-free is by designing test cases to test against your codebase. It is the most objective way to say confidently that a feature works and things did not break. This post looks at types of testing and how to use <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> to test common Rails functionality.</p>
+<h3 id="types-of-testing">Types of testing</h3>
 
-<h3>Types of testing</h3>
+<p>1) <em><strong>Unit Tests</strong></em>: Unit tests involve testing different components in isolation. You&#39;ll typically focus on one block at a time and make sure all cases are covered. In the Rails context, unit testing includes tests for models, views, helpers and routes in isolation. In sum, you&#39;re focusing on one thing at a time. Unit tests are the fastest in terms of speed and offer the best coverage.</p>
 
-<p>1) <em><strong>Unit Tests</strong></em>: Unit tests involve testing different components in isolation. You&rsquo;ll typically focus on one block at a time and make sure all cases are covered. In the Rails context, unit testing includes tests for models, views, helpers and routes in isolation. In sum, you&rsquo;re focusing on one thing at a time. Unit tests are the fastest in terms of speed and offer the best coverage.</p>
+<p>2) <em><strong>Functional Tests</strong></em>: Functional tests involve testing multiple components together. This is another way of making sure different parts of a system work in tandem. In the Rails context, functional testing includes controller tests. Typically the controller is where you pull multiple models and make them work with eachother to generate data before passing them over to the views. You&#39;ll also be testing request and response cycles.</p>
 
-<p>2) <em><strong>Functional Tests</strong></em>: Functional tests involve testing multiple components together. This is another way of making sure different parts of a system work in tandem. In the Rails context, functional testing includes controller tests. Typically the controller is where you pull multiple models and make them work with eachother to generate data before passing them over to the views. You&rsquo;ll also be testing request and response cycles.</p>
+<p>3) <em><strong>Integration Tests</strong></em>: This involves following a business process to make sure that not only do components work together, but can also work together to achieve a business objective. Integration testing involves mimicking the end-user by driving through the browser. You can login, fill a form, submit forms, click links and buttons etc. Integration tests are more realistic because you&#39;re following what a user of your system would do.</p>
 
-<p>3) <em><strong>Integration Tests</strong></em>: This involves following a business process to make sure that not only do components work together, but can also work together to achieve a business objective. Integration testing involves mimicking the end-user by driving through the browser. You can login, fill a form, submit forms, click links and buttons etc. Integration tests are more realistic because you&rsquo;re following what a user of your system would do.</p>
+<h3 id="shoulda-matcher">shoulda-matcher</h3>
 
-<h3>shoulda-matcher</h3>
-
-<p>In Test Driven Development (TDD) you&rsquo;ll typically want to test your own code. <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> is a library that simplifies testing common Rails functionality like associations and validations. Suppose we have a <code>video</code> model with the following code:</p>
+<p>In Test Driven Development (TDD) you&#39;ll typically want to test your own code. <a href="https://github.com/thoughtbot/shoulda-matchers">shoulda-matchers</a> is a library that simplifies testing common Rails functionality like associations and validations. Suppose we have a <code>video</code> model with the following code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -361,7 +609,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>using <code>shoulda-matchers</code> we can write a few lines of code to test the functionality of our code:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -371,7 +618,6 @@
 </span><span class='line'><span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:title</span> <span class="p">}</span>
 </span><span class='line'><span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">validate_presence_of</span> <span class="ss">:description</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>These simple lines can take the place of all the following tests:</p>
 
@@ -406,7 +652,6 @@
 </span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="no">Video</span><span class="o">.</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
@@ -417,23 +662,21 @@
     <id>http://alagram.github.io/blog/2014/08/28/github-flow-and-review-process</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&#39;re working on a project by yourself, it&#39;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
 
-<p><a href="http://git-scm.com/">Git</a> is an awesome version control system. For the uninitiated it might seem daunting at first, but with time it becomes indispensable. When you&rsquo;re working on a project by yourself, it&rsquo;s easy to keep track of things on <a href="https://github.com/">Github</a>. However, with time issues start cropping up when your project grows and you have a team of developers. Teams in such situations need an efficient way to work together. This aticle on <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github Flow</a> is a great read on the topic. It describes, in my opinion, an organized workflow that allows for systematic collaboration and code review on projects. Here are my notes from the article:</p>
+<h3 id="1.-anything-on-master-can-be-deployed">1. Anything on <code>master</code> can be deployed</h3>
 
-<h3>1. Anything on <code>master</code> can be deployed</h3>
+<p>If anything is on the <code>master</code> branch, it&#39;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
 
-<p>If anything is on the <code>master</code> branch, it&rsquo;s ready to be deployed. This means anything on <code>master</code> branch should be thoroughly tested and is ready to go to production.</p>
+<h3 id="2.-create-descriptively-named-local-branch-off-master.">2. Create descriptively named local branch off <code>master</code>.</h3>
 
-<h3>2. Create descriptively named local branch off <code>master</code>.</h3>
-
-<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&rsquo;re working on a new feature for authentication, you&rsquo;ll typically do something like so:</p>
+<p>When working on a new feature, one has to create a descriptively named local branch off <code>master</code>. People usually refer to this branch as a feature branch. Say you&#39;re working on a new feature for authentication, you&#39;ll typically do something like so:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># make sure you&#39;re on your master branch</span>
 </span><span class='line'>git checkout -b authentication
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>The above is the same as running:</p>
 
@@ -443,27 +686,25 @@
 </span><span class='line'>git checkout authentication
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Using the <code>-b</code> option with <code>git checkout</code> creates the local branch and switches to it at the same time.</p>
 
-<h3>3. Push code up</h3>
+<h3 id="3.-push-code-up">3. Push code up</h3>
 
-<p>You&rsquo;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&rsquo;re ready to push up to your remote server, you&rsquo;ll enter this command on your terminal:</p>
+<p>You&#39;ll work on this new feature branch, commit to the branch locally and regularly push to the same remote branch on your server. When you&#39;re ready to push up to your remote server, you&#39;ll enter this command on your terminal:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git push origin authentication
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>This will create a new remote branch named <code>authentication</code> on the remote server.</p>
 
-<h3>4. Create a pull request</h3>
+<h3 id="4.-create-a-pull-request">4. Create a pull request</h3>
 
-<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&rsquo;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&rsquo;re done, collaborators can review your commits.</p>
+<p>When you need feedback or assitance, or believe you work on the new feature is complete, open a <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>. You&#39;ll need to create this <code>pull request</code> from your feature branch to your <code>master</code> branch. When you&#39;re done, collaborators can review your commits.</p>
 
-<h3>5. Code review and merge</h3>
+<h3 id="5.-code-review-and-merge">5. Code review and merge</h3>
 
-<p>After all reviews have been made and changes effected, you&rsquo;ll want to merge it into your <code>master</code>.</p>
+<p>After all reviews have been made and changes effected, you&#39;ll want to merge it into your <code>master</code>.</p>
 
 <p>Note that, while the <code>pull request</code> is open, you can still <code>commit</code> and <code>push</code> code up to your remote feature branch. This means any correction can be made while the <code>pull request</code> is open. For example:</p>
 
@@ -475,17 +716,15 @@
 </span><span class='line'>git push origin authentication
 </span></code></pre></td></tr></table></div></figure>
 
+<p>Continue until the process is complete. When yoy&#39;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
 
-<p>Continue until the process is complete. When yoy&rsquo;re done, go to your <code>pull request</code> and click on the <code>merge</code> buton to <code>merge</code> it back to <code>master</code> branch.</p>
+<h3 id="6.-pull-changes">6. Pull changes</h3>
 
-<h3>6. Pull changes</h3>
-
-<p>Now on your terminal, you&rsquo;ll switch to your <code>master</code> branch:</p>
+<p>Now on your terminal, you&#39;ll switch to your <code>master</code> branch:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout master
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Next, you <code>pull</code> the merged code on <a href="https://github.com/">Github</a> to your local <code>master</code> branch:</p>
 
@@ -493,10 +732,9 @@
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git pull origin master
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="7.-deploy">7. Deploy</h3>
 
-<h3>7. Deploy</h3>
-
-<p>Once it&rsquo;s merged to <code>master</code>, you can deploy.</p>
+<p>Once it&#39;s merged to <code>master</code>, you can deploy.</p>
 ]]></content>
   </entry>
   
@@ -507,14 +745,12 @@
     <id>http://alagram.github.io/blog/2014/08/27/seeding-data</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
-<p>Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
+<p>Imagine you&#39;ve finished building a feature with tests and want to play with it in the UI. You&#39;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
 
 <ol>
-<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&rsquo;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
+<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&#39;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
 <li><p>Populate your <code>seeds.rb</code> with all the data you need. This approach is your sure bet to get default values in your database in less time and is stress-free.</p></li>
 </ol>
-
 
 <p>Example seed file:</p>
 
@@ -528,13 +764,11 @@
 </span><span class='line'><span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Monk&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Not bad. I&#39;ll watch this again.&quot;</span><span class="p">,</span> <span class="n">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk.jpg&quot;</span><span class="p">,</span> <span class="n">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
+<p>After filling in all data you want to be created, you&#39;ll simply run the following command in your terminal:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:seed
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>That its all it takes. When things get out of hand, you can start on a clean slate by running this in your terminal:</p>
 
@@ -548,7 +782,6 @@
 </span><span class='line'>rake db:seed
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.</p>
 
 <p>There is a simple <code>rake</code> task to complish all this in one fell swoop:</p>
@@ -556,7 +789,6 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:reset
 </span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
@@ -567,23 +799,19 @@
     <id>http://alagram.github.io/blog/2014/04/19/set-up-staging-environment-for-an-app</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&#39;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
 
-<p>Rails apps usually consist of test, development and production environments. We usually write test code to drive out implementation and make sure things work. However, you generally want to make sure that changes from developemt don&rsquo;t break things in production. For instance, developing on a Windows or Mac machine provides few guarantees that what works on development will work as you expect after deploying to production. This type of requirement calls for another eenvironment called staging. This environment should closely mirrow production. This blog post goes through how to set up a staging environment with a minimum of fuss.</p>
+<h2 id="with-app-not-deployed-to-production">With App Not Deployed to Production</h2>
 
-<h2>With App Not Deployed to Production</h2>
+<p>If your app has not been pushed to production, i.e , it&#39;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
 
-<p>If your app has not been pushed to production, i.e , it&rsquo;s sitting on your development machine, you can start at the top of this <a href="https://devcenter.heroku.com/articles/multiple-environments">document</a> and follow the simple steps to set up <code>staging</code> and <code>production</code> remote environments.</p>
+<h2 id="with-app-already-deployed-to-production">With App Already Deployed to Production</h2>
 
-<h2>With App Already Deployed to Production</h2>
-
-<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&rsquo;ll run</p>
-
-<pre><code>heroku fork -a googleclone googleclone-staging
-</code></pre>
-
+<p>Alternatively, if your app is already in production, you need to create a copy from the production environment by using the <code>heroku fork</code> command. This <a href="https://devcenter.heroku.com/articles/fork-app">command</a> also copies add-ons, config vars and Heroku Potgres data. Suppose our production app is <code>googleclone</code>, we&#39;ll run</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">heroku fork -a googleclone googleclone-staging
+</code></pre></div>
 <p>This will create a copy of googleclone called googleclone-clone</p>
-
-<pre><code>Creating fork googleclone-staging... done
+<div class="highlight"><pre><code class="language-text" data-lang="text">Creating fork googleclone-staging... done
 Copying slug... done
 Adding heroku-postgresql:some-dev... done
 Adding pgbackups:plus to googleclone... done
@@ -591,9 +819,8 @@ Adding pgbackups:plus to googleclone-staging... done
 Transferring database (this can take some time)...  done
 Copying config vars... done
 Fork complete, view it at http://googleclone-staging.herokuapp.com/
-</code></pre>
-
-<p>With this taken care of, we&rsquo;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&rsquo;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
+</code></pre></div>
+<p>With this taken care of, we&#39;ll use the <a href="https://github.com/mattpolito/paratrooper">paratrooper gem</a> which provides simple rake tasks and other goodies for Heroku deployment. After the gem is installed, we&#39;ll need to create a simple <code>deploy.rake</code> file under <code>lib/tasks</code></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -641,7 +868,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Now we can call  <code>rake deploy:staging</code> and <code>rake deploy:production</code> to deploy to <code>staging</code> and <code>production</code> environments respectively.</p>
 
 <p>I hope you found this useful.</p>
@@ -655,10 +881,9 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     <id>http://alagram.github.io/blog/2013/12/09/full-text-search-on-hstore-column</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>I&#39;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
 
-<p>I&rsquo;ve come to realise that PostgreSQL is awesome and comes with amazing in-built full-text search features. Another wonderful feature of Postgres is its Hstore schema less key value store. What this does is basically allow us to store data like hashes into a column.</p>
-
-<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&rsquo;t cut it. Lets assume we&rsquo;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&rsquo;t feel right.</p>
+<p>With this knowledge in place, we can query data based on keys and values as shown <a href="http://schneems.com/post/19298469372/you-got-nosql-in-my-postgres-using-hstore-in-rails">here</a>. This is fine and great but how does one search by value regardless of key? Using the examples in the above link won&#39;t cut it. Lets assume we&#39;re working on a Product model with hstore properties column. Initial solution I came up with involved creating a new column then added <code>before_save</code> and <code>before_update</code> callbacks to save the hash value into this column. It worked Ok but just didn&#39;t feel right.</p>
 
 <p>Upon feather research, I found that to do full-text search on hstore I could cast the properties column to text, but in my case I had to cast the values to text. Ended up with one kickasss search method:</p>
 
@@ -678,14 +903,12 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<h3>References</h3>
+<h3 id="references">References</h3>
 
 <ul>
-<li><a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
-<li><a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
+<li> <a href="http://community.gotealeaf.com/t/search-hstore-column/285">http://community.gotealeaf.com/t/search-hstore-column/285</a></li>
+<li> <a href="http://terryrfinn.com/posts/1">http://terryrfinn.com/posts/1</a></li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -696,19 +919,17 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     <id>http://alagram.github.io/blog/2013/11/28/testing-multiple-file-upload-with-rspec-fabrication-and-carrierwave</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
 <p>I ran into some problems when testing controller code with Rpsec while generating objects with fabrication. Most tests failed after I set validation on an Image object.</p>
 
 <p>My setup:</p>
 
 <ul>
-<li>fabrication (2.9.3)</li>
-<li>rspec-rails (2.14.0)</li>
-<li>faker (1.2.0)</li>
-<li>ruby 2.0.0p247</li>
-<li>OSX 10.9</li>
+<li> fabrication (2.9.3)</li>
+<li> rspec-rails (2.14.0)</li>
+<li> faker (1.2.0)</li>
+<li> ruby 2.0.0p247</li>
+<li> OSX 10.9</li>
 </ul>
-
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -744,9 +965,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-
-
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -758,7 +976,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'>  <span class="n">mount_uploader</span> <span class="ss">:image</span><span class="p">,</span> <span class="no">ImageUploader</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>With this, create an Image object first as shown <a href="https://github.com/carrierwaveuploader/carrierwave/wiki/How-to%3A-Use-test-fixtures">here</a>:</p>
 
@@ -782,9 +999,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&rsquo;s my final code:</p>
-
+<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&#39;s my final code:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -797,8 +1012,7 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'>  <span class="n">exp_date</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">images_attributes</span> <span class="p">{</span> <span class="o">[</span><span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>There is another way to do this through the controller spec without adding the last line in the Fabricator above:</p>
 
@@ -819,7 +1033,6 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
@@ -830,21 +1043,18 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     <id>http://alagram.github.io/blog/2013/11/23/migrating-to-postgresql</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&#39;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
 
-<p>In my recent project, I had to serialize a Hash into my SQLite database. Then I realised the need to search on that column. Upon doing some research, I found that searching a serialized hash column is very inefficient. There was a better way of going about this: using PostgreSQL Hstore! What&rsquo;s a hacker to do? I quickly started to migrate my SQLite database to PostgreSQL.</p>
-
-<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&rsquo;d like to put out here for anyone going through this.</p>
+<p>Found this <a href="http://railscasts.com/episodes/342-migrating-to-postgresql">Railscast</a> which really helped. But there are a few nasty suprises which I&#39;d like to put out here for anyone going through this.</p>
 
 <p>The real problem starts during the process of pulling data from SQLite database with <a href="https://github.com/ricardochimal/taps">Taps</a>. This gem provides a <code>taps</code> command that will help serve the one database and also pull data from it into another. First we have to serve our current SQLite database by passing <code>taps</code> a path to the database and also set a username and password. Then we can pull the data from this database into our Postgres database.</p>
 
 <p>However after running this command I got an error that read something like this:</p>
-
-<pre><code>taps cannot load such file -- sqlite3 (LoadError)
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">taps cannot load such file -- sqlite3 (LoadError)
+</code></pre></div>
 <p>Huh? After hours of frustration I found that <code>Taps</code> depends on <code>rack</code> version <code>1.0.1</code>.</p>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 
 <p>Added the this to <code>Gemfile</code></p>
 
@@ -852,13 +1062,11 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>'rack',’1.0.1’</span></code></pre></td></tr></table></div></figure>
 
-
-<p>Then on Terminal run this&hellip;</p>
+<p>Then on Terminal run this&#8230;</p>
 
 <figure class='code'><figcaption><span>Terminal </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>bundle update rack</span></code></pre></td></tr></table></div></figure>
-
 
 <p><code>Taps</code> will now successfully pull data from SQLite into Postgres.</p>
 ]]></content>
@@ -871,13 +1079,11 @@ Fork complete, view it at http://googleclone-staging.herokuapp.com/
     <id>http://alagram.github.io/blog/2013/11/04/uploading-multiple-files-with-carrierwave-and-a-nested-form</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
 <p>I recently needed to create a form for uploading multiple files to a given object. I implemented this with <a href="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a> and <a href="https://github.com/tors/jquery-fileupload-rails">jQuery File Upload</a> gems.</p>
 
 <p>Before we start, we need to make sure models and migrations are setup.
 For images, we have the following migration:</p>
-
-<pre><code>class CreateImages &lt; ActiveRecord::Migration
+<div class="highlight"><pre><code class="language-text" data-lang="text">class CreateImages &lt; ActiveRecord::Migration
   def change
     create_table :images do |t|
     t.string :image
@@ -886,11 +1092,9 @@ For images, we have the following migration:</p>
     t.timestamps
   end
 end
-</code></pre>
-
+</code></pre></div>
 <p>I have the following classes:</p>
-
-<pre><code>class Fraud &lt; ActiveRecord::Base
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Fraud &lt; ActiveRecord::Base
   has_many :images
   accepts_nested_attributes_for :images
 end
@@ -898,75 +1102,64 @@ end
 class Image &lt; ActiveRecord::Base
   belongs_to :fraud
 end
-</code></pre>
-
+</code></pre></div>
 <p>Added gems to Gemfile:</p>
-
-<pre><code>gem 'carrierwave'
-gem 'jquery-fileupload-rails'
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">gem &#39;carrierwave&#39;
+gem &#39;jquery-fileupload-rails&#39;
+</code></pre></div>
 <p>Run <code>bundle install</code> to install gems and dependencies.</p>
 
 <p>Then we create a carrierwave uploader with <code>rails generate uploader image</code> and mount the uploader:</p>
-
-<pre><code>class Image &lt; ActiveRecord::Base
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Image &lt; ActiveRecord::Base
   belongs_to :fraud
 
   mount_uploader :image, ImageUploader
 end
-</code></pre>
-
+</code></pre></div>
 <p>The carrierwave uploader helps by doing all the heavy lifting with regard to uploading the files.</p>
 
 <p>Now we are ready to work on the view, where the form is modified in the following way:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">= render &#39;shared/errors&#39;, object: @fraud
 
-<pre><code>= render 'shared/errors', object: @fraud
-
-= form_for @fraud, html: { class: "form-horizontal", autocomplete: "off", multipart: true } do |f|
+= form_for @fraud, html: { class: &quot;form-horizontal&quot;, autocomplete: &quot;off&quot;, multipart: true } do |f|
   %fieldset
     .control-group
-      = f.label :title, class: 'control-label'
+      = f.label :title, class: &#39;control-label&#39;
       .controls
-        = f.text_field :title, class: 'span3'
+        = f.text_field :title, class: &#39;span3&#39;
     .control-group
-      = f.label :description, class: 'control-label'
+      = f.label :description, class: &#39;control-label&#39;
       .controls
-        = f.text_area :description, rows: 6, class: 'span6'
+        = f.text_area :description, rows: 6, class: &#39;span6&#39;
     .control-group
-      = f.label :fraud_date, class: 'control-label'
+      = f.label :fraud_date, class: &#39;control-label&#39;
       .controls
-        = f.text_field :fraud_date, class: 'span3 fraud_date'
+        = f.text_field :fraud_date, class: &#39;span3 fraud_date&#39;
     .control-group
       = f.fields_for :images, Image.new do |ff|
-        = ff.label :image, "Upload Evidence", class: 'control-label'
+        = ff.label :image, &quot;Upload Evidence&quot;, class: &#39;control-label&#39;
         .controls
-          = ff.file_field :image, multiple: true, class: 'btn btn-file', id: 'upload-image', name: "fraud[images_attributes][][image]"
+          = ff.file_field :image, multiple: true, class: &#39;btn btn-file&#39;, id: &#39;upload-image&#39;, name: &quot;fraud[images_attributes][][image]&quot;
   %fieldset.actions.control-group
     .controls
-      = f.submit class: 'btn', id: 'submit-data'
-</code></pre>
-
+      = f.submit class: &#39;btn&#39;, id: &#39;submit-data&#39;
+</code></pre></div>
 <p>The form setup is a typical form with a few details:
 <code>= f.fields_for :images, Image.new do |ff|</code> creates a nested form. <code>accepts_nested_attributes_for</code> allows the creation of a related object along with the main object. There is good documentation of this <a href="http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html#method-i-accepts_nested_attributes_for">here</a>. So in this example, we are creating an instance of <code>Fraud</code> class while simultaneously creating an instance of an <code>Image</code> class.</p>
 
 <p>Since by default, most browsers do not allow selection of multiple files, we use <code>multiple: true</code> to change this. Also, we have to change the <code>name</code> attribute of our nested form to make it work with carrierwave. The attribute finally looks like this:</p>
-
-<pre><code>name: "fraud[images_attributes][][image]"
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">name: &quot;fraud[images_attributes][][image]&quot;
+</code></pre></div>
 <p>Lastly, we need our images to be uploaded on submit. jQuery File Upload gem by default tries to upload files immediately after its attached, we need to change this.</p>
 
-<p> We grab the id&rsquo;s of the file field and the submit button and use coffeescript to change this default behaviour to fit our needs:</p>
-
-<pre><code>$ -&gt;
-  $("#upload-image").fileupload
+<p>We grab the id&#39;s of the file field and the submit button and use coffeescript to change this default behaviour to fit our needs:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ -&gt;
+  $(&quot;#upload-image&quot;).fileupload
   add: (e, data) -&gt;
-    data.context = $("#submit-data")
+    data.context = $(&quot;#submit-data&quot;)
     data.submit()
-</code></pre>
-
-<p>That&rsquo;s all folks! With this, on submit, Rails knows to create an instance of Fraud and instances of Image. There is a natural association with Fraud and Image.</p>
+</code></pre></div>
+<p>That&#39;s all folks! With this, on submit, Rails knows to create an instance of Fraud and instances of Image. There is a natural association with Fraud and Image.</p>
 ]]></content>
   </entry>
   
@@ -977,19 +1170,17 @@ end
     <id>http://alagram.github.io/blog/2013/08/16/deploying-to-heroku</id>
     <content type="html"><![CDATA[<!-- more -->
 
-
 <p><a href="http://www.heroku.com">Heroku</a> is great for rapid prototyping and testing ideas. All you have to do is <code>git push heroku master</code> right? Wonderful.</p>
 
 <p>However, sometimes deploying can be somewhat daunting, with so many errors messages to deal with. Below is my own Heroku deployment checklist:</p>
 
-<h2>Steps</h2>
+<h2 id="steps">Steps</h2>
 
 <ol>
 <li><p>Create an App on Heroku dashboard eg. <code>boboobo</code> and select appropriate region.</p></li>
 <li><p>Copy Git URL in this case <code>git@heroku.com:boboobo.git</code> and run <code>git remote add heroku git@heroku.com:boboobo.git</code> in the App directory.</p></li>
 <li><p>After making changes in local directory, stage files, commit and then deploy code via <code>git push heroku master</code> or <code>git push heroku mod1:master</code> (when deploying from branch mod1)</p></li>
 </ol>
-
 
 <p>After generating migrations, do the following to avoid any nasty errors</p>
 
@@ -1000,8 +1191,7 @@ end
 <li><p>Also do <code>heroku logs -t</code> and <code>heroku run console</code> to check server logs and db in console respectively.</p></li>
 </ol>
 
-
-<p>After successfully deploying this app you&rsquo;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
+<p>After successfully deploying this app you&#39;ll end up with a nice url like <a href="http://boboobo.herokuapp.com">http://boboobo.herokuapp.com</a></p>
 ]]></content>
   </entry>
   
@@ -1012,25 +1202,20 @@ end
     <id>http://alagram.github.io/blog/2013/08/15/fix-octopress-rake-new-post-problem-on-zsh</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post[&quot;My New Post&quot;]</code></p>
 
-<p>Creating a post on <a href="http://octopress.org">Octopress</a> uses a rake command like so:<code>rake new_post["My New Post"]</code></p>
-
-<p>However when you try to create a new post within zsh shell it doesn&rsquo;t work.</p>
-
-<pre><code>$ rake new_post["My New Post"]
+<p>However when you try to create a new post within zsh shell it doesn&#39;t work. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ rake new_post[&quot;My New Post&quot;]
 zsh: no matches found: new_post[My New Post]
-</code></pre>
-
+</code></pre></div>
 <p>After following worked for me after doing some googling.</p>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 
 <p>You can fix this problem by simply running <code>rake new_post</code></p>
-
-<pre><code>rake new_post
+<div class="highlight"><pre><code class="language-text" data-lang="text">rake new_post
 Enter a title for your post:
-</code></pre>
-
+</code></pre></div>
 <p>This will then prompt for title of post and then create it. Done!</p>
 ]]></content>
   </entry>
@@ -1041,7 +1226,6 @@ Enter a title for your post:
     <updated>2013-05-24T16:31:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/05/24/lets-get-classy</id>
     <content type="html"><![CDATA[<!-- more -->
-
 
 <p>We can create an empty class in Ruby by using the following syntax:</p>
 
@@ -1057,7 +1241,6 @@ Enter a title for your post:
 </span><span class='line'><span class="k">class</span> <span class="nc">Animal</span><span class="p">;</span> <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Next, lets initialize our class with the <code>initialize</code> method like so:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1069,7 +1252,6 @@ Enter a title for your post:
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Our Animal class can now hold vairables, in the form of instance variables and class vairables. Instance variables always start with <code>@</code> while class varaibles start with <code>@@</code>. We have to make sure every Animal we create has a name by giving it <code>@name</code> instance varaible. This way only the Animal class and instances of that class will have access to <code>@name</code>.</p>
 
@@ -1085,16 +1267,13 @@ Enter a title for your post:
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>Now we can create an instance of our Animal class by calling the <code>new</code> method on <code>Animal</code> class and passing an argument.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="no">Animal</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;bruno&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Class variables are attached to the entire class, not just an instance of the class. For instance we can set up a simple BankAccount class and use class variables to track how many instance of the class have been created like so:</p>
-
+<p>Class variables are attached to the entire class, not just an instance of the class. For instance we can set up a simple BankAccount class and use class variables to track how many instance of the class have been created like so:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1131,12 +1310,11 @@ Enter a title for your post:
 </span><span class='line'>
 </span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Number of accounts created is </span><span class="si">#{</span><span class="no">BankAccount</span><span class="o">.</span><span class="n">accounts_created</span><span class="si">}</span><span class="s2">.&quot;</span>
 </span><span class='line'><span class="c1"># =&gt; Number of accounts created is 3.</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>So now everytime a new instance of BankAcoount is created <code>@@total_accounts</code> is increamented by one. Simple right?</p>
 
-<p>The above illustration also subtly introduced the concept of Class mehtods. These usually start with <code>self</code>. In the context of the class <code>self</code> referes to the current class, hence they can be called directed without creating an instance of a class.</p>
+<p>The above illustration also subtly introduced the concept of Class mehtods. These usually start with <code>self</code>. In the context of the class <code>self</code> referes to the current class, hence they can be called directed without creating an instance of a class. </p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1155,7 +1333,6 @@ Enter a title for your post:
 </span><span class='line'><span class="no">Book</span><span class="o">.</span><span class="n">title</span>
 </span><span class='line'><span class="c1"># =&gt; The title of this book is &#39;Outliers&#39;.</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Instance methods, on the other hand, can only be called by creating an instance of the class.</p>
 
@@ -1189,7 +1366,6 @@ Enter a title for your post:
 </span><span class='line'><span class="c1"># =&gt; The book has X number of pages and the author is Malcolm Gladwell.</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>The <code>def</code> keyword creates an instance method. Hence the only way <code>info</code> method can be called is by creating an instance of <code>Author</code>.</p>
 ]]></content>
   </entry>
@@ -1200,7 +1376,6 @@ Enter a title for your post:
     <updated>2013-05-17T14:37:00+00:00</updated>
     <id>http://alagram.github.io/blog/2013/05/17/getting-familiar-with-ruby-arrays-and-hashes</id>
     <content type="html"><![CDATA[<!-- more -->
-
 
 <p>This post is about getting familiar with array and hash methods. Understanding arrays and hashes are very core concepts of Ruby and other frameworks like Rails.</p>
 
@@ -1232,45 +1407,37 @@ Enter a title for your post:
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>It prints every element in the array and returns the entire array at the end.</p>
 
 <p>Next, lets use the <code>select</code> method to select all even elements from <code>my_array</code>.
-We can do something like this:</p>
-
+We can do something like this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></p>
 
-
-<p>Or we can do this:</p>
-
+<p>Or we can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span><span class="o">.</span><span class="n">even?</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Cute right?</p>
 
-<p>Note: Select returns an array by default, so we didn&rsquo;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&rsquo;s going to be selected, if its false it won&rsquo;t be selected.</p>
+<p>Note: Select returns an array by default, so we didn&#39;t have to <code>puts</code> the value like we did with the <code>each</code> method. Also, when using <code>select</code> method, the code within the block or <code>{ }</code> evaluates to true or false. So when its true it&#39;s going to be selected, if its false it won&#39;t be selected.</p>
 
-<p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:</p>
-
+<p>Finally, lets use the <code>collect</code> method to square the elements of <code>my_array</code>. We can do this:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">my_array</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">val</span><span class="o">|</span> <span class="n">val</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">}</span>
 </span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">225</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Note: We can use the <code>map</code> method to achieve the same result.</p>
 
-<p>If we have a hash, how do we get the key and value pairs? We&rsquo;ll use the <code>each</code> method.</p>
-
+<p>If we have a hash, how do we get the key and value pairs? We&#39;ll use the <code>each</code> method.
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1289,11 +1456,9 @@ We can do something like this:</p>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span> <span class="n">value</span> <span class="n">is</span> <span class="mi">20</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span> <span class="n">value</span> <span class="n">is</span> <span class="n">fergie</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span> <span class="n">value</span> <span class="n">is</span> <span class="n">old</span> <span class="n">trafford</span> <span class="n">manchester</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></p>
 
-
-<p>What if we want only the keys from a hash? We&rsquo;ll use the <code>each_key</code> method like so:</p>
-
+<p>What if we want only the keys from a hash? We&#39;ll use the <code>each_key</code> method like so:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1312,8 +1477,7 @@ We can do something like this:</p>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">title</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">manager</span>
 </span><span class='line'><span class="n">key</span> <span class="n">is</span> <span class="n">location</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Conclusion: Array and Hash methods are very good to know and this post has covered just a few. Learn more about these methods by looking at several Ruby/Rails APIs.</p>
 ]]></content>
@@ -1326,16 +1490,15 @@ We can do something like this:</p>
     <id>http://alagram.github.io/blog/2013/05/17/welcome-to-my-coding-blog</id>
     <content type="html"><![CDATA[<!-- more -->
 
+<p>I finally set up my blog. Hurray! </p>
 
-<p>I finally set up my blog. Hurray!</p>
+<p>About a year ago, I decide to take coding seriously. Along the way I quit my job as a banker, to focus more on business and coding. Started with codecademy, then stopped. Then started learning some PHP and MySQL, and then moved back to codecademy to complete their HTML/CSS and JavaScript tracks. It&#39;s been a really fun and sometimes frustrating experience. Tried to build a few things along the way but got stuck.</p>
 
-<p>About a year ago, I decide to take coding seriously. Along the way I quit my job as a banker, to focus more on business and coding. Started with codecademy, then stopped. Then started learning some PHP and MySQL, and then moved back to codecademy to complete their HTML/CSS and JavaScript tracks. It&rsquo;s been a really fun and sometimes frustrating experience. Tried to build a few things along the way but got stuck.</p>
+<p>After all the drifting and some careful research, I settled on Ruby language and building apps with the Rails framework and I&#39;m loving it!</p>
 
-<p>After all the drifting and some careful research, I settled on Ruby language and building apps with the Rails framework and I&rsquo;m loving it!</p>
+<p>This blog will mainly be for sharing my coding adventure with the rest of the world. </p>
 
-<p>This blog will mainly be for sharing my coding adventure with the rest of the world.</p>
-
-<p>So here goes&hellip;</p>
+<p>So here goes&#8230;</p>
 ]]></content>
   </entry>
   

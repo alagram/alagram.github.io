@@ -96,19 +96,17 @@
 
 <div class="entry-content"><!-- more -->
 
-
 <p>I ran into some problems when testing controller code with Rpsec while generating objects with fabrication. Most tests failed after I set validation on an Image object.</p>
 
 <p>My setup:</p>
 
 <ul>
-<li>fabrication (2.9.3)</li>
-<li>rspec-rails (2.14.0)</li>
-<li>faker (1.2.0)</li>
-<li>ruby 2.0.0p247</li>
-<li>OSX 10.9</li>
+<li> fabrication (2.9.3)</li>
+<li> rspec-rails (2.14.0)</li>
+<li> faker (1.2.0)</li>
+<li> ruby 2.0.0p247</li>
+<li> OSX 10.9</li>
 </ul>
-
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -144,9 +142,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-
-
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -158,7 +153,6 @@
 </span><span class='line'>  <span class="n">mount_uploader</span> <span class="ss">:image</span><span class="p">,</span> <span class="no">ImageUploader</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>With this, create an Image object first as shown <a href="https://github.com/carrierwaveuploader/carrierwave/wiki/How-to%3A-Use-test-fixtures">here</a>:</p>
 
@@ -182,9 +176,7 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&rsquo;s my final code:</p>
-
+<p>Then comes the tricky part of creating an <code>Expense</code> object. Adding this line <code>images_attributes { [Fabricate.attributes_for(:image)] }</code> to the Fabricator did the magic. Here&#39;s my final code:
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -197,8 +189,7 @@
 </span><span class='line'>  <span class="n">exp_date</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">images_attributes</span> <span class="p">{</span> <span class="o">[</span><span class="no">Fabricate</span><span class="o">.</span><span class="n">attributes_for</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>There is another way to do this through the controller spec without adding the last line in the Fabricator above:</p>
 
@@ -219,7 +210,6 @@
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 </div>
 
 
@@ -274,6 +264,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -287,10 +281,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>

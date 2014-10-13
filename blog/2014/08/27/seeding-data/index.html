@@ -9,7 +9,7 @@
   <meta name="author" content="Albert Agram">
 
   
-  <meta name="description" content="Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into &hellip;">
+  <meta name="description" content="Imagine you&#39;ve finished building a feature with tests and want to play with it in the UI. You&#39;ll have to find a way to get data into your &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -99,14 +99,12 @@
 
 <div class="entry-content"><!-- more -->
 
-
-<p>Imagine you&rsquo;ve finished building a feature with tests and want to play with it in the UI. You&rsquo;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
+<p>Imagine you&#39;ve finished building a feature with tests and want to play with it in the UI. You&#39;ll have to find a way to get data into your development database somehow. There are two ways of going about this:</p>
 
 <ol>
-<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&rsquo;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
+<li><p>Fire up <code>rails console</code> and manually create all the data needed. This is fine and works when you want to create one-off data entries. Overtime you&#39;ll find that things become cumbersome when you need to add more data. What about when you want to fill up a development database over a network? Or when you accidentally lose all your development data and need to repopulate? Things can get out of hand quickly.</p></li>
 <li><p>Populate your <code>seeds.rb</code> with all the data you need. This approach is your sure bet to get default values in your database in less time and is stress-free.</p></li>
 </ol>
-
 
 <p>Example seed file:</p>
 
@@ -120,13 +118,11 @@
 </span><span class='line'><span class="no">Video</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Monk&quot;</span><span class="p">,</span> <span class="ss">description</span><span class="p">:</span> <span class="s2">&quot;Not bad. I&#39;ll watch this again.&quot;</span><span class="p">,</span> <span class="n">small_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk.jpg&quot;</span><span class="p">,</span> <span class="n">large_cover_url</span><span class="p">:</span> <span class="s2">&quot;/tmp/monk_large.jpg&quot;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>After filling in all data you want to be created, you&rsquo;ll simply run the following command in your terminal:</p>
+<p>After filling in all data you want to be created, you&#39;ll simply run the following command in your terminal:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:seed
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>That its all it takes. When things get out of hand, you can start on a clean slate by running this in your terminal:</p>
 
@@ -140,7 +136,6 @@
 </span><span class='line'>rake db:seed
 </span></code></pre></td></tr></table></div></figure>
 
-
 <p>This will first drop the development database, then re-create it, run all migrations and finally initialize with the seed data.</p>
 
 <p>There is a simple <code>rake</code> task to complish all this in one fell swoop:</p>
@@ -148,7 +143,6 @@
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rake db:reset
 </span></code></pre></td></tr></table></div></figure>
-
 </div>
 
 
@@ -209,6 +203,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/evaluating-reverse-polish-notation-using-a-stack-in-ruby/">Evaluating Reverse Polish Notation Using a Stack in Ruby</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/05/simple-test-using-tdd-with-rspec/">Simple Test Using TDD With Rspec</a>
       </li>
     
@@ -222,10 +220,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/27/seeding-data/">Seeding Data in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/19/set-up-staging-environment-for-an-app/">Set Up Staging Environment for an App</a>
       </li>
     
   </ul>
