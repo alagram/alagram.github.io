@@ -1,0 +1,15 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Author</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">info</span>
+    <span class="nb">puts</span> <span class="s2">&quot;The book has X number of pages and the author is </span><span class="si">#{</span><span class="vi">@name</span><span class="si">}</span><span class="s2">.&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">audiobook</span> <span class="o">=</span> <span class="no">Author</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Malcolm Gladwell&quot;</span><span class="p">)</span>
+<span class="n">audiobook</span><span class="o">.</span><span class="n">info</span>
+
+<span class="c1"># =&gt; The book has X number of pages and the author is Malcolm Gladwell.</span>
+</pre></div>

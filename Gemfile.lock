@@ -103,9 +103,11 @@ DEPENDENCIES
   jekyll-sitemap
   octopress-date-format (~> 2.0)
   octopress-hooks (~> 2.2)
+  pygments.rb
   rake (~> 10.0)
   rb-fsevent (~> 0.9)
   rdiscount (~> 2.0)
+  redcarpet
   rubypants (~> 0.2.0)
   sass-globbing (~> 1.0.0)
   sinatra (~> 1.4.2)

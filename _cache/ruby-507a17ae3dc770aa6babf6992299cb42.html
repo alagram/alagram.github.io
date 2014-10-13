@@ -1,0 +1,22 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">BankAccount</span>
+  <span class="vc">@@total_accounts</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+
+<span class="sr">&lt;p&gt;  def initialize</span>
+<span class="sr">    @@total_accounts += 1</span>
+<span class="sr">  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">accounts_created</span>
+    <span class="vc">@@total_accounts</span>
+  <span class="k">end</span>
+<span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+
+<span class="sr">&lt;p&gt;savings = BankAccount.new</span>
+<span class="sr">current = BankAccount.new</span>
+<span class="sr">inv = BankAccount.new&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Number</span> <span class="n">of</span> <span class="n">accounts</span> <span class="n">created</span> <span class="n">is</span> <span class="c1">#{BankAccount.accounts_created}.&amp;rdquo;&lt;/p&gt;</span>
+
+<span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;=&gt;</span> <span class="no">Number</span> <span class="n">of</span> <span class="n">accounts</span> <span class="n">created</span> <span class="n">is</span> <span class="mi">3</span><span class="o">.</span><span class="n">&lt;</span><span class="sr">/h1&gt;</span>
+
+<span class="sr">&lt;p&gt;</span>
+</pre></div>

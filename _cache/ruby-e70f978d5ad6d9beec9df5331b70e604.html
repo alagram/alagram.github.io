@@ -1,0 +1,48 @@
+<div class="highlight"><pre><span class="c1"># rpn_expression.rb</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="c1"># Stack class omitted for brevity</span>
+
+<span class="k">class</span> <span class="nc">RPNExpression</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="vi">@expr</span> <span class="o">=</span> <span class="n">expr</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">evaluate</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="no">Stack</span><span class="o">.</span><span class="n">new</span>
+
+    <span class="n">tokens</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span>
+      <span class="k">if</span> <span class="n">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_i</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lhs</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="k">raise</span> <span class="s2">&quot;whaaaat I don&#39;t know this token?&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="n">stack</span><span class="o">.</span><span class="n">pop</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">tokens</span>
+    <span class="vi">@expr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">numeric?</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=~</span> <span class="sr">/^-?\d\+$/</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>

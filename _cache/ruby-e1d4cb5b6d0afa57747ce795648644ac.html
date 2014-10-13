@@ -1,0 +1,19 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">BankAccount</span>
+  <span class="vc">@@total_accounts</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vc">@@total_accounts</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">accounts_created</span>
+    <span class="vc">@@total_accounts</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">savings</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+<span class="n">current</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="no">BankAccount</span><span class="o">.</span><span class="n">new</span>
+
+<span class="nb">puts</span> <span class="s2">&quot;Number of accounts created is </span><span class="si">#{</span><span class="no">BankAccount</span><span class="o">.</span><span class="n">accounts_created</span><span class="si">}</span><span class="s2">.&quot;</span> 
+<span class="c1"># =&gt; Number of accounts created is 3.</span>
+</pre></div>

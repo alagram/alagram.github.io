@@ -1,0 +1,10 @@
+<div class="highlight"><pre><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:image</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">file</span> <span class="p">{</span>
+    <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Http</span><span class="o">::</span><span class="no">UploadedFile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+      <span class="ss">:tempfile</span> <span class="o">=&gt;</span> <span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;spec/support/uploads/file.jpg&quot;</span><span class="p">)),</span>
+      <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s1">&#39;image/jpg&#39;</span><span class="p">,</span>
+      <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;spec/support/uploads/file.jpg&quot;</span><span class="p">)))</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+</pre></div>
